@@ -1,18 +1,20 @@
 package compiler;
 
+import java.io.FileNotFoundException;
+
 import compiler.LexicalAnalyser;
 
 public class App
 {
     public static void main( String[] args )
     {
-        if(args.leght > 0){
+        if(args.length > 0) {
             for (String arg : args){
                 try {
-                    System.out.println(arg);
                     LexicalAnalyser lexical = new LexicalAnalyser();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    lexical.openFile(arg);
+                } catch (FileNotFoundException e) {
+                    System.out.println("Invalid file path : " + arg);
                 }
             }
         } else {

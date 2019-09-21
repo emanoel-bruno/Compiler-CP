@@ -1,15 +1,74 @@
 # Compiler-CP
 
-## Language Grammar
+## Language 
+
+### Grammar
+
+![](doc/Grammar.png)
+
+### Tokens
+
+caractere: ASCII except " and break line;
+digit: [0-9]
+letter: [A-Za-z]
+integer_const: digit{digit}
+identifier: letter{letter|digit}
+float_const: digit{digit}.digit{digit}
+literal: "{caractere}"
+
 
 ### Keywords
 
+* start
+* exit
+* int
+* float
+* string
+* if
+* then
+* end
+* else
+* do
+* while
+* scan
+* print
 
-## Build
+### Operators
+
+* not
+* or
+* and
+* =
+* \==
+* \>
+* \>=
+* <
+* <=
+* <>
+* \+
+* \*
+* /
+* \-
+  
+### Symbols
+
+* ;
+* ,
+* (
+* )
+* .
+* "
+
+## How to run
+
+### Build
 
     mvn package
 
-## Execute
+### Execute
 
     java -cp target/compiler-1.0.jar compiler.App
 
+#### Fazer
+
+IMplementar panic mode
