@@ -1,17 +1,17 @@
 package compiler;
 
 public class Token{
-    private final int tag;
+    private final String tag;
 
-    public Token(int tag){
+    public Token(String tag){
         this.tag = tag;
     }
 
-    public int getTag(){
+    public String getTag(){
         return this.tag;
     }
 
     public String toString(){
-        return String.valueOf(tag);
+        return this.tag;
     }
 }

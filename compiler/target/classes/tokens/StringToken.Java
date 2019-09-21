@@ -7,6 +7,7 @@ public class StringToken(){
     private final Lexeme value;
 
     public StringToken(){
+        super("string");
         this.value = new Lexeme("string");
     }
 

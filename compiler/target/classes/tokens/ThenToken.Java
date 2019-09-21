@@ -7,6 +7,7 @@ public class ThenToken(){
     private final Lexeme value;
 
     public ThenToken(){
+        super("then");
         this.value = new Lexeme("then");
     }
 

@@ -7,6 +7,7 @@ public class IntToken(){
     private final Lexeme value;
 
     public IntToken(){
+        super("int");
         this.value = new Lexeme("int");
     }
 

@@ -7,6 +7,7 @@ public class FloatToken(){
     private final Lexeme value;
 
     public FloatToken(){
+        super("float");        
         this.value = new Lexeme("float");
     }
 

@@ -7,6 +7,7 @@ public class ExitToken(){
     private final Lexeme value;
 
     public ExitToken(){
+        super("exit");
         this.value = new Lexeme("exit");
     }
 

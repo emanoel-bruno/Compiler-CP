@@ -7,6 +7,7 @@ public class WhileToken(){
     private final Lexeme value;
 
     public WhileToken(){
+        super("while");
         this.value = new Lexeme("while");
     }
 

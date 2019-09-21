@@ -7,6 +7,7 @@ public class ScanToken(){
     private final Lexeme value;
 
     public ScanToken(){
+        super("scan");
         this.value = new Lexeme("scan");
     }
 

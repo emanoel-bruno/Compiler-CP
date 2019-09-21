@@ -7,6 +7,7 @@ public class IfToken(){
     private final Lexeme value;
 
     public IfToken(){
+        super("if");
         this.value = new Lexeme("if");
     }
 

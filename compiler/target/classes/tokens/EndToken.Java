@@ -7,6 +7,7 @@ public class EndToken(){
     private final Lexeme value;
 
     public EndToken(){
+        super("end");
         this.value = new Lexeme("end");
     }
 

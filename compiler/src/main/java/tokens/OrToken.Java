@@ -7,6 +7,7 @@ public class OrToken(){
     private final Lexeme value;
 
     public OrToken(){
+        super("or");
         this.value = new Lexeme("or");
     }
 

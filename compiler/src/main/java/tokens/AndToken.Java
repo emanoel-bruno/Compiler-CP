@@ -6,8 +6,9 @@ import compiler.Lexeme;
 public class AndToken(){
     private final Lexeme value;
 
-    public StartToken(){
-        this.value = new Lexeme("start");
+    public AndToken(){
+        super("and");
+        this.value = new Lexeme("and");
     }
 
     public String function getValue(){

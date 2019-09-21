@@ -7,6 +7,7 @@ public class NotToken(){
     private final Lexeme value;
 
     public NotToken(){
+        super("not");
         this.value = new Lexeme("not");
     }
 

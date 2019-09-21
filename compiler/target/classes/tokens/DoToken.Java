@@ -7,6 +7,7 @@ public class DoToken(){
     private final Lexeme value;
 
     public DoToken(){
+        super("do");
         this.value = new Lexeme("do");
     }
 

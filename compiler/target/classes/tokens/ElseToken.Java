@@ -7,6 +7,7 @@ public class ElseToken(){
     private final Lexeme value;
 
     public ElseToken(){
+        super("else");
         this.value = new Lexeme("else");
     }
 

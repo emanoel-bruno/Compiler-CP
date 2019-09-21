@@ -7,6 +7,7 @@ public class StartToken(){
     private final Lexeme value;
 
     public StartToken(){
+        super("start");
         this.value = new Lexeme("start");
     }
 

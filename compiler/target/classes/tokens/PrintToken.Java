@@ -7,6 +7,7 @@ public class PrintToken(){
     private final Lexeme value;
 
     public PrintToken(){
+        super("print");
         this.value = new Lexeme("print");
     }
 
