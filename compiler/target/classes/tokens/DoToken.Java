@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class DoToken(){
     private final Lexeme value;
 
     public DoToken(){
-        super("do");
-        this.value = new Lexeme("do");
+        super(Tag.DO);
+        this.value = new Lexeme('do');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

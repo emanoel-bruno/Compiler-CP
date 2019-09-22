@@ -12,7 +12,7 @@ public class SymbolTable{
     }
 
     public void insertToken(Token t){
-        this.table.put(t.toString(), t);
+        this.table.put(t.getValue(), t);
     }
 
     public void clear(){

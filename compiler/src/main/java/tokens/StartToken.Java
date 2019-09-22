@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class StartToken(){
     private final Lexeme value;
 
     public StartToken(){
-        super("start");
-        this.value = new Lexeme("start");
+        super(Tag.START);
+        this.value = new Lexeme('start');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

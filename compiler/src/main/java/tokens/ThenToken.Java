@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class ThenToken(){
     private final Lexeme value;
 
     public ThenToken(){
-        super("then");
-        this.value = new Lexeme("then");
+        super(Tag.THEN);
+        this.value = new Lexeme('then');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

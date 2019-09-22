@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class EndToken(){
     private final Lexeme value;
 
     public EndToken(){
-        super("end");
-        this.value = new Lexeme("end");
+        super(Tag.END);
+        this.value = new Lexeme('end');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class FloatToken(){
     private final Lexeme value;
 
     public FloatToken(){
-        super("float");        
-        this.value = new Lexeme("float");
+        super(Tag.FLOAT);        
+        this.value = new Lexeme('float');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

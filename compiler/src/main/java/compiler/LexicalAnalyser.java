@@ -25,4 +25,22 @@ public class LexicalAnalyser {
         this.currentChar = (char) c;
         return true;
     }
+
+
+    public boolean nextChar(String condition) throws IOException{
+        int c = this.bufferedReader.read();
+        if (condition.intern() == "digit") {
+            return Character.isDigit(c);
+        } 
+        else if(condition.intern() == "letter"){
+            return Character.isLetter(c);            
+        }
+        else if(condition.intern() == "character"){
+            return (Character.isBmpCodePoint(c) && c != 34 && c != 10) ? true : false;            
+        }
+        else if(c == -1)
+            return false;
+        this.currentChar = (char) c;
+        return true;
+    }
 }

@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class AndToken(){
     private final Lexeme value;
 
     public AndToken(){
-        super("and");
-        this.value = new Lexeme("and");
+        super(Tag.AND);
+        this.value = new Lexeme('and');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

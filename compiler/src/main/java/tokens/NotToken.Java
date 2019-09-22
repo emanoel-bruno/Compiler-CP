@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class NotToken(){
     private final Lexeme value;
 
     public NotToken(){
-        super("not");
-        this.value = new Lexeme("not");
+        super(Tag.NOT);
+        this.value = new Lexeme('not');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

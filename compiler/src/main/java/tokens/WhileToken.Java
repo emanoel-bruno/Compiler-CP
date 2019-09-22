@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class WhileToken(){
     private final Lexeme value;
 
     public WhileToken(){
-        super("while");
-        this.value = new Lexeme("while");
+        super(Tag.WHILE);
+        this.value = new Lexeme('while');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

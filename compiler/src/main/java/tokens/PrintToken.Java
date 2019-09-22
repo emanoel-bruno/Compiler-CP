@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class PrintToken(){
     private final Lexeme value;
 
     public PrintToken(){
-        super("print");
-        this.value = new Lexeme("print");
+        super(Tag.PRINT);
+        this.value = new Lexeme('print');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

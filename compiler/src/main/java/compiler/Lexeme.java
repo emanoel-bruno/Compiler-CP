@@ -11,7 +11,7 @@ public class Lexeme {
         return (this.identifier.intern() == identifier.intern()) ? true : false;
     };
     
-    public String toString(){
+    public String getIdentifier(){
         return this.identifier;        
     }
 }

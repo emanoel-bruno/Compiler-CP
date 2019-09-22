@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class ElseToken(){
     private final Lexeme value;
 
     public ElseToken(){
-        super("else");
-        this.value = new Lexeme("else");
+        super(Tag.ELSE);
+        this.value = new Lexeme('else');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){

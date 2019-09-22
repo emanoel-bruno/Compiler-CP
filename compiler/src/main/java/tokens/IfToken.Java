@@ -2,17 +2,18 @@ package tokens;
 
 import compiler.Token;
 import compiler.Lexeme;
+import compiler.Tag;
 
 public class IfToken(){
     private final Lexeme value;
 
     public IfToken(){
-        super("if");
-        this.value = new Lexeme("if");
+        super(Tag.IF);
+        this.value = new Lexeme('if');
     }
 
-    public String function getValue(){
-        return this.value.toString();
+    public String getValue(){
+        return this.value.getIdentifier();
     }
 
     public boolean match(String s){
