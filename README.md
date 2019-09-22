@@ -6,15 +6,18 @@
 
 ![](doc/Grammar.png)
 
-### Tokens
+### Base
 
-caractere: ASCII except " and break line;
-digit: [0-9]
-letter: [A-Za-z]
-integer_const: digit{digit}
-identifier: letter{letter|digit}
-float_const: digit{digit}.digit{digit}
-literal: "{caractere}"
+* digit: [0-9]
+* letter: [A-Za-z]
+
+### Rules
+
+* caractere: ASCII except " and break line;
+* integer_const: digit{digit}
+* identifier: letter{letter|digit}
+* float_const: digit{digit}.digit{digit}
+* literal: "{caractere}"
 
 
 ### Keywords
