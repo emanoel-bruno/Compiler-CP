@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class DoToken(){
+public class DoToken extends Token{
     private final Lexeme value;
 
     public DoToken(){
         super(Tag.DO);
-        this.value = new Lexeme('do');
+        this.value = new Lexeme("do");
     }
 
     public String getValue(){

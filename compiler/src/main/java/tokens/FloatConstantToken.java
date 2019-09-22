@@ -1,18 +1,17 @@
 package tokens;
 
 import compiler.Token;
-import compiler.Lexeme;
 import compiler.Tag;
 
-public class FloatConstant(){
+public class FloatConstantToken extends Token{
     private final float value;
 
-    public FloatConstant(float value){
+    public FloatConstantToken(float value){
         super(Tag.FLOAT_CONSTANT);
         this.value = value;
     }
 
-    public float getValue(){
+    public float getValue() {
         return this.value;
     }
 }

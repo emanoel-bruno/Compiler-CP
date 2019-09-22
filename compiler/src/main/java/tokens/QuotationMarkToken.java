@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class QuotationMarkToken(){
+public class QuotationMarkToken extends Token{
     private final Lexeme value;
 
     public QuotationMarkToken(){
         super(Tag.QUOTATION_MARK);
-        this.value = new Lexeme('"');
+        this.value = new Lexeme("\"");
     }
 
     public String getValue(){

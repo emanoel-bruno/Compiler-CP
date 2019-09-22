@@ -4,7 +4,7 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class LiteralToken(){
+public class LiteralToken extends Token{
     private final Lexeme value;
 
     public LiteralToken(String s){

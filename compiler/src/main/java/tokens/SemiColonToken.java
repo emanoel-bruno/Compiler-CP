@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class SemiColonToken(){
+public class SemiColonToken extends Token{
     private final Lexeme value;
 
     public SemiColonToken(){
         super(Tag.SEMICOLON);
-        this.value = new Lexeme(';');
+        this.value = new Lexeme(";");
     }
 
     public String getValue(){

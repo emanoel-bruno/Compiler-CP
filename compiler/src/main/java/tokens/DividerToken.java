@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class DividerToken(){
+public class DividerToken extends Token{
     private final Lexeme value;
 
     public DividerToken(){
         super(Tag.DIVIDER);
-        this.value = new Lexeme('/');
+        this.value = new Lexeme("/");
     }
 
     public String getValue(){

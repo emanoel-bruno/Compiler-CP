@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class WhileToken(){
+public class WhileToken extends Token{
     private final Lexeme value;
 
     public WhileToken(){
         super(Tag.WHILE);
-        this.value = new Lexeme('while');
+        this.value = new Lexeme("while");
     }
 
     public String getValue(){

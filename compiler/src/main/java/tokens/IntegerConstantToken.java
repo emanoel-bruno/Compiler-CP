@@ -1,10 +1,9 @@
 package tokens;
 
 import compiler.Token;
-import compiler.Lexeme;
 import compiler.Tag;
 
-public class IntegerConstantToken(){
+public class IntegerConstantToken extends Token{
     private final int value;
 
     public IntegerConstantToken(int value){

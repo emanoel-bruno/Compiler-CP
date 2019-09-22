@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class PlusToken(){
+public class PlusToken extends Token{
     private final Lexeme value;
 
     public PlusToken(){
         super(Tag.PLUS);
-        this.value = new Lexeme('+');
+        this.value = new Lexeme("+");
     }
 
     public String getValue(){

@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class AssignToken(){
+public class AssignToken extends Token{
     private final Lexeme value;
 
     public AssignToken(){
         super(Tag.ASSIGN);
-        this.value = new Lexeme('=');
+        this.value = new Lexeme("=");
     }
 
     public String getValue(){

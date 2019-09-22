@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class IntToken(){
+public class IntToken extends Token{
     private final Lexeme value;
 
     public IntToken(){
         super(Tag.INT);
-        this.value = new Lexeme('int');
+        this.value = new Lexeme("int");
     }
 
     public String getValue(){

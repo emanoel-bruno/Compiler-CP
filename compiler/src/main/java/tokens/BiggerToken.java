@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class BiggerToken(){
+public class BiggerToken extends Token{
     private final Lexeme value;
 
     public BiggerToken(){
         super(Tag.BIGGER);
-        this.value = new Lexeme('>');
+        this.value = new Lexeme(">");
     }
 
     public String getValue(){

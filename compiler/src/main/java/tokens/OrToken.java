@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class OrToken(){
+public class OrToken extends Token{
     private final Lexeme value;
 
     public OrToken(){
         super(Tag.OR);
-        this.value = new Lexeme('or');
+        this.value = new Lexeme("or");
     }
 
     public String getValue(){

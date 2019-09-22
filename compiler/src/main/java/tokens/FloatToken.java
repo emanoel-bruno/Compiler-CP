@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class FloatToken(){
+public class FloatToken extends Token{
     private final Lexeme value;
 
     public FloatToken(){
         super(Tag.FLOAT);        
-        this.value = new Lexeme('float');
+        this.value = new Lexeme("float");
     }
 
     public String getValue(){

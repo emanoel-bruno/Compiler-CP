@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class OpenParenthesisToken(){
+public class OpenParenthesisToken extends Token{
     private final Lexeme value;
 
     public OpenParenthesisToken(){
         super(Tag.OPEN_PARENTHESIS);
-        this.value = new Lexeme('(');
+        this.value = new Lexeme("(");
     }
 
     public String getValue(){

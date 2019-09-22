@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class MinusToken(){
+public class MinusToken extends Token{
     private final Lexeme value;
 
     public MinusToken(){
         super(Tag.MINUS);
-        this.value = new Lexeme('-');
+        this.value = new Lexeme("-");
     }
 
     public String getValue(){

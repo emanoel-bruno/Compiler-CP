@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class ScanToken(){
+public class ScanToken extends Token{
     private final Lexeme value;
 
     public ScanToken(){
         super(Tag.SCAN);
-        this.value = new Lexeme('scan');
+        this.value = new Lexeme("scan");
     }
 
     public String getValue(){

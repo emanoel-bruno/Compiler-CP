@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class EqualToken(){
+public class EqualToken extends Token{
     private final Lexeme value;
 
     public EqualToken(){
         super(Tag.EQUAL);
-        this.value = new Lexeme('==');
+        this.value = new Lexeme("==");
     }
 
     public String getValue(){

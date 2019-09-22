@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class NotToken(){
+public class NotToken extends Token{
     private final Lexeme value;
 
     public NotToken(){
         super(Tag.NOT);
-        this.value = new Lexeme('not');
+        this.value = new Lexeme("not");
     }
 
     public String getValue(){

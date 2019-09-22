@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class CloseParenthesisToken(){
+public class CloseParenthesisToken extends Token{
     private final Lexeme value;
 
     public CloseParenthesisToken(){
         super(Tag.CLOSE_PARENTHESIS);
-        this.value = new Lexeme(')');
+        this.value = new Lexeme(")");
     }
 
     public String getValue(){

@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class TimesToken(){
+public class TimesToken extends Token{
     private final Lexeme value;
 
     public TimesToken(){
         super(Tag.TIMES);
-        this.value = new Lexeme('*');
+        this.value = new Lexeme("*");
     }
 
     public String getValue(){

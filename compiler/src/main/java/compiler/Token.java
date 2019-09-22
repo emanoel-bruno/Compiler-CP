@@ -10,8 +10,4 @@ public class Token{
     public int getTag(){
         return this.tag;
     }
-
-    public String getValue(){
-        return String.valueOf(this.tag);
-    }
 }

@@ -4,12 +4,12 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class CommaToken(){
+public class CommaToken extends Token{
     private final Lexeme value;
 
     public CommaToken(){
         super(Tag.COMMA);
-        this.value = new Lexeme(',');
+        this.value = new Lexeme(",");
     }
 
     public String getValue(){
