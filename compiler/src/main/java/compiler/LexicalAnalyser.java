@@ -52,186 +52,159 @@ public class LexicalAnalyser {
         }
     }
 
+    public Token findNextToken() throws IOException {
+        if(Character.isDigit(this.currentChar)){
+            StringBuilder number = new StringBuilder();
+            number.append(this.currentChar);
+            while(this.nextChar("digit"))
+                number.append(this.currentChar);                    
+            if(String.valueOf(this.currentChar).intern() == "."){
+                number.append(this.currentChar);                                   
+                while(this.nextChar("digit"))
+                    number.append(this.currentChar);
+                return new FloatConstantToken(Float.valueOf(number.toString()));
+            } 
+            else{
+                return new IntegerConstantToken(Integer.valueOf(number.toString()));
+            }
+        }
+
+        if(Character.isLetter(this.currentChar)){
+            StringBuilder lexeme = new StringBuilder();
+            lexeme.append(this.currentChar);
+            while(this.nextChar("letter"))
+                lexeme.append(this.currentChar);                    
+            if(Character.isDigit(this.currentChar)){
+                while (this.nextChar() && (Character.isDigit(this.currentChar) || Character.isLetter(this.currentChar))) {
+                    lexeme.append(this.currentChar);                    
+                }
+                return new IdentifierToken(lexeme.toString());
+            }
+            else{
+                switch (lexeme.toString().intern()) {
+                    case "start":
+                        return new StartToken();
+                    case "exit":
+                        return new ExitToken();
+                    case "int":
+                        return new IntToken();
+                    case "float":
+                        return new FloatToken();
+                    case "string":
+                        return new StringToken();
+                    case "if":
+                        return new IfToken();
+                    case "then":
+                        return new ThenToken();
+                    case "end":
+                        return new EndToken();
+                    case "else":
+                        return new ElseToken();
+                    case "do":
+                        return new DoToken();
+                    case "while":
+                        return new WhileToken();
+                    case "scan":
+                        return new ScanToken();
+                    case "print":
+                        return new PrintToken();
+                    case "not":
+                        return new NotToken();
+                    case "or":
+                        return new OrToken();
+                    case "and":
+                        return new AndToken();
+                    default:
+                        return new IdentifierToken(lexeme.toString());
+                }    
+            }
+        }
+
+        if((int)this.currentChar == 8221 ){
+            this.nextChar();
+            System.out.println("Deu ruim não sei o que dizer");                
+        }
+
+        if((int)this.currentChar == 8220 || String.valueOf(this.currentChar).intern() == "\""){
+            StringBuilder literal = new StringBuilder();
+            while(this.nextChar("character"))
+                literal.append(this.currentChar);                    
+            if((int)this.currentChar == 8221 || String.valueOf(this.currentChar) == "\""){
+                this.nextChar();
+                return new LiteralToken(literal.toString());
+            }
+            else if ((int)this.currentChar == 8221 ){
+                this.nextChar();
+                System.out.println("Deu ruim não sei o que dizer");                
+            }
+        }
+
+        if(CharMatcher.ascii().matches(this.currentChar)){
+            switch (String.valueOf(this.currentChar).intern()) {
+                case "=":
+                    if(this.nextChar("="))
+                        return new EqualToken();
+                    else
+                        return new AssignToken();
+                case ">":
+                    if(this.nextChar("="))
+                        return new BiggerEqualToken();
+                    else
+                        return new BiggerToken();
+                case "<":
+                    if(this.nextChar("="))
+                        return new SmallerEqualToken();
+                    else if(String.valueOf(this.currentChar).intern() == ">")
+                        return new DoubleArrowToken();
+                    else
+                        return new SmallerToken();
+                case "+":
+                    this.nextChar();
+                    return new PlusToken();
+                case "*":
+                    this.nextChar();
+                    return new TimesToken();
+                case "/":
+                    this.nextChar();
+                    return new DividerToken();
+                case "-":
+                    this.nextChar();
+                    return new MinusToken();
+                case ";":
+                    this.nextChar();
+                    return new SemiColonToken();
+                case ",":
+                    this.nextChar();
+                    return new CommaToken();
+                case "(":
+                    this.nextChar();
+                    return new OpenParenthesisToken();
+                case ")":
+                    this.nextChar();
+                    return new CloseParenthesisToken();
+                case ".":
+                    this.nextChar();
+                    return new DotToken();
+                default:
+                    if(String.valueOf(this.currentChar) != "\n"){
+                        CaractereToken t = new CaractereToken(String.valueOf(this.currentChar));
+                        this.nextChar();
+                        return t;
+                    }
+            }
+        }
+        return new Token(65535);
+    }
+
     public void scanToken() throws IOException {
         while(this.nextChar("empty")){}
-
         while((int)this.currentChar != 65535){
-
             if(this.currentChar == ' ' || this.currentChar == '\t' || this.currentChar == '\r' || this.currentChar == '\b' || this.currentChar == '\n')
                 while(this.nextChar("empty")){}
-
-            if(Character.isDigit(this.currentChar)){
-                StringBuilder number = new StringBuilder();
-                number.append(this.currentChar);
-                while(this.nextChar("digit"))
-                    number.append(this.currentChar);                    
-                if(String.valueOf(this.currentChar).intern() == "."){
-                    number.append(this.currentChar);                                   
-                    while(this.nextChar("digit"))
-                        number.append(this.currentChar);
-                    this.symbolTable.insertToken(new FloatConstantToken(Float.valueOf(number.toString())));
-                } 
-                else{
-                    this.symbolTable.insertToken(new IntegerConstantToken(Integer.valueOf(number.toString())));
-                }
-            }
-
-            if(Character.isLetter(this.currentChar)){
-                StringBuilder lexeme = new StringBuilder();
-                lexeme.append(this.currentChar);
-                while(this.nextChar("letter"))
-                    lexeme.append(this.currentChar);                    
-                if(Character.isDigit(this.currentChar)){
-                    while (this.nextChar() && (Character.isDigit(this.currentChar) || Character.isLetter(this.currentChar))) {
-                        lexeme.append(this.currentChar);                    
-                    }
-                    this.symbolTable.insertToken(new IdentifierToken(lexeme.toString()));
-                }
-                else{
-                    switch (lexeme.toString().intern()) {
-                        case "start":
-                            this.symbolTable.insertToken(new StartToken());
-                            break;
-                        case "exit":
-                            this.symbolTable.insertToken(new ExitToken());
-                            break;
-                        case "int":
-                            this.symbolTable.insertToken(new IntToken());
-                            break;
-                        case "float":
-                            this.symbolTable.insertToken(new FloatToken());
-                            break;
-                        case "string":
-                            this.symbolTable.insertToken(new StringToken());
-                            break;
-                        case "if":
-                            this.symbolTable.insertToken(new IfToken());
-                            break;
-                        case "then":
-                            this.symbolTable.insertToken(new ThenToken());
-                            break;
-                        case "end":
-                            this.symbolTable.insertToken(new EndToken());
-                            break;
-                        case "else":
-                            this.symbolTable.insertToken(new ElseToken());
-                            break;
-                        case "do":
-                            this.symbolTable.insertToken(new DoToken());
-                            break;
-                        case "while":
-                            this.symbolTable.insertToken(new WhileToken());
-                            break;
-                        case "scan":
-                            this.symbolTable.insertToken(new ScanToken());
-                            break;
-                        case "print":
-                            this.symbolTable.insertToken(new PrintToken());
-                            break;
-                        case "not":
-                            this.symbolTable.insertToken(new NotToken());
-                            break;
-                        case "or":
-                            this.symbolTable.insertToken(new OrToken());
-                            break;
-                        case "and":
-                            this.symbolTable.insertToken(new AndToken());
-                            break;
-                        default:
-                            this.symbolTable.insertToken(new IdentifierToken(lexeme.toString()));
-                            break;
-                    }    
-                }
-            }
-
-            if((int)this.currentChar == 8221 ){
-                System.out.println("Deu ruim não sei o que dizer");                
-                nextChar();
-            }
-
-            if((int)this.currentChar == 8220 || String.valueOf(this.currentChar).intern() == "\""){
-                StringBuilder literal = new StringBuilder();
-                literal.append(this.currentChar);
-                while(this.nextChar("character"))
-                    literal.append(this.currentChar);                    
-                if((int)this.currentChar == 8221 || String.valueOf(this.currentChar) == "\""){
-                    this.symbolTable.insertToken(new LiteralToken(literal.toString()));
-                    nextChar();
-                }
-                else{
-                    System.out.println("Deu ruim não sei o que dizer");
-                }
-            }
-
-            if(CharMatcher.ascii().matches(this.currentChar)){
-                switch (String.valueOf(this.currentChar).intern()) {
-                    case "=":
-                        if(this.nextChar("="))
-                            this.symbolTable.insertToken(new EqualToken());
-                        else
-                            this.symbolTable.insertToken(new AssignToken());
-
-                        break;
-                    case ">":
-                        if(this.nextChar("="))
-                            this.symbolTable.insertToken(new BiggerEqualToken());
-                        else
-                            this.symbolTable.insertToken(new BiggerToken());
-
-                        break;
-                    case "<":
-                        if(this.nextChar("="))
-                            this.symbolTable.insertToken(new SmallerEqualToken());
-                        else if(String.valueOf(this.currentChar).intern() == ">")
-                            this.symbolTable.insertToken(new DoubleArrowToken());
-                        else
-                            this.symbolTable.insertToken(new SmallerToken());
-                            
-                        break;
-                    case "+":
-                        this.symbolTable.insertToken(new PlusToken());
-                        nextChar();
-                        break;
-                    case "*":
-                        this.symbolTable.insertToken(new TimesToken());
-                        nextChar();
-                        break;
-                    case "/":
-                        this.symbolTable.insertToken(new DividerToken());
-                        nextChar();
-                        break;
-                    case "-":
-                        this.symbolTable.insertToken(new MinusToken());
-                        nextChar();
-                        break;
-                    case ";":
-                        this.symbolTable.insertToken(new SemiColonToken());
-                        nextChar();
-                        break;
-                    case ",":
-                        this.symbolTable.insertToken(new CommaToken());
-                        nextChar();
-                        break;
-                    case "(":
-                        this.symbolTable.insertToken(new OpenParenthesisToken());
-                        nextChar();
-                        break;
-                    case ")":
-                        this.symbolTable.insertToken(new CloseParenthesisToken());
-                        nextChar();
-                        break;
-                    case ".":
-                        this.symbolTable.insertToken(new DotToken());
-                        nextChar();
-                        break;
-                    default:
-                        if(String.valueOf(this.currentChar) != "\n"){
-                            this.symbolTable.insertToken(new CaractereToken(String.valueOf(this.currentChar)));
-                        }
-                        nextChar();
-                        break;
-                }
-            }
+            
+            Token t = this.findNextToken();
+            if(t.getTag() != 65535)
+                this.symbolTable.insertToken(t);
         }
     }
 }
