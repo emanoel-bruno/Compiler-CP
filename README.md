@@ -67,6 +67,8 @@
 ### Build
 
     mvn package
+    or
+    mvn clean package assembly:single
 
 ### Execute
 
