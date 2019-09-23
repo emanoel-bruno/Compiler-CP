@@ -70,11 +70,9 @@ public class LexicalAnalyser {
                     while(this.nextChar("digit"))
                         number.append(this.currentChar);
                     this.symbolTable.insertToken(new FloatConstantToken(Float.valueOf(number.toString())));
-                    System.out.println(number.toString());
                 } 
                 else{
                     this.symbolTable.insertToken(new IntegerConstantToken(Integer.valueOf(number.toString())));
-                    System.out.println(number.toString());
                 }
             }
 
@@ -88,84 +86,66 @@ public class LexicalAnalyser {
                         lexeme.append(this.currentChar);                    
                     }
                     this.symbolTable.insertToken(new IdentifierToken(lexeme.toString()));
-                    System.out.println(lexeme.toString());
                 }
                 else{
                     switch (lexeme.toString().intern()) {
                         case "start":
                             this.symbolTable.insertToken(new StartToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "exit":
                             this.symbolTable.insertToken(new ExitToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "int":
                             this.symbolTable.insertToken(new IntToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "float":
                             this.symbolTable.insertToken(new FloatToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "string":
                             this.symbolTable.insertToken(new StringToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "if":
                             this.symbolTable.insertToken(new IfToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "then":
                             this.symbolTable.insertToken(new ThenToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "end":
                             this.symbolTable.insertToken(new EndToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "else":
                             this.symbolTable.insertToken(new ElseToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "do":
                             this.symbolTable.insertToken(new DoToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "while":
                             this.symbolTable.insertToken(new WhileToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "scan":
                             this.symbolTable.insertToken(new ScanToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "print":
                             this.symbolTable.insertToken(new PrintToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "not":
                             this.symbolTable.insertToken(new NotToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "or":
                             this.symbolTable.insertToken(new OrToken());
-                            System.out.println(lexeme.toString());
                             break;
                         case "and":
                             this.symbolTable.insertToken(new AndToken());
-                            System.out.println(lexeme.toString());
                             break;
                         default:
                             this.symbolTable.insertToken(new IdentifierToken(lexeme.toString()));
-                            System.out.println(lexeme.toString());
                             break;
                     }    
                 }
             }
 
             if((int)this.currentChar == 8221 ){
-                System.out.println("Deu ruim não sei o que dizer");
+                System.out.println("Deu ruim não sei o que dizer");                
                 nextChar();
             }
 
@@ -181,7 +161,6 @@ public class LexicalAnalyser {
                 else{
                     System.out.println("Deu ruim não sei o que dizer");
                 }
-                System.out.println("”" + literal.toString() +"”");
             }
 
             if(CharMatcher.ascii().matches(this.currentChar)){
@@ -192,7 +171,6 @@ public class LexicalAnalyser {
                         else
                             this.symbolTable.insertToken(new AssignToken());
 
-                        System.out.println(this.currentChar);
                         break;
                     case ">":
                         if(this.nextChar("="))
@@ -200,7 +178,6 @@ public class LexicalAnalyser {
                         else
                             this.symbolTable.insertToken(new BiggerToken());
 
-                        System.out.println(this.currentChar);
                         break;
                     case "<":
                         if(this.nextChar("="))
@@ -210,63 +187,51 @@ public class LexicalAnalyser {
                         else
                             this.symbolTable.insertToken(new SmallerToken());
                             
-                        System.out.println(this.currentChar);
                         break;
                     case "+":
                         this.symbolTable.insertToken(new PlusToken());
-                        System.out.println(this.currentChar);
                         nextChar();
                         break;
                     case "*":
                         this.symbolTable.insertToken(new TimesToken());
-                        System.out.println(this.currentChar);
                         nextChar();
                         break;
                     case "/":
                         this.symbolTable.insertToken(new DividerToken());
-                        System.out.println(this.currentChar);
                         nextChar();
                         break;
                     case "-":
                         this.symbolTable.insertToken(new MinusToken());
-                        System.out.println(this.currentChar);
                         nextChar();
                         break;
                     case ";":
                         this.symbolTable.insertToken(new SemiColonToken());
-                        System.out.println(this.currentChar);
                         nextChar();
                         break;
                     case ",":
                         this.symbolTable.insertToken(new CommaToken());
-                        System.out.println(this.currentChar);
                         nextChar();
                         break;
                     case "(":
                         this.symbolTable.insertToken(new OpenParenthesisToken());
-                        System.out.println(this.currentChar);
                         nextChar();
                         break;
                     case ")":
                         this.symbolTable.insertToken(new CloseParenthesisToken());
-                        System.out.println(this.currentChar);
                         nextChar();
                         break;
                     case ".":
                         this.symbolTable.insertToken(new DotToken());
-                        System.out.println(this.currentChar);
                         nextChar();
                         break;
                     default:
                         if(String.valueOf(this.currentChar) != "\n"){
                             this.symbolTable.insertToken(new CaractereToken(String.valueOf(this.currentChar)));
-                            System.out.println(this.currentChar);
                         }
                         nextChar();
                         break;
                 }
             }
-            System.in.read();
         }
     }
 }
