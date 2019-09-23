@@ -16,6 +16,11 @@ public class LiteralToken extends Token{
         return this.value.getIdentifier();
     }
 
+    public String toString(){
+        return "\""  + this.value.getIdentifier() + "\"";
+
+    }
+
     public boolean match(String s){
         return this.value.match(s);
     }

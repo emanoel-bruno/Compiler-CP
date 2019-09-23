@@ -12,7 +12,6 @@ public class SymbolTable{
     }
 
     public void insertToken(Token t){
-        
         this.table.put(String.valueOf(t.getTag()), t);
     }
 
