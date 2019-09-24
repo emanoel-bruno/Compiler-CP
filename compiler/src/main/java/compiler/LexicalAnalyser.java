@@ -1,6 +1,7 @@
 package compiler;
 
 import compiler.SymbolTable;
+import exception.LexicalException;
 import tokens.*;
 
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ public class LexicalAnalyser {
     private FileReader fileReader;
     private BufferedReader bufferedReader;
     private char currentChar;
+    private int currentLine;
     private SymbolTable symbolTable;
     
     public void openFile(String path) throws FileNotFoundException {
@@ -23,6 +25,7 @@ public class LexicalAnalyser {
         this.fileReader = new FileReader(this.file);
         this.bufferedReader = new BufferedReader(this.fileReader);
         this.symbolTable = new SymbolTable();
+        this.currentLine = 0;
     }
 
     public boolean nextChar() throws IOException{
@@ -45,6 +48,8 @@ public class LexicalAnalyser {
             return (CharMatcher.ascii().matches(this.currentChar) && String.valueOf(this.currentChar) != "\""  && (int)this.currentChar != 8220 && (int)this.currentChar != 8221  && String.valueOf(this.currentChar) != "\n") ? true : false;            
         }
         else if(condition.intern() == "empty"){
+            if(this.currentChar == '\n')
+                this.currentLine++;
             return (this.currentChar == ' ' || this.currentChar == '\t' || this.currentChar == '\r' || this.currentChar == '\b' || this.currentChar == '\n') ? true : false;            
         }
         else{
@@ -52,7 +57,7 @@ public class LexicalAnalyser {
         }
     }
 
-    public Token findNextToken() throws IOException {
+    public Token findNextToken() throws IOException, LexicalException {
         if(Character.isDigit(this.currentChar)){
             StringBuilder number = new StringBuilder();
             number.append(this.currentChar);
@@ -122,7 +127,7 @@ public class LexicalAnalyser {
 
         if((int)this.currentChar == 8221 ){
             this.nextChar();
-            System.out.println("Deu ruim não sei o que dizer");                
+            throw new LexicalException("Character Invalid: " + this.currentChar +"[Close Quotation Mark(Unicode)] line: "+ this.currentLine );
         }
 
         if((int)this.currentChar == 8220 || String.valueOf(this.currentChar).intern() == "\""){
@@ -133,9 +138,9 @@ public class LexicalAnalyser {
                 this.nextChar();
                 return new LiteralToken(literal.toString());
             }
-            else if ((int)this.currentChar == 8221 ){
+            else if ((int)this.currentChar == 8220 ){
                 this.nextChar();
-                System.out.println("Deu ruim não sei o que dizer");                
+                throw new LexicalException("Character Invalid: " + this.currentChar +"[Open Quotation Mark(Unicode)] line: "+ this.currentLine );            
             }
         }
 
@@ -196,7 +201,7 @@ public class LexicalAnalyser {
         return new Token(65535);
     }
 
-    public void scanToken() throws IOException {
+    public void scanToken() throws IOException, LexicalException {
         while(this.nextChar("empty")){}
         while((int)this.currentChar != 65535){
             if(this.currentChar == ' ' || this.currentChar == '\t' || this.currentChar == '\r' || this.currentChar == '\b' || this.currentChar == '\n')
