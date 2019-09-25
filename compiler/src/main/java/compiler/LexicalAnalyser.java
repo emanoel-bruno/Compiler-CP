@@ -1,8 +1,11 @@
 package compiler;
 
-import compiler.SymbolTable;
-import exception.LexicalException;
 import tokens.*;
+import compiler.SymbolTable;
+
+import exception.CharacterInvalidException;
+import exception.LexicalException;
+import exception.UnknownCharacterException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,6 +29,7 @@ public class LexicalAnalyser {
         this.bufferedReader = new BufferedReader(this.fileReader);
         this.symbolTable = new SymbolTable();
         this.currentLine = 0;
+        this.symbolTable.clear();
     }
 
     public boolean nextChar() throws IOException{
@@ -34,6 +38,10 @@ public class LexicalAnalyser {
         return true;
     }
 
+    private boolean isWhiteSpace(){
+        return (isWhiteSpace()) ? true : false;
+    };
+    
     public boolean nextChar(String condition) throws IOException{
         if((int)(this.currentChar = (char) this.bufferedReader.read()) == -1)
             return false;
@@ -45,19 +53,22 @@ public class LexicalAnalyser {
             return Character.isLetter(this.currentChar);            
         }
         else if(condition.intern() == "character"){
-            return (CharMatcher.ascii().matches(this.currentChar) && String.valueOf(this.currentChar) != "\""  && (int)this.currentChar != 8220 && (int)this.currentChar != 8221  && String.valueOf(this.currentChar) != "\n") ? true : false;            
+            return (CharMatcher.ascii().matches(this.currentChar) && String.valueOf(this.currentChar) != "\""  && (int)this.currentChar != 8220 && (int)this.currentChar != 8221  && String.valueOf(this.currentChar) != "\n");           
         }
         else if(condition.intern() == "empty"){
             if(this.currentChar == '\n')
                 this.currentLine++;
-            return (this.currentChar == ' ' || this.currentChar == '\t' || this.currentChar == '\r' || this.currentChar == '\b' || this.currentChar == '\n') ? true : false;            
+            return (isWhiteSpace());  
         }
         else{
-            return (String.valueOf(this.currentChar).intern() == condition.intern()) ? true : false;            
+            return (String.valueOf(this.currentChar).intern() == condition.intern());            
         }
     }
 
     public Token findNextToken() throws IOException, LexicalException {
+        if(isWhiteSpace())
+            while(this.nextChar("empty")){}
+        
         if(Character.isDigit(this.currentChar)){
             StringBuilder number = new StringBuilder();
             number.append(this.currentChar);
@@ -81,53 +92,55 @@ public class LexicalAnalyser {
                 lexeme.append(this.currentChar);                    
             if(Character.isDigit(this.currentChar)){
                 while (this.nextChar() && (Character.isDigit(this.currentChar) || Character.isLetter(this.currentChar))) {
-                    lexeme.append(this.currentChar);                    
+                    lexeme.append(this.currentChar);               
                 }
                 return new IdentifierToken(lexeme.toString());
             }
             else{
-                switch (lexeme.toString().intern()) {
-                    case "start":
-                        return new StartToken();
-                    case "exit":
-                        return new ExitToken();
-                    case "int":
-                        return new IntToken();
-                    case "float":
-                        return new FloatToken();
-                    case "string":
-                        return new StringToken();
-                    case "if":
-                        return new IfToken();
-                    case "then":
-                        return new ThenToken();
-                    case "end":
-                        return new EndToken();
-                    case "else":
-                        return new ElseToken();
-                    case "do":
-                        return new DoToken();
-                    case "while":
-                        return new WhileToken();
-                    case "scan":
-                        return new ScanToken();
-                    case "print":
-                        return new PrintToken();
-                    case "not":
-                        return new NotToken();
-                    case "or":
-                        return new OrToken();
-                    case "and":
-                        return new AndToken();
-                    default:
-                        return new IdentifierToken(lexeme.toString());
-                }    
+                if(String.valueOf(this.currentChar) == ")"){
+                    switch (lexeme.toString().intern()) {
+                        case "start":
+                            return new StartToken();
+                        case "exit":
+                            return new ExitToken();
+                        case "int":
+                            return new IntToken();
+                        case "float":
+                            return new FloatToken();
+                        case "string":
+                            return new StringToken();
+                        case "if":
+                            return new IfToken();
+                        case "then":
+                            return new ThenToken();
+                        case "end":
+                            return new EndToken();
+                        case "else":
+                            return new ElseToken();
+                        case "do":
+                            return new DoToken();
+                        case "while":
+                            return new WhileToken();
+                        case "scan":
+                            return new ScanToken();
+                        case "print":
+                            return new PrintToken();
+                        case "not":
+                            return new NotToken();
+                        case "or":
+                            return new OrToken();
+                        case "and":
+                            return new AndToken();
+                        default:
+                            return new IdentifierToken(lexeme.toString());
+                    }
+                }
             }
         }
 
         if((int)this.currentChar == 8221 ){
             this.nextChar();
-            throw new LexicalException("Character Invalid: " + this.currentChar +"[Close Quotation Mark(Unicode)] line: "+ this.currentLine );
+            throw new CharacterInvalidException(this.currentChar, "[Close Quotation Mark(Unicode)] without open quotation before", this.currentLine);
         }
 
         if((int)this.currentChar == 8220 || String.valueOf(this.currentChar).intern() == "\""){
@@ -140,7 +153,13 @@ public class LexicalAnalyser {
             }
             else if ((int)this.currentChar == 8220 ){
                 this.nextChar();
-                throw new LexicalException("Character Invalid: " + this.currentChar +"[Open Quotation Mark(Unicode)] line: "+ this.currentLine );            
+                throw new CharacterInvalidException(this.currentChar,"[Open Quotation Mark(Unicode)] already opened quotation", this.currentLine );    
+            }
+            else if(String.valueOf(this.currentChar) == "\n"){
+                throw new CharacterInvalidException(this.currentChar,"[New Line] can't be used within a literal", this.currentLine );            
+            }
+            else{
+                throw new CharacterInvalidException(this.currentChar," can't be used within a literal", this.currentLine );            
             }
         }
 
@@ -198,18 +217,15 @@ public class LexicalAnalyser {
                     }
             }
         }
-        return new Token(65535);
+        
+        if((int) this.currentChar == 65535 ){
+            return new EOFToken();
+        }
+
+        throw new UnknownCharacterException(this.currentChar, this.currentLine);
     }
 
-    public void scanToken() throws IOException, LexicalException {
-        while(this.nextChar("empty")){}
-        while((int)this.currentChar != 65535){
-            if(this.currentChar == ' ' || this.currentChar == '\t' || this.currentChar == '\r' || this.currentChar == '\b' || this.currentChar == '\n')
-                while(this.nextChar("empty")){}
-            
-            Token t = this.findNextToken();
-            if(t.getTag() != 65535)
-                this.symbolTable.insertToken(t);
-        }
+    public boolean insertToken(IdentifierToken t){
+        return this.insertToken(t);
     }
 }

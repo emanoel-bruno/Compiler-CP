@@ -39,5 +39,6 @@ public class Tag{
                             STRING = 290,
                             THEN = 291,
                             TIMES = 292,
-                            WHILE = 293;                            
+                            WHILE = 293,
+                            EOF = 293;
 }
