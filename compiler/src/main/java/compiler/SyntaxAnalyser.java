@@ -15,84 +15,84 @@ public class SyntaxAnalyser {
         this.lexical = lexical;
     }
 
-    private String printToken(Token t) {
+    private String stringToken(Token t) {
         String s = "Class not Found: " + t.getTag();
         if (t instanceof AndToken) {
-            s = ((AndToken) t).getValue();
+            s = ((AndToken) t).toString();
         } else if (t instanceof AssignToken) {
-            s = ((AssignToken) t).getValue();
+            s = ((AssignToken) t).toString();
         } else if (t instanceof BiggerEqualToken) {
-            s = ((BiggerEqualToken) t).getValue();
+            s = ((BiggerEqualToken) t).toString();
         } else if (t instanceof BiggerToken) {
-            s = ((BiggerToken) t).getValue();
+            s = ((BiggerToken) t).toString();
         } else if (t instanceof CaractereToken) {
-            s = ((CaractereToken) t).getValue();
+            s = ((CaractereToken) t).toString();
         } else if (t instanceof CloseParenthesisToken) {
-            s = ((CloseParenthesisToken) t).getValue();
+            s = ((CloseParenthesisToken) t).toString();
         } else if (t instanceof CommaToken) {
-            s = ((CommaToken) t).getValue();
+            s = ((CommaToken) t).toString();
         } else if (t instanceof DividerToken) {
-            s = ((DividerToken) t).getValue();
+            s = ((DividerToken) t).toString();
         } else if (t instanceof DoToken) {
-            s = ((DoToken) t).getValue();
+            s = ((DoToken) t).toString();
         } else if (t instanceof DotToken) {
-            s = ((DotToken) t).getValue();
+            s = ((DotToken) t).toString();
         } else if (t instanceof DoubleArrowToken) {
-            s = ((DoubleArrowToken) t).getValue();
+            s = ((DoubleArrowToken) t).toString();
         } else if (t instanceof ElseToken) {
-            s = ((ElseToken) t).getValue();
+            s = ((ElseToken) t).toString();
         } else if (t instanceof EndToken) {
-            s = ((EndToken) t).getValue();
+            s = ((EndToken) t).toString();
         } else if (t instanceof EqualToken) {
-            s = ((EqualToken) t).getValue();
+            s = ((EqualToken) t).toString();
         } else if (t instanceof ExitToken) {
-            s = ((ExitToken) t).getValue();
+            s = ((ExitToken) t).toString();
         } else if (t instanceof FloatConstantToken) {
-            s = "" + ((FloatConstantToken) t).getValue();
+            s = "" + ((FloatConstantToken) t).toString();
         } else if (t instanceof FloatToken) {
-            s = ((FloatToken) t).getValue();
+            s = ((FloatToken) t).toString();
         } else if (t instanceof IdentifierToken) {
-            s = ((IdentifierToken) t).getValue();
+            s = ((IdentifierToken) t).toString();
         } else if (t instanceof IfToken) {
-            s = ((IfToken) t).getValue();
+            s = ((IfToken) t).toString();
         } else if (t instanceof IntegerConstantToken) {
-            s = "" + ((IntegerConstantToken) t).getValue();
+            s = "" + ((IntegerConstantToken) t).toString();
         } else if (t instanceof IntToken) {
-            s = ((IntToken) t).getValue();
+            s = ((IntToken) t).toString();
         } else if (t instanceof LiteralToken) {
             s = ((LiteralToken) t).toString();
         } else if (t instanceof MinusToken) {
-            s = ((MinusToken) t).getValue();
+            s = ((MinusToken) t).toString();
         } else if (t instanceof NotToken) {
-            s = ((NotToken) t).getValue();
+            s = ((NotToken) t).toString();
         } else if (t instanceof OpenParenthesisToken) {
-            s = ((OpenParenthesisToken) t).getValue();
+            s = ((OpenParenthesisToken) t).toString();
         } else if (t instanceof OrToken) {
-            s = ((OrToken) t).getValue();
+            s = ((OrToken) t).toString();
         } else if (t instanceof PlusToken) {
-            s = ((PlusToken) t).getValue();
+            s = ((PlusToken) t).toString();
         } else if (t instanceof PrintToken) {
-            s = ((PrintToken) t).getValue();
+            s = ((PrintToken) t).toString();
         } else if (t instanceof ScanToken) {
-            s = ((ScanToken) t).getValue();
+            s = ((ScanToken) t).toString();
         } else if (t instanceof SemiColonToken) {
-            s = ((SemiColonToken) t).getValue();
+            s = ((SemiColonToken) t).toString();
         } else if (t instanceof SmallerEqualToken) {
-            s = ((SmallerEqualToken) t).getValue();
+            s = ((SmallerEqualToken) t).toString();
         } else if (t instanceof SmallerToken) {
-            s = ((SmallerToken) t).getValue();
+            s = ((SmallerToken) t).toString();
         } else if (t instanceof StartToken) {
-            s = ((StartToken) t).getValue();
+            s = ((StartToken) t).toString();
         } else if (t instanceof StringToken) {
-            s = ((StringToken) t).getValue();
+            s = ((StringToken) t).toString();
         } else if (t instanceof ThenToken) {
-            s = ((ThenToken) t).getValue();
+            s = ((ThenToken) t).toString();
         } else if (t instanceof TimesToken) {
-            s = ((TimesToken) t).getValue();
+            s = ((TimesToken) t).toString();
         } else if (t instanceof WhileToken) {
-            s = ((WhileToken) t).getValue();
+            s = ((WhileToken) t).toString();
         }
-
+        
         return s;
     }
 
@@ -181,9 +181,10 @@ public class SyntaxAnalyser {
             t = this.lexical.findNextToken();
             if( t instanceof EOFToken)
                 break;
+
+            System.out.println(stringToken(t));
             if( t instanceof  IdentifierToken)
                 this.lexical.insertToken((IdentifierToken)t);
-            printToken(t);
         }
     }
 }

@@ -14,4 +14,8 @@ public class FloatConstantToken extends Token{
     public float getValue() {
         return this.value;
     }
+
+    public String toString(){
+        return String.valueOf(this.value);
+    }
 }

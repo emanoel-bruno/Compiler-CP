@@ -12,7 +12,7 @@ public class ThenToken extends Token{
         this.value = new Lexeme("then");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

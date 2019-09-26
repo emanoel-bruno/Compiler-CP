@@ -12,7 +12,7 @@ public class AndToken extends Token{
         this.value = new Lexeme("and");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

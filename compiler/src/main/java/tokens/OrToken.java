@@ -12,7 +12,7 @@ public class OrToken extends Token{
         this.value = new Lexeme("or");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

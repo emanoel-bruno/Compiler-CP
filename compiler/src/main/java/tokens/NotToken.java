@@ -12,7 +12,7 @@ public class NotToken extends Token{
         this.value = new Lexeme("not");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

@@ -12,7 +12,7 @@ public class CaractereToken extends Token{
         this.value = new Lexeme(c);
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

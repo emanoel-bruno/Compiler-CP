@@ -12,7 +12,7 @@ public class IfToken extends Token{
         this.value = new Lexeme("if");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

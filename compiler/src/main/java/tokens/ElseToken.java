@@ -12,7 +12,7 @@ public class ElseToken extends Token{
         this.value = new Lexeme("else");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

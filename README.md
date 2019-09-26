@@ -66,12 +66,16 @@
 
 ### Build
 
-    mvn clean package assembly:single
+    ./cp build
 
 ### Execute
+    
+    ./cp run [files]
+    
+### Fazer
 
-    java -cp target/compiler-1.0-jar-with-dependencies.jar compiler.App
-
-#### Fazer
-
-IMplementar panic mode
+1. Checar funcionamento
+2. Implementar panic mode
+3. Implementar Syntax Analyser
+3. Implementar Semantic Analyser
+3. Implementar Code Generator

@@ -12,7 +12,7 @@ public class DoToken extends Token{
         this.value = new Lexeme("do");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

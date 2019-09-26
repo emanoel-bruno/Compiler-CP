@@ -12,7 +12,7 @@ public class ScanToken extends Token{
         this.value = new Lexeme("scan");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

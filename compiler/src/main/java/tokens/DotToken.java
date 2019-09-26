@@ -12,7 +12,7 @@ public class DotToken extends Token{
         this.value = new Lexeme(".");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

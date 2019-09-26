@@ -12,7 +12,7 @@ public class PrintToken extends Token{
         this.value = new Lexeme("print");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

@@ -12,10 +12,6 @@ public class LiteralToken extends Token{
         this.value = new Lexeme(s);
     }
 
-    public String getValue(){
-        return this.value.getIdentifier();
-    }
-
     public String toString(){
         return "\""  + this.value.getIdentifier() + "\"";
 

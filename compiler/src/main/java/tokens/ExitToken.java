@@ -12,7 +12,7 @@ public class ExitToken extends Token{
         this.value = new Lexeme("exit");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

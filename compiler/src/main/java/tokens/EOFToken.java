@@ -12,7 +12,7 @@ public class EOFToken extends Token {
         this.value = new Lexeme("EOF");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

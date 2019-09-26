@@ -12,7 +12,7 @@ public class StartToken extends Token{
         this.value = new Lexeme("start");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

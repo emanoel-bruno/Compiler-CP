@@ -12,7 +12,7 @@ public class IdentifierToken extends Token{
         this.value = new Lexeme(id);
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

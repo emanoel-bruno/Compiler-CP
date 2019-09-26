@@ -12,7 +12,7 @@ public class IntToken extends Token{
         this.value = new Lexeme("int");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

@@ -14,4 +14,8 @@ public class IntegerConstantToken extends Token{
     public int getValue(){
         return this.value;
     }
+
+    public String toString(){
+        return String.valueOf(this.value);
+    }
 }

@@ -3,9 +3,11 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/NotToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/CaractereToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/IntegerConstantToken.java
+/home/emanoel/Git/Compiler-CP/compiler/src/main/java/exception/CharacterInvalidException.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/FloatToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/ElseToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exception/CustomException.java
+/home/emanoel/Git/Compiler-CP/compiler/src/main/java/compiler/SyntaxAnalyser.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/compiler/App.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/EqualToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/OpenParenthesisToken.java
@@ -18,6 +20,7 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/IntToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/EndToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/DividerToken.java
+/home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/EOFToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/IdentifierToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/OrToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/PrintToken.java
@@ -28,7 +31,6 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/ScanToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/StringToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/CloseParenthesisToken.java
-/home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/QuotationMarkToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/compiler/Tag.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/AndToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/PlusToken.java
@@ -36,6 +38,7 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/compiler/Token.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/BiggerEqualToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/MinusToken.java
+/home/emanoel/Git/Compiler-CP/compiler/src/main/java/exception/UnknownCharacterException.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/TimesToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exception/LexicalException.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/ExitToken.java

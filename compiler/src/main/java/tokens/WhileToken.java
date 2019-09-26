@@ -12,7 +12,7 @@ public class WhileToken extends Token{
         this.value = new Lexeme("while");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 

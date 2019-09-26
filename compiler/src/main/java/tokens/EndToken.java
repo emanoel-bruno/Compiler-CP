@@ -12,7 +12,7 @@ public class EndToken extends Token{
         this.value = new Lexeme("end");
     }
 
-    public String getValue(){
+    public String toString(){
         return this.value.getIdentifier();
     }
 
