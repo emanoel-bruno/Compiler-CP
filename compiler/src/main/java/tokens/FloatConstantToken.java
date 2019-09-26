@@ -3,10 +3,10 @@ package tokens;
 import compiler.Token;
 import compiler.Tag;
 
-public class FloatConstantToken extends Token{
+public class FloatConstantToken extends Token {
     private final float value;
 
-    public FloatConstantToken(float value){
+    public FloatConstantToken(float value) {
         super(Tag.FLOAT_CONSTANT);
         this.value = value;
     }
@@ -15,7 +15,7 @@ public class FloatConstantToken extends Token{
         return this.value;
     }
 
-    public String toString(){
+    public String toString() {
         return String.valueOf(this.value);
     }
 }

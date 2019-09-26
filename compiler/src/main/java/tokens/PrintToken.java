@@ -4,19 +4,19 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class PrintToken extends Token{
+public class PrintToken extends Token {
     private final Lexeme value;
 
-    public PrintToken(){
+    public PrintToken() {
         super(Tag.PRINT);
         this.value = new Lexeme("print");
     }
 
-    public String toString(){
+    public String toString() {
         return this.value.getIdentifier();
     }
 
-    public boolean match(String s){
+    public boolean match(String s) {
         return this.value.match(s);
     }
 }

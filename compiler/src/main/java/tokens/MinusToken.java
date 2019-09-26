@@ -4,19 +4,19 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class MinusToken extends Token{
+public class MinusToken extends Token {
     private final Lexeme value;
 
-    public MinusToken(){
+    public MinusToken() {
         super(Tag.MINUS);
         this.value = new Lexeme("-");
     }
 
-    public String toString(){
+    public String toString() {
         return this.value.getIdentifier();
     }
 
-    public boolean match(String s){
+    public boolean match(String s) {
         return this.value.match(s);
     }
 }

@@ -4,20 +4,20 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class LiteralToken extends Token{
+public class LiteralToken extends Token {
     private final Lexeme value;
 
-    public LiteralToken(String s){
+    public LiteralToken(String s) {
         super(Tag.LITERAL);
         this.value = new Lexeme(s);
     }
 
-    public String toString(){
-        return "\""  + this.value.getIdentifier() + "\"";
+    public String toString() {
+        return "\"" + this.value.getIdentifier() + "\"";
 
     }
 
-    public boolean match(String s){
+    public boolean match(String s) {
         return this.value.match(s);
     }
 }

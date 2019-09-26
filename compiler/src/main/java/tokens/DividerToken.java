@@ -4,19 +4,19 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class DividerToken extends Token{
+public class DividerToken extends Token {
     private final Lexeme value;
 
-    public DividerToken(){
+    public DividerToken() {
         super(Tag.DIVIDER);
         this.value = new Lexeme("/");
     }
 
-    public String toString(){
+    public String toString() {
         return this.value.getIdentifier();
     }
 
-    public boolean match(String s){
+    public boolean match(String s) {
         return this.value.match(s);
     }
 }

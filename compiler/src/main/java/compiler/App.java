@@ -8,7 +8,6 @@ import exception.LexicalException;
 import compiler.LexicalAnalyser;
 import compiler.SyntaxAnalyser;
 
-
 public class App {
     public static void main(String[] args) {
         if (args.length > 0) {

@@ -11,7 +11,7 @@ import compiler.LexicalAnalyser;
 public class SyntaxAnalyser {
     private LexicalAnalyser lexical;
 
-    public SyntaxAnalyser(LexicalAnalyser lexical){
+    public SyntaxAnalyser(LexicalAnalyser lexical) {
         this.lexical = lexical;
     }
 
@@ -92,99 +92,98 @@ public class SyntaxAnalyser {
         } else if (t instanceof WhileToken) {
             s = ((WhileToken) t).toString();
         }
-        
+
         return s;
     }
 
-
     // public boolean validadeNextToken(String className){
-    //     if (t instanceof AndToken) {
-    //         return ();
-    //     } else if (t instanceof AssignToken) {
-    //         return ();
-    //     } else if (t instanceof BiggerEqualToken) {
-    //         return ();
-    //     } else if (t instanceof BiggerToken) {
-    //         return ();
-    //     } else if (t instanceof CaractereToken) {
-    //         return ();
-    //     } else if (t instanceof CloseParenthesisToken) {
-    //         return ();
-    //     } else if (t instanceof CommaToken) {
-    //         return ();
-    //     } else if (t instanceof DividerToken) {
-    //         return ();
-    //     } else if (t instanceof DoToken) {
-    //         return ();
-    //     } else if (t instanceof DotToken) {
-    //         return ();
-    //     } else if (t instanceof DoubleArrowToken) {
-    //         return ();
-    //     } else if (t instanceof ElseToken) {
-    //         return ();
-    //     } else if (t instanceof EndToken) {
-    //         return ();
-    //     } else if (t instanceof EqualToken) {
-    //         return ();
-    //     } else if (t instanceof ExitToken) {
-    //         return ();
-    //     } else if (t instanceof FloatConstantToken) {
-    //         return ();
-    //     } else if (t instanceof FloatToken) {
-    //         return ();
-    //     } else if (t instanceof IdentifierToken) {
-    //         return ();
-    //     } else if (t instanceof IfToken) {
-    //         return ();
-    //     } else if (t instanceof IntegerConstantToken) {
-    //         return ();
-    //     } else if (t instanceof IntToken) {
-    //         return ();
-    //     } else if (t instanceof LiteralToken) {
-    //         return ();
-    //     } else if (t instanceof MinusToken) {
-    //         return ();
-    //     } else if (t instanceof NotToken) {
-    //         return ();
-    //     } else if (t instanceof OpenParenthesisToken) {
-    //         return ();
-    //     } else if (t instanceof OrToken) {
-    //         return ();
-    //     } else if (t instanceof PlusToken) {
-    //         return ();
-    //     } else if (t instanceof PrintToken) {
-    //         return ();
-    //     } else if (t instanceof ScanToken) {
-    //         return ();
-    //     } else if (t instanceof SemiColonToken) {
-    //         return ();
-    //     } else if (t instanceof SmallerEqualToken) {
-    //         return ();
-    //     } else if (t instanceof SmallerToken) {
-    //         return ();
-    //     } else if (t instanceof StartToken) {
-    //         return ();
-    //     } else if (t instanceof StringToken) {
-    //         return ();
-    //     } else if (t instanceof ThenToken) {
-    //         return ();
-    //     } else if (t instanceof TimesToken) {
-    //         return ();
-    //     } else if (t instanceof WhileToken) {
-    //         return ();
-    //     }
+    // if (t instanceof AndToken) {
+    // return ();
+    // } else if (t instanceof AssignToken) {
+    // return ();
+    // } else if (t instanceof BiggerEqualToken) {
+    // return ();
+    // } else if (t instanceof BiggerToken) {
+    // return ();
+    // } else if (t instanceof CaractereToken) {
+    // return ();
+    // } else if (t instanceof CloseParenthesisToken) {
+    // return ();
+    // } else if (t instanceof CommaToken) {
+    // return ();
+    // } else if (t instanceof DividerToken) {
+    // return ();
+    // } else if (t instanceof DoToken) {
+    // return ();
+    // } else if (t instanceof DotToken) {
+    // return ();
+    // } else if (t instanceof DoubleArrowToken) {
+    // return ();
+    // } else if (t instanceof ElseToken) {
+    // return ();
+    // } else if (t instanceof EndToken) {
+    // return ();
+    // } else if (t instanceof EqualToken) {
+    // return ();
+    // } else if (t instanceof ExitToken) {
+    // return ();
+    // } else if (t instanceof FloatConstantToken) {
+    // return ();
+    // } else if (t instanceof FloatToken) {
+    // return ();
+    // } else if (t instanceof IdentifierToken) {
+    // return ();
+    // } else if (t instanceof IfToken) {
+    // return ();
+    // } else if (t instanceof IntegerConstantToken) {
+    // return ();
+    // } else if (t instanceof IntToken) {
+    // return ();
+    // } else if (t instanceof LiteralToken) {
+    // return ();
+    // } else if (t instanceof MinusToken) {
+    // return ();
+    // } else if (t instanceof NotToken) {
+    // return ();
+    // } else if (t instanceof OpenParenthesisToken) {
+    // return ();
+    // } else if (t instanceof OrToken) {
+    // return ();
+    // } else if (t instanceof PlusToken) {
+    // return ();
+    // } else if (t instanceof PrintToken) {
+    // return ();
+    // } else if (t instanceof ScanToken) {
+    // return ();
+    // } else if (t instanceof SemiColonToken) {
+    // return ();
+    // } else if (t instanceof SmallerEqualToken) {
+    // return ();
+    // } else if (t instanceof SmallerToken) {
+    // return ();
+    // } else if (t instanceof StartToken) {
+    // return ();
+    // } else if (t instanceof StringToken) {
+    // return ();
+    // } else if (t instanceof ThenToken) {
+    // return ();
+    // } else if (t instanceof TimesToken) {
+    // return ();
+    // } else if (t instanceof WhileToken) {
+    // return ();
     // }
-    
+    // }
+
     public void scanRules() throws IOException, LexicalException {
-        Token t; 
-        while(true){
+        Token t;
+        while (true) {
             t = this.lexical.findNextToken();
-            if( t instanceof EOFToken)
+            if (t instanceof EOFToken)
                 break;
 
             System.out.println(stringToken(t));
-            if( t instanceof  IdentifierToken)
-                this.lexical.insertToken((IdentifierToken)t);
+            if (t instanceof IdentifierToken)
+                this.lexical.insertToken((IdentifierToken) t);
         }
     }
 }

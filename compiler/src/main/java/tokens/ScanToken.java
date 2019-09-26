@@ -4,19 +4,19 @@ import compiler.Token;
 import compiler.Lexeme;
 import compiler.Tag;
 
-public class ScanToken extends Token{
+public class ScanToken extends Token {
     private final Lexeme value;
 
-    public ScanToken(){
+    public ScanToken() {
         super(Tag.SCAN);
         this.value = new Lexeme("scan");
     }
 
-    public String toString(){
+    public String toString() {
         return this.value.getIdentifier();
     }
 
-    public boolean match(String s){
+    public boolean match(String s) {
         return this.value.match(s);
     }
 }
