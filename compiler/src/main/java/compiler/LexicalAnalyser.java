@@ -252,7 +252,7 @@ public class LexicalAnalyser {
      * Insert a identifier on the SymbolTable
      * 
      * @param t The token to be inserted
-     * @return If false, it already was on the table
+     * @return |False, when it was already on the table
      * @throws IOException
      */
     public boolean insertToken(IdentifierToken t){
