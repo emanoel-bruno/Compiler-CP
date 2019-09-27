@@ -239,11 +239,7 @@ public class LexicalAnalyser {
                 this.nextChar();
                 return new DotToken();
             default:
-                if (String.valueOf(this.currentChar) != "\n") {
-                    CaractereToken t = new CaractereToken(String.valueOf(this.currentChar));
-                    this.nextChar();
-                    return t;
-                }
+                throw new UnknownCharacterException(this.currentChar, this.currentLine);
             }
         }
 
