@@ -17,8 +17,4 @@ public class SymbolTable {
         this.table.put(String.valueOf(id.toString()), id);
         return true;
     }
-
-    public void clear() {
-        this.table.clear();
-    }
 }

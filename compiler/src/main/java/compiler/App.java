@@ -13,16 +13,20 @@ public class App {
         if (args.length > 0) {
             for (String arg : args) {
                 try {
-                    LexicalAnalyser lexical = new LexicalAnalyser();
-                    lexical.openFile(arg);
+                    System.out.println("---------- Compiling the file " + arg.split("/")[arg.split("/").length - 1] + "...");
+                    LexicalAnalyser lexical = new LexicalAnalyser(arg);
                     SyntaxAnalyser syntax = new SyntaxAnalyser(lexical);
                     syntax.scanRules();
+                    System.out.println("---------- Compilation finished  :/) ");
                 } catch (FileNotFoundException e) {
-                    System.out.println("Invalid file path : " + arg);
+                    System.out.println("---------- Invalid file path : " + arg + "\n");
+                    continue;
                 } catch (IOException e) {
-                    System.out.println("IOException: " + e.getMessage());
+                    System.out.println("---------- IOException: " + e.getMessage() + "\n");
+                    continue;                
                 } catch (LexicalException e) {
-                    System.out.println(e.getMessage());
+                    System.out.println("---------- " + e.getMessage() + "\n");
+                    continue;                
                 }
             }
         } else {

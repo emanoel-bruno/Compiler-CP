@@ -24,18 +24,17 @@ public class LexicalAnalyser {
     private SymbolTable symbolTable;
 
     /**
-     * Open a file
+     * Create a new LexicalAnalyser and open a file
      * 
      * @param path Path for the file to be open
      * @throws FileNotFoundException
      */
-    public void openFile(String path) throws FileNotFoundException {
+    public LexicalAnalyser(String path) throws FileNotFoundException {
         this.file = new File(path);
         this.fileReader = new FileReader(this.file);
         this.bufferedReader = new BufferedReader(this.fileReader);
         this.symbolTable = new SymbolTable();
         this.currentLine = 0;
-        this.symbolTable.clear();
     }
 
     /**
