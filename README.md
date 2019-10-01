@@ -8,7 +8,7 @@
 
 ## First and Follow Table
 
-* Groups: *mulop*, *addlop*, *relop*, *type*
+* Groups: *mulop*, *relop*, *type*
 
 | Token | First  | Follow |
 | :--- | :---: | :---: |
@@ -21,7 +21,6 @@
 | integer_const | **[digit]** |  |
 | constant | **[digit]** **[literal]** |  |
 | mulop | **[*]** **[/]** **[and]** |  |
-| addlop | **[+]** **[-]** **[or]** |  |
 | relop | **[==]** **[>]** **[>=]** **[<]** **[<=]** **[<>]** |  |
 | factor | **[letter]** **[digit]** **[literal]** **[(]** |  |
 | factor-a | **[letter]** **[digit]** **[literal]** **[(]** **[not]** **[-]** |  |
@@ -38,21 +37,30 @@
 | assign-stmt | **[letter]** |  |
 | stmt | **[print]** **[scan]** **[while]** **[do]** **[if]** **[letter]** |  |
 | stmt-list | **[print]** **[scan]** **[while]** **[do]** **[if]** **[letter]** |  |
-| type | **[int]** **[float]** **[string]** |  |
+| type | **[int]** **[float]** **[string]** | **[letter]** |
 | ident-list | **[letter]** |  |
 | decl | **[int]** **[float]** **[string]** |  |
 | decl-list | **[int]** **[float]** **[string]** |  |
-| start | **[start]** | |
+| start | **[start]** | **[int]** **[float]** **[string]** **[print]** **[scan]** **[while]** **[do]** **[if]** **[letter]** |
 | exit | **[exit]** | |
-| if | **[if]** | |
-| then | **[then]** | |
-| else | **[else]** | |
+| if | **[if]** | **[letter]** **[digit]** **[literal]** **[(]** **[not]** **[-]** |
+| then | **[then]** | **[print]** **[scan]** **[while]** **[do]** **[if]** **[letter]** |
+| else | **[else]** | **[print]** **[scan]** **[while]** **[do]** **[if]** **[letter]** |
 | end | **[end]** | |
-| do | **[do]** | |
-| while | **[while]** | |
-| scan | **[scan]** | |
-| print | **[print]** | |
-| not | **[not]** | |
+| do | **[do]** | **[print]** **[scan]** **[while]** **[do]** **[if]** **[letter]** |
+| while | **[while]** | **[letter]** **[digit]** **[literal]** **[(]** **[not]** **[-]** |
+| scan | **[scan]** | **[(]** |
+| print | **[print]** | **[(]** |
+| not | **[not]** | **[letter]** **[digit]** **[literal]** **[(]** |
+| minus | **[-]** | **[letter]** **[digit]** **[literal]** **[(]** **[not]** **[-]** |
+| plus | **[+]** | **[letter]** **[digit]** **[literal]** **[(]** **[not]** **[-]** |
+| or | **[or]** | **[letter]** **[digit]** **[literal]** **[(]** **[not]** **[-]** |
+| semicolon | **[;]** | |
+| coma | **[,]** | **[letter]** |
+| open-parenthesis | **[(]** | |
+| close-parenthesis | **[)]** | |
+| semicolon | **[;]** | |
+| assign | **[=]** | |
 
 ## How to run
 
