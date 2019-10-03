@@ -1,12 +1,5 @@
 package compiler;
 
-import tokens.*;
-import compiler.SymbolTable;
-
-import exception.CharacterInvalidException;
-import exception.LexicalException;
-import exception.UnknownCharacterException;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +7,47 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.google.common.base.CharMatcher;
+
+import exception.CharacterInvalidException;
+import exception.LexicalException;
+import exception.UnknownCharacterException;
+import tokens.AndToken;
+import tokens.AssignToken;
+import tokens.BiggerEqualToken;
+import tokens.BiggerToken;
+import tokens.CloseParenthesisToken;
+import tokens.CommaToken;
+import tokens.DividerToken;
+import tokens.DoToken;
+import tokens.DotToken;
+import tokens.DoubleArrowToken;
+import tokens.EOFToken;
+import tokens.ElseToken;
+import tokens.EndToken;
+import tokens.EqualToken;
+import tokens.ExitToken;
+import tokens.FloatConstantToken;
+import tokens.FloatToken;
+import tokens.IdentifierToken;
+import tokens.IfToken;
+import tokens.IntToken;
+import tokens.IntegerConstantToken;
+import tokens.LiteralToken;
+import tokens.MinusToken;
+import tokens.NotToken;
+import tokens.OpenParenthesisToken;
+import tokens.OrToken;
+import tokens.PlusToken;
+import tokens.PrintToken;
+import tokens.ScanToken;
+import tokens.SemiColonToken;
+import tokens.SmallerEqualToken;
+import tokens.SmallerToken;
+import tokens.StartToken;
+import tokens.StringToken;
+import tokens.ThenToken;
+import tokens.TimesToken;
+import tokens.WhileToken;
 
 public class LexicalAnalyser {
     private File file;
@@ -34,7 +68,7 @@ public class LexicalAnalyser {
         this.fileReader = new FileReader(this.file);
         this.bufferedReader = new BufferedReader(this.fileReader);
         this.symbolTable = new SymbolTable();
-        this.currentLine = 0;
+        this.currentLine = 1;
     }
 
     /**
@@ -67,21 +101,21 @@ public class LexicalAnalyser {
      * @throws IOException
      */
     public boolean nextChar(String condition) throws IOException {
+        if (this.currentChar == '\n')
+            this.currentLine++;
+        
         if ((int) (this.currentChar = (char) this.bufferedReader.read()) == -1)
             return false;
-
+        
         if (condition.intern() == "digit") {
             return Character.isDigit(this.currentChar);
         } else if (condition.intern() == "letter") {
             return Character.isLetter(this.currentChar);
         } else if (condition.intern() == "character") {
-            System.out.println((int) this.currentChar);
             return (CharMatcher.ascii().matches(this.currentChar) && String.valueOf(this.currentChar) != "\""
                     && (int) this.currentChar != 8220 && (int) this.currentChar != 8221
                     && String.valueOf(this.currentChar) != "\n" && (int) this.currentChar != 10);
         } else if (condition.intern() == "empty") {
-            if (this.currentChar == '\n')
-                this.currentLine++;
             return (isEmptySpace());
         } else {
             return (String.valueOf(this.currentChar).intern() == condition.intern());
@@ -97,8 +131,8 @@ public class LexicalAnalyser {
      */
     public Token findNextToken() throws IOException, LexicalException {
         if (isEmptySpace())
-            while (this.nextChar("empty")) {
-            }
+            while (this.nextChar("empty"));
+
         if (Character.isDigit(this.currentChar)) {
             StringBuilder number = new StringBuilder();
             number.append(this.currentChar);
@@ -120,8 +154,8 @@ public class LexicalAnalyser {
             while (this.nextChar("letter"))
                 lexeme.append(this.currentChar);
             if (Character.isDigit(this.currentChar)) {
-                while (this.nextChar()
-                        && (Character.isDigit(this.currentChar) || Character.isLetter(this.currentChar))) {
+                lexeme.append(this.currentChar);
+                while (this.nextChar() && (Character.isDigit(this.currentChar) || Character.isLetter(this.currentChar))) {
                     lexeme.append(this.currentChar);
                 }
                 return new IdentifierToken(lexeme.toString());
@@ -170,7 +204,6 @@ public class LexicalAnalyser {
             throw new CharacterInvalidException(this.currentChar,
                     "[Close Quotation Mark(Unicode)] without open quotation before", this.currentLine);
         }
-
         if ((int) this.currentChar == 8220 || String.valueOf(this.currentChar).intern() == "\"") {
             StringBuilder literal = new StringBuilder();
             while (this.nextChar("character"))

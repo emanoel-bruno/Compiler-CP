@@ -18,6 +18,8 @@ elif [[ $1 == "run" ]]; then
     done
 
     java -cp compiler/target/compiler-1.0-jar-with-dependencies.jar compiler.App $params
+elif [[ $1 == "test" ]]; then
+    java -cp compiler/target/compiler-1.0-jar-with-dependencies.jar compiler.App tests/Teste1 tests/Teste2 tests/Teste3 tests/Teste4 tests/Teste5 tests/Teste6
 else
     echo "Please type a valid action: build, run";
 fi

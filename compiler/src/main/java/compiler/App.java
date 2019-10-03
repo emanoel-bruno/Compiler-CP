@@ -13,19 +13,22 @@ public class App {
         if (args.length > 0) {
             for (String arg : args) {
                 try {
-                    System.out.println("---------- Compiling the file " + arg.split("/")[arg.split("/").length - 1] + "...");
+                    System.out.println("-- Compiling " + arg.split("/")[arg.split("/").length - 1] + "...");
                     LexicalAnalyser lexical = new LexicalAnalyser(arg);
                     SyntaxAnalyser syntax = new SyntaxAnalyser(lexical);
                     syntax.scanRules();
-                    System.out.println("---------- Compilation finished  :/) ");
+                    System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :) \n");
                 } catch (FileNotFoundException e) {
-                    System.out.println("---------- Invalid file path : " + arg + "\n");
+                    System.out.println("- Invalid file path : " + arg + "\n");
+                    System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(");
                     continue;
                 } catch (IOException e) {
-                    System.out.println("---------- IOException: " + e.getMessage() + "\n");
+                    System.out.println("- IOException: " + e.getMessage() + "\n");
+                    System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(");
                     continue;                
                 } catch (LexicalException e) {
-                    System.out.println("---------- " + e.getMessage() + "\n");
+                    System.out.println("- " + e.getMessage() + "\n");
+                    System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(\n");
                     continue;                
                 }
             }

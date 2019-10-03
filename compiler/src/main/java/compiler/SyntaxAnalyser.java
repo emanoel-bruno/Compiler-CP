@@ -181,7 +181,7 @@ public class SyntaxAnalyser {
             if (t instanceof EOFToken)
                 break;
 
-            System.out.println(stringToken(t));
+            System.out.println(t.toString());
             if (t instanceof IdentifierToken)
                 this.lexical.insertToken((IdentifierToken) t);
         }
