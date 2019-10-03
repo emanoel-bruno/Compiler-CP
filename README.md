@@ -72,6 +72,10 @@ To build or run is necessary be inside the folder of the project (Compiler-CP)
     
     ./cp run [ files ]
 
+### Testar
+    
+    ./cp test
+
 ## Windows
 
 To build or run is necessary be inside the folder of the project (Compiler-CP)
