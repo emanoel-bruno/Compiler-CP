@@ -89,6 +89,11 @@ To build or run is necessary be inside the folder of the project (Compiler-CP)
     
     java -cp compiler/target/compiler-1.0-jar-with-dependencies.jar compiler.App [ files ]
 
+## Java
+
+If you want run from the .jar just go to the releases folder
+
+
 ### Fazer
 
 1. Checar funcionamento
