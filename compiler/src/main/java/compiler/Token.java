@@ -1,6 +1,6 @@
 package compiler;
 
-public class Token {
+public class Token{
     private final int tag;
 
     public Token(int tag) {

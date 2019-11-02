@@ -1,6 +1,6 @@
-package exception;
+package exceptions;
 
-import exception.LexicalException;
+import exceptions.LexicalException;
 
 public class UnknownCharacterException extends LexicalException {
     private static final long serialVersionUID = 1L;

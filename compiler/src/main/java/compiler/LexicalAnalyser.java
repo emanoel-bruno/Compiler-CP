@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import com.google.common.base.CharMatcher;
 
-import exception.CharacterInvalidException;
-import exception.LexicalException;
-import exception.UnknownCharacterException;
+import exceptions.CharacterInvalidException;
+import exceptions.LexicalException;
+import exceptions.UnknownCharacterException;
 import tokens.AndToken;
 import tokens.AssignToken;
 import tokens.BiggerEqualToken;
@@ -56,6 +56,7 @@ public class LexicalAnalyser {
     private char currentChar;
     private int currentLine;
     private SymbolTable symbolTable;
+    private Token currentToken;
 
     /**
      * Create a new LexicalAnalyser and open a file
@@ -122,6 +123,14 @@ public class LexicalAnalyser {
         }
     }
 
+    public Token findNextToken() throws IOException, LexicalException {
+        Token t = this.nextToken();
+        if (t instanceof IdentifierToken)
+            this.insertToken((IdentifierToken) t);
+        return t;
+    }
+
+
     /**
      * Find the next token in the file
      * 
@@ -129,10 +138,10 @@ public class LexicalAnalyser {
      * @throws IOException
      * @throws LexicalException
      */
-    public Token findNextToken() throws IOException, LexicalException {
+    public Token nextToken() throws IOException, LexicalException {
         if (isEmptySpace())
             while (this.nextChar("empty"));
-
+    
         if (Character.isDigit(this.currentChar)) {
             StringBuilder number = new StringBuilder();
             number.append(this.currentChar);
@@ -142,12 +151,12 @@ public class LexicalAnalyser {
                 number.append(this.currentChar);
                 while (this.nextChar("digit"))
                     number.append(this.currentChar);
-                return new FloatConstantToken(Float.valueOf(number.toString()));
+                return( this.currentToken = new FloatConstantToken(Float.valueOf(number.toString())));
             } else {
-                return new IntegerConstantToken(Integer.valueOf(number.toString()));
+                return( this.currentToken = new IntegerConstantToken(Integer.valueOf(number.toString())));
             }
         }
-
+    
         if (Character.isLetter(this.currentChar)) {
             StringBuilder lexeme = new StringBuilder();
             lexeme.append(this.currentChar);
@@ -158,47 +167,47 @@ public class LexicalAnalyser {
                 while (this.nextChar() && (Character.isDigit(this.currentChar) || Character.isLetter(this.currentChar))) {
                     lexeme.append(this.currentChar);
                 }
-                return new IdentifierToken(lexeme.toString());
+                return( this.currentToken = new IdentifierToken(lexeme.toString()));
             } else {
                 switch (lexeme.toString().intern()) {
                 case "start":
-                    return new StartToken();
+                    return( this.currentToken = new StartToken());
                 case "exit":
-                    return new ExitToken();
+                    return( this.currentToken = new ExitToken());
                 case "int":
-                    return new IntToken();
+                    return( this.currentToken = new IntToken());
                 case "float":
-                    return new FloatToken();
+                    return( this.currentToken = new FloatToken());
                 case "string":
-                    return new StringToken();
+                    return( this.currentToken = new StringToken());
                 case "if":
-                    return new IfToken();
+                    return( this.currentToken = new IfToken());
                 case "then":
-                    return new ThenToken();
+                    return( this.currentToken = new ThenToken());
                 case "end":
-                    return new EndToken();
+                    return( this.currentToken = new EndToken());
                 case "else":
-                    return new ElseToken();
+                    return( this.currentToken = new ElseToken());
                 case "do":
-                    return new DoToken();
+                    return( this.currentToken = new DoToken());
                 case "while":
-                    return new WhileToken();
+                    return( this.currentToken = new WhileToken());
                 case "scan":
-                    return new ScanToken();
+                    return( this.currentToken = new ScanToken());
                 case "print":
-                    return new PrintToken();
+                    return( this.currentToken = new PrintToken());
                 case "not":
-                    return new NotToken();
+                    return( this.currentToken = new NotToken());
                 case "or":
-                    return new OrToken();
+                    return( this.currentToken = new OrToken());
                 case "and":
-                    return new AndToken();
+                    return( this.currentToken = new AndToken());
                 default:
-                    return new IdentifierToken(lexeme.toString());
+                    return( this.currentToken = new IdentifierToken(lexeme.toString()));
                 }
             }
         }
-
+    
         if ((int) this.currentChar == 8221) {
             this.nextChar();
             throw new CharacterInvalidException(this.currentChar,
@@ -210,7 +219,7 @@ public class LexicalAnalyser {
                 literal.append(this.currentChar);
             if ((int) this.currentChar == 8221 || String.valueOf(this.currentChar) == "\"") {
                 this.nextChar();
-                return new LiteralToken(literal.toString());
+                return( this.currentToken = new LiteralToken(literal.toString()));
             } else if ((int) this.currentChar == 8220) {
                 this.nextChar();
                 throw new CharacterInvalidException(this.currentChar,
@@ -223,62 +232,62 @@ public class LexicalAnalyser {
                         this.currentLine);
             }
         }
-
+    
         if (CharMatcher.ascii().matches(this.currentChar)) {
             switch (String.valueOf(this.currentChar).intern()) {
             case "=":
                 if (this.nextChar("="))
-                    return new EqualToken();
+                    return( this.currentToken = new EqualToken());
                 else
-                    return new AssignToken();
+                    return( this.currentToken = new AssignToken());
             case ">":
                 if (this.nextChar("="))
-                    return new BiggerEqualToken();
+                    return( this.currentToken = new BiggerEqualToken());
                 else
-                    return new BiggerToken();
+                    return( this.currentToken = new BiggerToken());
             case "<":
                 if (this.nextChar("="))
-                    return new SmallerEqualToken();
+                    return( this.currentToken = new SmallerEqualToken());
                 else if (String.valueOf(this.currentChar).intern() == ">")
-                    return new DoubleArrowToken();
+                    return( this.currentToken = new DoubleArrowToken());
                 else
-                    return new SmallerToken();
+                    return( this.currentToken = new SmallerToken());
             case "+":
                 this.nextChar();
-                return new PlusToken();
+                return( this.currentToken = new PlusToken());
             case "*":
                 this.nextChar();
-                return new TimesToken();
+                return( this.currentToken = new TimesToken());
             case "/":
                 this.nextChar();
-                return new DividerToken();
+                return( this.currentToken = new DividerToken());
             case "-":
                 this.nextChar();
-                return new MinusToken();
+                return( this.currentToken = new MinusToken());
             case ";":
                 this.nextChar();
-                return new SemiColonToken();
+                return( this.currentToken = new SemiColonToken());
             case ",":
                 this.nextChar();
-                return new CommaToken();
+                return( this.currentToken = new CommaToken());
             case "(":
                 this.nextChar();
-                return new OpenParenthesisToken();
+                return( this.currentToken = new OpenParenthesisToken());
             case ")":
                 this.nextChar();
-                return new CloseParenthesisToken();
+                return( this.currentToken = new CloseParenthesisToken());
             case ".":
                 this.nextChar();
-                return new DotToken();
+                return( this.currentToken = new DotToken());
             default:
                 throw new UnknownCharacterException(this.currentChar, this.currentLine);
             }
         }
-
+    
         if ((int) this.currentChar == 65535) {
-            return new EOFToken();
+            return( this.currentToken = new EOFToken());
         }
-
+    
         throw new UnknownCharacterException(this.currentChar, this.currentLine);
     }
 
@@ -291,5 +300,13 @@ public class LexicalAnalyser {
      */
     public boolean insertToken(IdentifierToken t) {
         return this.symbolTable.insertToken(t);
+    }
+
+    public int getLine(){
+        return this.currentLine;
+    }
+
+    public Token getCurrentToken(){
+        return this.currentToken;
     }
 }

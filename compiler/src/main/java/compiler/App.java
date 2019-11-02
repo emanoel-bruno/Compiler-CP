@@ -3,8 +3,8 @@ package compiler;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import exception.LexicalException;
-
+import exceptions.LexicalException;
+import exceptions.SyntaxException;
 import compiler.LexicalAnalyser;
 import compiler.SyntaxAnalyser;
 
@@ -30,6 +30,9 @@ public class App {
                     System.out.println("- " + e.getMessage() + "\n");
                     System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(\n");
                     continue;                
+                } catch (SyntaxException e) {
+                    System.out.println("- " + e.getMessage() + "\n");
+                    System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(\n");
                 }
             }
         } else {

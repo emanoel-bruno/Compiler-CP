@@ -2,7 +2,9 @@ package compiler;
 
 import tokens.*;
 import compiler.Token;
-import exception.LexicalException;
+import exceptions.LexicalException;
+import exceptions.SyntaxException;
+import procedures.ProgramProcedure;
 
 import java.io.IOException;
 
@@ -15,16 +17,8 @@ public class SyntaxAnalyser {
         this.lexical = lexical;
     }
 
-    public void scanRules() throws IOException, LexicalException {
-        Token t;
-        while (true) {
-            t = this.lexical.findNextToken();
-            if (t instanceof EOFToken)
-                break;
-
-            System.out.println(t.toString());
-            if (t instanceof IdentifierToken)
-                this.lexical.insertToken((IdentifierToken) t);
-        }
+    public void scanRules() throws IOException, LexicalException, SyntaxException {
+        Token t = this.lexical.findNextToken();
+        new ProgramProcedure(this.lexical).check(t);
     }
 }
