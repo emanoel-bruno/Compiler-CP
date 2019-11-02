@@ -3,30 +3,27 @@ package procedures;
 import java.io.IOException;
 
 import compiler.Token;
-import compiler.LexicalAnalyser;
 import compiler.PanicMode;
 import compiler.Tag;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import exceptions.UnexpectedTokenException;
 import compiler.Procedure;
+import compiler.SyntaxAnalyser;
 import procedures.IdentListAsteriskProcedure;
 
 public class IdentListProcedure extends Procedure {
-    public IdentListProcedure(LexicalAnalyser lexical) {
-        this.lexical = lexical;
-    }
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        int line = this.lexical.getLine();
+        int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
         case Tag.IDENTIFIER:
-            t = this.lexical.findNextToken();
-            new IdentListAsteriskProcedure(lexical).check(t);
+            t = SyntaxAnalyser.nextToken();
+            new IdentListAsteriskProcedure().check(t);
             break;
         default:
-            PanicMode.nextToken(this,t.getTag(), this.lexical);
+            PanicMode.nextToken(this, t.getTag());
             throw new UnexpectedTokenException(t.toString(), line);
         }
     }

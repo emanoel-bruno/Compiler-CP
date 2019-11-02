@@ -104,10 +104,10 @@ public class LexicalAnalyser {
     public boolean nextChar(String condition) throws IOException {
         if (this.currentChar == '\n')
             this.currentLine++;
-        
+
         if ((int) (this.currentChar = (char) this.bufferedReader.read()) == -1)
             return false;
-        
+
         if (condition.intern() == "digit") {
             return Character.isDigit(this.currentChar);
         } else if (condition.intern() == "letter") {
@@ -130,7 +130,6 @@ public class LexicalAnalyser {
         return t;
     }
 
-
     /**
      * Find the next token in the file
      * 
@@ -140,8 +139,9 @@ public class LexicalAnalyser {
      */
     public Token nextToken() throws IOException, LexicalException {
         if (isEmptySpace())
-            while (this.nextChar("empty"));
-    
+            while (this.nextChar("empty"))
+                ;
+
         if (Character.isDigit(this.currentChar)) {
             StringBuilder number = new StringBuilder();
             number.append(this.currentChar);
@@ -151,12 +151,12 @@ public class LexicalAnalyser {
                 number.append(this.currentChar);
                 while (this.nextChar("digit"))
                     number.append(this.currentChar);
-                return( this.currentToken = new FloatConstantToken(Float.valueOf(number.toString())));
+                return (this.currentToken = new FloatConstantToken(Float.valueOf(number.toString())));
             } else {
-                return( this.currentToken = new IntegerConstantToken(Integer.valueOf(number.toString())));
+                return (this.currentToken = new IntegerConstantToken(Integer.valueOf(number.toString())));
             }
         }
-    
+
         if (Character.isLetter(this.currentChar)) {
             StringBuilder lexeme = new StringBuilder();
             lexeme.append(this.currentChar);
@@ -164,50 +164,51 @@ public class LexicalAnalyser {
                 lexeme.append(this.currentChar);
             if (Character.isDigit(this.currentChar)) {
                 lexeme.append(this.currentChar);
-                while (this.nextChar() && (Character.isDigit(this.currentChar) || Character.isLetter(this.currentChar))) {
+                while (this.nextChar()
+                        && (Character.isDigit(this.currentChar) || Character.isLetter(this.currentChar))) {
                     lexeme.append(this.currentChar);
                 }
-                return( this.currentToken = new IdentifierToken(lexeme.toString()));
+                return (this.currentToken = new IdentifierToken(lexeme.toString()));
             } else {
                 switch (lexeme.toString().intern()) {
                 case "start":
-                    return( this.currentToken = new StartToken());
+                    return (this.currentToken = new StartToken());
                 case "exit":
-                    return( this.currentToken = new ExitToken());
+                    return (this.currentToken = new ExitToken());
                 case "int":
-                    return( this.currentToken = new IntToken());
+                    return (this.currentToken = new IntToken());
                 case "float":
-                    return( this.currentToken = new FloatToken());
+                    return (this.currentToken = new FloatToken());
                 case "string":
-                    return( this.currentToken = new StringToken());
+                    return (this.currentToken = new StringToken());
                 case "if":
-                    return( this.currentToken = new IfToken());
+                    return (this.currentToken = new IfToken());
                 case "then":
-                    return( this.currentToken = new ThenToken());
+                    return (this.currentToken = new ThenToken());
                 case "end":
-                    return( this.currentToken = new EndToken());
+                    return (this.currentToken = new EndToken());
                 case "else":
-                    return( this.currentToken = new ElseToken());
+                    return (this.currentToken = new ElseToken());
                 case "do":
-                    return( this.currentToken = new DoToken());
+                    return (this.currentToken = new DoToken());
                 case "while":
-                    return( this.currentToken = new WhileToken());
+                    return (this.currentToken = new WhileToken());
                 case "scan":
-                    return( this.currentToken = new ScanToken());
+                    return (this.currentToken = new ScanToken());
                 case "print":
-                    return( this.currentToken = new PrintToken());
+                    return (this.currentToken = new PrintToken());
                 case "not":
-                    return( this.currentToken = new NotToken());
+                    return (this.currentToken = new NotToken());
                 case "or":
-                    return( this.currentToken = new OrToken());
+                    return (this.currentToken = new OrToken());
                 case "and":
-                    return( this.currentToken = new AndToken());
+                    return (this.currentToken = new AndToken());
                 default:
-                    return( this.currentToken = new IdentifierToken(lexeme.toString()));
+                    return (this.currentToken = new IdentifierToken(lexeme.toString()));
                 }
             }
         }
-    
+
         if ((int) this.currentChar == 8221) {
             this.nextChar();
             throw new CharacterInvalidException(this.currentChar,
@@ -219,7 +220,7 @@ public class LexicalAnalyser {
                 literal.append(this.currentChar);
             if ((int) this.currentChar == 8221 || String.valueOf(this.currentChar) == "\"") {
                 this.nextChar();
-                return( this.currentToken = new LiteralToken(literal.toString()));
+                return (this.currentToken = new LiteralToken(literal.toString()));
             } else if ((int) this.currentChar == 8220) {
                 this.nextChar();
                 throw new CharacterInvalidException(this.currentChar,
@@ -232,62 +233,62 @@ public class LexicalAnalyser {
                         this.currentLine);
             }
         }
-    
+
         if (CharMatcher.ascii().matches(this.currentChar)) {
             switch (String.valueOf(this.currentChar).intern()) {
             case "=":
                 if (this.nextChar("="))
-                    return( this.currentToken = new EqualToken());
+                    return (this.currentToken = new EqualToken());
                 else
-                    return( this.currentToken = new AssignToken());
+                    return (this.currentToken = new AssignToken());
             case ">":
                 if (this.nextChar("="))
-                    return( this.currentToken = new BiggerEqualToken());
+                    return (this.currentToken = new BiggerEqualToken());
                 else
-                    return( this.currentToken = new BiggerToken());
+                    return (this.currentToken = new BiggerToken());
             case "<":
                 if (this.nextChar("="))
-                    return( this.currentToken = new SmallerEqualToken());
+                    return (this.currentToken = new SmallerEqualToken());
                 else if (String.valueOf(this.currentChar).intern() == ">")
-                    return( this.currentToken = new DoubleArrowToken());
+                    return (this.currentToken = new DoubleArrowToken());
                 else
-                    return( this.currentToken = new SmallerToken());
+                    return (this.currentToken = new SmallerToken());
             case "+":
                 this.nextChar();
-                return( this.currentToken = new PlusToken());
+                return (this.currentToken = new PlusToken());
             case "*":
                 this.nextChar();
-                return( this.currentToken = new TimesToken());
+                return (this.currentToken = new TimesToken());
             case "/":
                 this.nextChar();
-                return( this.currentToken = new DividerToken());
+                return (this.currentToken = new DividerToken());
             case "-":
                 this.nextChar();
-                return( this.currentToken = new MinusToken());
+                return (this.currentToken = new MinusToken());
             case ";":
                 this.nextChar();
-                return( this.currentToken = new SemiColonToken());
+                return (this.currentToken = new SemiColonToken());
             case ",":
                 this.nextChar();
-                return( this.currentToken = new CommaToken());
+                return (this.currentToken = new CommaToken());
             case "(":
                 this.nextChar();
-                return( this.currentToken = new OpenParenthesisToken());
+                return (this.currentToken = new OpenParenthesisToken());
             case ")":
                 this.nextChar();
-                return( this.currentToken = new CloseParenthesisToken());
+                return (this.currentToken = new CloseParenthesisToken());
             case ".":
                 this.nextChar();
-                return( this.currentToken = new DotToken());
+                return (this.currentToken = new DotToken());
             default:
                 throw new UnknownCharacterException(this.currentChar, this.currentLine);
             }
         }
-    
+
         if ((int) this.currentChar == 65535) {
-            return( this.currentToken = new EOFToken());
+            return (this.currentToken = new EOFToken());
         }
-    
+
         throw new UnknownCharacterException(this.currentChar, this.currentLine);
     }
 
@@ -302,11 +303,11 @@ public class LexicalAnalyser {
         return this.symbolTable.insertToken(t);
     }
 
-    public int getLine(){
+    public int getLine() {
         return this.currentLine;
     }
 
-    public Token getCurrentToken(){
+    public Token getCurrentToken() {
         return this.currentToken;
     }
 }

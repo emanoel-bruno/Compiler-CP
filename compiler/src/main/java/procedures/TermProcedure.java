@@ -3,20 +3,17 @@ package procedures;
 import java.io.IOException;
 
 import compiler.Token;
-import compiler.LexicalAnalyser;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
+import compiler.SyntaxAnalyser;
 
 public class TermProcedure extends Procedure {
-    public TermProcedure(LexicalAnalyser lexical) {
-        this.lexical = lexical;
-    }
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        new FactorAProcedure(this.lexical).check(t);
-        t = this.lexical.findNextToken();
-        new TermAsteriskProcedure(this.lexical).check(t);
+        new FactorAProcedure().check(t);
+        t = SyntaxAnalyser.nextToken();
+        new TermAsteriskProcedure().check(t);
     }
 }

@@ -1,6 +1,5 @@
 package compiler;
 
-import tokens.*;
 import compiler.Token;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
@@ -11,14 +10,26 @@ import java.io.IOException;
 import compiler.LexicalAnalyser;
 
 public class SyntaxAnalyser {
-    private LexicalAnalyser lexical;
+    private static LexicalAnalyser lexical;
 
     public SyntaxAnalyser(LexicalAnalyser lexical) {
-        this.lexical = lexical;
+        SyntaxAnalyser.lexical = lexical;
+    }
+
+    public static Token nextToken() throws IOException, LexicalException {
+        return SyntaxAnalyser.lexical.findNextToken();
+    }
+
+    public static Token currentToken() {
+        return SyntaxAnalyser.lexical.getCurrentToken();
+    }
+
+    public static int currentLine() {
+        return SyntaxAnalyser.lexical.getLine();
     }
 
     public void scanRules() throws IOException, LexicalException, SyntaxException {
-        Token t = this.lexical.findNextToken();
-        new ProgramProcedure(this.lexical).check(t);
+        Token t = SyntaxAnalyser.lexical.findNextToken();
+        new ProgramProcedure().check(t);
     }
 }

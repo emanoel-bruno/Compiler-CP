@@ -17,7 +17,8 @@ public class App {
                     LexicalAnalyser lexical = new LexicalAnalyser(arg);
                     SyntaxAnalyser syntax = new SyntaxAnalyser(lexical);
                     syntax.scanRules();
-                    System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :) \n");
+                    System.out.println(
+                            "-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :) \n");
                 } catch (FileNotFoundException e) {
                     System.out.println("- Invalid file path : " + arg + "\n");
                     System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(");
@@ -25,14 +26,16 @@ public class App {
                 } catch (IOException e) {
                     System.out.println("- IOException: " + e.getMessage() + "\n");
                     System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(");
-                    continue;                
+                    continue;
                 } catch (LexicalException e) {
                     System.out.println("- " + e.getMessage() + "\n");
-                    System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(\n");
-                    continue;                
+                    System.out
+                            .println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(\n");
+                    continue;
                 } catch (SyntaxException e) {
                     System.out.println("- " + e.getMessage() + "\n");
-                    System.out.println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(\n");
+                    System.out
+                            .println("-- " + arg.split("/")[arg.split("/").length - 1] + " compilation finished  :(\n");
                 }
             }
         } else {
