@@ -14,10 +14,13 @@ public class ProgramProcedure extends Procedure {
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
         this.consume(Tag.START, false);
-        t = SyntaxAnalyser.nextToken();
+        while ((t = SyntaxAnalyser.nextToken()).getTag() == Tag.NEW_LINE)
+            ;
         if (t.getTag() == Tag.INT || t.getTag() == Tag.FLOAT || t.getTag() == Tag.STRING)
             this.invoke(Procedure.DECLLIST_PROCEDURE, false);
         this.invoke(Procedure.STMTLIST_PROCEDURE, false); // DeclListProcedure already moved one step forward
+        Tag.printTag(SyntaxAnalyser.currentToken().getTag());
+
         this.consume(Tag.EXIT, false); // StmtListProcedure already moved one step forward
         this.consume(Tag.EOF, true);
     }

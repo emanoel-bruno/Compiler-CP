@@ -37,6 +37,10 @@ public class ExpressionAsteriskProcedure extends Procedure {
             this.consume(Tag.DOUBLE_ARROW, false);
             this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, true);
             break;
+        case Tag.NEW_LINE:
+            consume(Tag.NEW_LINE, false);
+            this.invoke(Procedure.EXPRESSION_ASTERISK_PROCEDURE, true);
+            break;
         }
     }
 }

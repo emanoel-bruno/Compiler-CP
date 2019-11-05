@@ -28,6 +28,10 @@ public class TermAsteriskProcedure extends Procedure {
             this.invoke(Procedure.FACTORA_PROCEDURE, true);
             this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, true);
             break;
+        case Tag.NEW_LINE:
+            consume(Tag.NEW_LINE, false);
+            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, true);
+            break;
         }
     }
 }

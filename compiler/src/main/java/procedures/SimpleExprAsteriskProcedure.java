@@ -28,6 +28,10 @@ public class SimpleExprAsteriskProcedure extends Procedure {
             this.invoke(Procedure.TERM_PROCEDURE, true);
             this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE, false); // TermProcedure already moved one step forward
             break;
+        case Tag.NEW_LINE:
+            consume(Tag.NEW_LINE, false);
+            this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE, true);
+            break;
         }
     }
 }

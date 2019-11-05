@@ -37,6 +37,10 @@ public class StmtProcedure extends Procedure {
             this.invoke(Procedure.ASSIGNSTMT_PROCEDURE, false);
             consume(Tag.SEMICOLON, false); // SimpleExprProcedure already moved one step
             break;
+        case Tag.NEW_LINE:
+            consume(Tag.NEW_LINE, false);
+            this.invoke(Procedure.STMT_PROCEDURE, true);
+            break;
         default:
             PanicMode.nextToken(this, t.getTag());
             throw new UnexpectedTokenException(t.toString(), line);

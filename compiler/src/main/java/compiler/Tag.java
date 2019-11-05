@@ -12,121 +12,124 @@ public class Tag {
     public static void printTag(int tag) {
         switch (tag) {
         case 256:
-            System.out.println("AND");
+            System.out.println(" AND");
             break;
         case 257:
-            System.out.println("ASSIGN");
+            System.out.println(" ASSIGN");
             break;
         case 258:
-            System.out.println("BIGGER_EQUAL");
+            System.out.println(" BIGGER_EQUAL");
             break;
         case 259:
-            System.out.println("BIGGER");
+            System.out.println(" BIGGER");
             break;
         case 260:
-            System.out.println("CARACTERE");
+            System.out.println(" CARACTERE");
             break;
         case 261:
-            System.out.println("CLOSE_PARENTHESIS");
+            System.out.println(" CLOSE_PARENTHESIS");
             break;
         case 262:
-            System.out.println("COMMA");
+            System.out.println(" COMMA");
             break;
         case 263:
-            System.out.println("DIVIDER");
+            System.out.println(" DIVIDER");
             break;
         case 264:
-            System.out.println("DO");
+            System.out.println(" DO");
             break;
         case 265:
-            System.out.println("DOT");
+            System.out.println(" DOT");
             break;
         case 266:
-            System.out.println("DOUBLE_ARROW");
+            System.out.println(" DOUBLE_ARROW");
             break;
         case 267:
-            System.out.println("ELSE");
+            System.out.println(" ELSE");
             break;
         case 268:
-            System.out.println("END");
+            System.out.println(" END");
             break;
         case 269:
-            System.out.println("EQUAL");
+            System.out.println(" EQUAL");
             break;
         case 270:
-            System.out.println("EXIT");
+            System.out.println(" EXIT");
             break;
         case 271:
-            System.out.println("FLOAT_CONSTANT");
+            System.out.println(" FLOAT_CONSTANT");
             break;
         case 272:
-            System.out.println("FLOAT");
+            System.out.println(" FLOAT");
             break;
         case 273:
-            System.out.println("IDENTIFIER");
+            System.out.println(" IDENTIFIER");
             break;
         case 274:
-            System.out.println("IF");
+            System.out.println(" IF");
             break;
         case 275:
-            System.out.println("INTEGER_CONSTANT");
+            System.out.println(" INTEGER_CONSTANT");
             break;
         case 276:
-            System.out.println("INT");
+            System.out.println(" INT");
             break;
         case 277:
-            System.out.println("LITERAL");
+            System.out.println(" LITERAL");
             break;
         case 278:
-            System.out.println("MINUS");
+            System.out.println(" MINUS");
             break;
         case 279:
-            System.out.println("NOT");
+            System.out.println(" NOT");
             break;
         case 280:
-            System.out.println("OPEN_PARENTHESIS");
+            System.out.println(" OPEN_PARENTHESIS");
             break;
         case 281:
-            System.out.println("OR");
+            System.out.println(" OR");
             break;
         case 282:
-            System.out.println("PLUS");
+            System.out.println(" PLUS");
             break;
         case 283:
-            System.out.println("PRINT");
+            System.out.println(" PRINT");
             break;
         case 284:
-            System.out.println("QUOTATION_MARK");
+            System.out.println(" QUOTATION_MARK");
             break;
         case 285:
-            System.out.println("SCAN");
+            System.out.println(" SCAN");
             break;
         case 286:
-            System.out.println("SEMICOLON");
+            System.out.println(" SEMICOLON");
             break;
         case 287:
-            System.out.println("SMALLER_EQUAL");
+            System.out.println(" SMALLER_EQUAL");
             break;
         case 288:
-            System.out.println("SMALLER");
+            System.out.println(" SMALLER");
             break;
         case 289:
-            System.out.println("START");
+            System.out.println(" START");
             break;
         case 290:
-            System.out.println("STRING");
+            System.out.println(" STRING");
             break;
         case 291:
-            System.out.println("THEN");
+            System.out.println(" THEN");
             break;
         case 292:
-            System.out.println("TIMES");
+            System.out.println(" TIMES");
             break;
         case 293:
-            System.out.println("WHILE");
+            System.out.println(" WHILE");
             break;
         case 294:
-            System.out.println("EOF");
+            System.out.println(" EOF");
+            break;
+        case 295:
+            System.out.println(" NEW_LINE");
             break;
         }
     }

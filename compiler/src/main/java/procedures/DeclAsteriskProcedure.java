@@ -15,6 +15,9 @@ public class DeclAsteriskProcedure extends Procedure {
         if (t.getTag() == Tag.INT || t.getTag() == Tag.FLOAT || t.getTag() == Tag.STRING) {
             this.invoke(Procedure.DECL_PROCEDURE, false);
             this.invoke(Procedure.DECL_ASTERISK_PROCEDURE, true);
+        } else if (t.getTag() == Tag.NEW_LINE) {
+            consume(Tag.NEW_LINE, false);
+            this.invoke(Procedure.DECL_ASTERISK_PROCEDURE, true);
         }
     }
 }

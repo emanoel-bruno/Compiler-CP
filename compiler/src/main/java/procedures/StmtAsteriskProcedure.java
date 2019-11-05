@@ -12,8 +12,8 @@ public class StmtAsteriskProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        if (t.getTag() == Tag.DIVIDER || t.getTag() == Tag.PRINT || t.getTag() == Tag.SCAN || t.getTag() == Tag.DO
-                || t.getTag() == Tag.IF || t.getTag() == Tag.IDENTIFIER) {
+        if (t.getTag() == Tag.NEW_LINE || t.getTag() == Tag.DIVIDER || t.getTag() == Tag.PRINT || t.getTag() == Tag.SCAN
+                || t.getTag() == Tag.DO || t.getTag() == Tag.IF || t.getTag() == Tag.IDENTIFIER) {
             this.invoke(Procedure.STMT_PROCEDURE, false);
             this.invoke(Procedure.STMT_ASTERISK_PROCEDURE, true);
         }

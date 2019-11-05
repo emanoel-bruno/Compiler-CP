@@ -34,6 +34,7 @@ import tokens.IntToken;
 import tokens.IntegerConstantToken;
 import tokens.LiteralToken;
 import tokens.MinusToken;
+import tokens.NewLineToken;
 import tokens.NotToken;
 import tokens.OpenParenthesisToken;
 import tokens.OrToken;
@@ -77,7 +78,7 @@ public class LexicalAnalyser {
      */
     public boolean isEmptySpace() {
         return (this.currentChar == ' ' || this.currentChar == '\t' || this.currentChar == '\r'
-                || this.currentChar == '\b' || this.currentChar == '\n' || (int) this.currentChar == 0);
+                || this.currentChar == '\b'  || (int) this.currentChar == 0);
     };
 
     /**
@@ -102,9 +103,6 @@ public class LexicalAnalyser {
      * @throws IOException
      */
     public boolean nextChar(String condition) throws IOException {
-        if (this.currentChar == '\n')
-            this.currentLine++;
-
         if ((int) (this.currentChar = (char) this.bufferedReader.read()) == -1)
             return false;
 
@@ -127,6 +125,7 @@ public class LexicalAnalyser {
         Token t = this.nextToken();
         if (t instanceof IdentifierToken)
             this.insertToken((IdentifierToken) t);
+
         return t;
     }
 
@@ -139,9 +138,14 @@ public class LexicalAnalyser {
      */
     public Token nextToken() throws IOException, LexicalException {
         if (isEmptySpace())
-            while (this.nextChar("empty"))
-                ;
+            while (this.nextChar("empty"));
 
+        if (this.currentChar == '\n'){
+            this.currentLine++;
+            this.nextChar();
+            return (this.currentToken = new NewLineToken());
+        }
+        
         if (Character.isDigit(this.currentChar)) {
             StringBuilder number = new StringBuilder();
             number.append(this.currentChar);
@@ -304,7 +308,7 @@ public class LexicalAnalyser {
     }
 
     public int getLine() {
-        return this.currentLine;
+        return (SyntaxAnalyser.currentToken().getTag() == Tag.NEW_LINE) ? this.currentLine - 1 : this.currentLine;
     }
 
     public Token getCurrentToken() {
