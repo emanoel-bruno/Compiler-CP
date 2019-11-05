@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ -z $1 ]]; then
-    echo "Please type a valid action: build, run";
+    echo "Please type a valid action: build, run, test";
 elif [[ $1 == "build" ]]; then
     cd compiler
     mvn clean package assembly:single

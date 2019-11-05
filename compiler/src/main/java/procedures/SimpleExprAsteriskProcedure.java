@@ -7,7 +7,6 @@ import compiler.Tag;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
-import compiler.SyntaxAnalyser;
 
 public class SimpleExprAsteriskProcedure extends Procedure {
 
@@ -15,12 +14,19 @@ public class SimpleExprAsteriskProcedure extends Procedure {
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
         switch (t.getTag()) {
         case Tag.PLUS:
+            this.consume(Tag.PLUS, false);
+            this.invoke(Procedure.TERM_PROCEDURE, true);
+            this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE, false); // TermProcedure already moved one step forward
+            break;
         case Tag.MINUS:
+            this.consume(Tag.MINUS, false);
+            this.invoke(Procedure.TERM_PROCEDURE, true);
+            this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE, false); // TermProcedure already moved one step forward
+            break;
         case Tag.OR:
-            t = SyntaxAnalyser.nextToken();
-            new TermProcedure().check(t);
-            t = SyntaxAnalyser.currentToken(); // TermProcedure already moved one step forward
-            this.check(t);
+            this.consume(Tag.OR, false);
+            this.invoke(Procedure.TERM_PROCEDURE, true);
+            this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE, false); // TermProcedure already moved one step forward
             break;
         }
     }

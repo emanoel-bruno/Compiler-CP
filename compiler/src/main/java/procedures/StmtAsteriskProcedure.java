@@ -7,23 +7,15 @@ import compiler.Tag;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
-import compiler.SyntaxAnalyser;
-import procedures.StmtProcedure;
 
 public class StmtAsteriskProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        switch (t.getTag()) {
-        case Tag.PRINT:
-        case Tag.SCAN:
-        case Tag.DO:
-        case Tag.IF:
-        case Tag.IDENTIFIER:
-            new StmtProcedure().check(t);
-            t = SyntaxAnalyser.nextToken();
-            this.check(t);
-            break;
+        if (t.getTag() == Tag.DIVIDER || t.getTag() == Tag.PRINT || t.getTag() == Tag.SCAN || t.getTag() == Tag.DO
+                || t.getTag() == Tag.IF || t.getTag() == Tag.IDENTIFIER) {
+            this.invoke(Procedure.STMT_PROCEDURE, false);
+            this.invoke(Procedure.STMT_ASTERISK_PROCEDURE, true);
         }
     }
 }

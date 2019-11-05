@@ -21,7 +21,4 @@ public class LiteralToken extends Token {
 
     }
 
-    public boolean match(String s) {
-        return this.value.match(s);
-    }
 }

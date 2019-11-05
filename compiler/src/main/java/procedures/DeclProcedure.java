@@ -10,7 +10,6 @@ import exceptions.SyntaxException;
 import exceptions.UnexpectedTokenException;
 import compiler.Procedure;
 import compiler.SyntaxAnalyser;
-import procedures.IdentListProcedure;
 
 public class DeclProcedure extends Procedure {
 
@@ -19,10 +18,18 @@ public class DeclProcedure extends Procedure {
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
         case Tag.INT:
+            this.consume(Tag.INT, false);
+            this.invoke(Procedure.IDENTLIST_PROCEDURE, true);
+            this.consume(Tag.SEMICOLON, false); // IdentListProcedure move one step forward
+            break;
         case Tag.FLOAT:
+            this.consume(Tag.FLOAT, false);
+            this.invoke(Procedure.IDENTLIST_PROCEDURE, true);
+            this.consume(Tag.SEMICOLON, false); // IdentListProcedure move one step forward
+            break;
         case Tag.STRING:
-            t = SyntaxAnalyser.nextToken();
-            new IdentListProcedure().check(t);
+            this.consume(Tag.STRING, false);
+            this.invoke(Procedure.IDENTLIST_PROCEDURE, true);
             this.consume(Tag.SEMICOLON, false); // IdentListProcedure move one step forward
             break;
         default:

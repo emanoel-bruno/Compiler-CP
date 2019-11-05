@@ -17,22 +17,25 @@ public class StmtProcedure extends Procedure {
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
+        case Tag.DIVIDER:
+            this.invoke(Procedure.COMMENT_PROCEDURE, false);
+            break;
         case Tag.PRINT:
-            new WriteStmtProcedure().check(t);
+            this.invoke(Procedure.WRITESTMT_PROCEDURE, false);
             consume(Tag.SEMICOLON, true);
             break;
         case Tag.SCAN:
-            new ReadStmtProcedure().check(t);
+            this.invoke(Procedure.READSTMT_PROCEDURE, false);
             consume(Tag.SEMICOLON, true);
             break;
         case Tag.DO:
-            new WhileStmtProcedure().check(t);
+            this.invoke(Procedure.WHILESTMT_PROCEDURE, false);
             break;
         case Tag.IF:
-            new IfStmtProcedure().check(t);
+            this.invoke(Procedure.IFSTMT_PROCEDURE, false);
         case Tag.IDENTIFIER:
-            new AssignStmtProcedure().check(t);
-            consume(Tag.SEMICOLON, false); // simple-expr already moved one step
+            this.invoke(Procedure.ASSIGNSTMT_PROCEDURE, false);
+            consume(Tag.SEMICOLON, false); // SimpleExprProcedure already moved one step
             break;
         default:
             PanicMode.nextToken(this, t.getTag());

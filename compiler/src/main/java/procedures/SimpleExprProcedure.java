@@ -6,15 +6,12 @@ import compiler.Token;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
-import compiler.SyntaxAnalyser;
-import procedures.SimpleExprAsteriskProcedure;
 
 public class SimpleExprProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        new TermProcedure().check(t);
-        t = SyntaxAnalyser.currentToken(); // TermProcedure already moved one step forward
-        new SimpleExprAsteriskProcedure().check(t);
+        this.invoke(Procedure.TERM_PROCEDURE, false);
+        this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE, false); // TermProcedure already moved one step forward
     }
 }

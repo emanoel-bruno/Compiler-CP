@@ -1,5 +1,7 @@
 tokens/DoToken.class
+procedures/OneCommentAsteriskProcedure.class
 procedures/FactorAProcedure.class
+procedures/MultipleCommentProcedure.class
 exceptions/SemanticException.class
 tokens/BiggerEqualToken.class
 exceptions/LexicalException.class
@@ -24,6 +26,7 @@ tokens/ScanToken.class
 compiler/PanicMode.class
 procedures/DeclAsteriskProcedure.class
 procedures/SimpleExprProcedure.class
+procedures/OneCommentProcedure.class
 tokens/ElseToken.class
 procedures/TermAsteriskProcedure.class
 procedures/StmtProcedure.class
@@ -36,8 +39,10 @@ tokens/SemiColonToken.class
 tokens/OpenParenthesisToken.class
 tokens/StringToken.class
 tokens/TimesToken.class
+tokens/NewLineToken.class
 tokens/CommaToken.class
 tokens/DoubleArrowToken.class
+procedures/MultipleCommentAsteriskProcedure.class
 compiler/App.class
 compiler/SymbolTable.class
 compiler/Lexeme.class
@@ -66,6 +71,7 @@ procedures/ReadStmtProcedure.class
 exceptions/CustomException.class
 procedures/WhileStmtProcedure.class
 tokens/LiteralToken.class
+procedures/CommentProcedure.class
 exceptions/CharacterInvalidException.class
 compiler/Procedure.class
 procedures/IfStmtProcedure.class

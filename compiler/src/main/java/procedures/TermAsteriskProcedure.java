@@ -7,7 +7,6 @@ import compiler.Tag;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
-import compiler.SyntaxAnalyser;
 
 public class TermAsteriskProcedure extends Procedure {
 
@@ -15,12 +14,19 @@ public class TermAsteriskProcedure extends Procedure {
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
         switch (t.getTag()) {
         case Tag.TIMES:
+            this.consume(Tag.TIMES, false);
+            this.invoke(Procedure.FACTORA_PROCEDURE, true);
+            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, true);
+            break;
         case Tag.DIVIDER:
+            this.consume(Tag.DIVIDER, false);
+            this.invoke(Procedure.FACTORA_PROCEDURE, true);
+            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, true);
+            break;
         case Tag.AND:
-            t = SyntaxAnalyser.nextToken();
-            new FactorAProcedure().check(t);
-            t = SyntaxAnalyser.nextToken();
-            this.check(t);
+            this.consume(Tag.AND, false);
+            this.invoke(Procedure.FACTORA_PROCEDURE, true);
+            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, true);
             break;
         }
     }

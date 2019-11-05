@@ -18,15 +18,20 @@ public class FactorProcedure extends Procedure {
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
         case Tag.IDENTIFIER:
+            this.consume(Tag.IDENTIFIER, false);
+            break;
         case Tag.INTEGER_CONSTANT:
+            this.consume(Tag.INTEGER_CONSTANT, false);
+            break;
         case Tag.FLOAT_CONSTANT:
+            this.consume(Tag.FLOAT_CONSTANT, false);
+            break;
         case Tag.LITERAL:
-            t = SyntaxAnalyser.nextToken();
+            this.consume(Tag.LITERAL, false);
             break;
         case Tag.OPEN_PARENTHESIS:
             this.consume(Tag.OPEN_PARENTHESIS, false);
-            t = SyntaxAnalyser.nextToken();
-            new ExpressionProcedure().check(t);
+            this.invoke(Procedure.EXPRESSION_PROCEDURE, true);
             this.consume(Tag.CLOSE_PARENTHESIS, false); // ExpressionProcedure already moved one step forward
             break;
         default:

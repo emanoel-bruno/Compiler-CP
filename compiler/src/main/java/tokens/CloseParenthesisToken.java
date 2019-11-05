@@ -16,7 +16,4 @@ public class CloseParenthesisToken extends Token {
         return this.value.getIdentifier();
     }
 
-    public boolean match(String s) {
-        return this.value.match(s);
-    }
 }

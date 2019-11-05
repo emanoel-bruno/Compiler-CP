@@ -11,6 +11,6 @@ public class WriteableProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        new SimpleExprProcedure().check(t);
+        this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, false);
     }
 }

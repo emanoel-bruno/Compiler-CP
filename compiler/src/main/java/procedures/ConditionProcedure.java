@@ -11,6 +11,6 @@ public class ConditionProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        new ExpressionProcedure().check(t);
+        this.invoke(Procedure.EXPRESSION_PROCEDURE, false);
     }
 }

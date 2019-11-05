@@ -3,18 +3,16 @@ package procedures;
 import java.io.IOException;
 
 import compiler.Token;
-import compiler.Tag;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
+import compiler.Tag;
 
-public class ReadStmtProcedure extends Procedure {
+public class MultipleCommentProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        this.consume(Tag.SCAN, false);
-        this.consume(Tag.OPEN_PARENTHESIS, true);
-        this.consume(Tag.IDENTIFIER, true);
-        this.consume(Tag.CLOSE_PARENTHESIS, true);
+        this.consume(Tag.PLUS, false);
+        this.invoke(Procedure.MULTIPLE_COMMENT_ASTERISK_PROCEDURE, true);
     }
 }

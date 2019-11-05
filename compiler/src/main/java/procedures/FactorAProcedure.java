@@ -22,12 +22,15 @@ public class FactorAProcedure extends Procedure {
         case Tag.FLOAT_CONSTANT:
         case Tag.LITERAL:
         case Tag.OPEN_PARENTHESIS:
-            new FactorProcedure().check(t);
+            this.invoke(Procedure.FACTOR_PROCEDURE, false);
             break;
         case Tag.MINUS:
+            this.consume(Tag.MINUS, false);
+            this.invoke(Procedure.FACTOR_PROCEDURE, true);
+            break;
         case Tag.NOT:
-            t = SyntaxAnalyser.nextToken();
-            new FactorProcedure().check(t);
+            this.consume(Tag.NOT, false);
+            this.invoke(Procedure.FACTOR_PROCEDURE, true);
             break;
         default:
             PanicMode.nextToken(this, t.getTag());
