@@ -12,6 +12,16 @@ public class TermAsteriskProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
+        if(t.getTag() != Tag.NEW_LINE){
+            this.rule(t);
+        } else{
+            t = SyntaxAnalyser.nextToken();
+            this.check(t);
+        }
+    }
+
+    @Override
+    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         switch (t.getTag()) {
         case Tag.TIMES:
             this.consume(Tag.TIMES, false);
@@ -26,10 +36,6 @@ public class TermAsteriskProcedure extends Procedure {
         case Tag.AND:
             this.consume(Tag.AND, false);
             this.invoke(Procedure.FACTORA_PROCEDURE, true);
-            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, true);
-            break;
-        case Tag.NEW_LINE:
-            consume(Tag.NEW_LINE, false);
             this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, true);
             break;
         }

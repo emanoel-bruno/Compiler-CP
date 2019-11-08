@@ -15,19 +15,29 @@ public class CommentProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        this.consume(Tag.DIVIDER, false);
-        t = SyntaxAnalyser.nextToken();
+        if(t.getTag() != Tag.NEW_LINE){
+            this.rule(t);
+        } else{
+            t = SyntaxAnalyser.nextToken();
+            this.check(t);
+        }
+    }
+
+    @Override
+    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
-        case Tag.DIVIDER:
-            this.invoke(Procedure.ONE_COMMENT_PROCEDURE, false);
-            break;
-        case Tag.PLUS:
-            this.invoke(Procedure.MULTIPLE_COMMENT_PROCEDURE, false);
-            break;
-        default:
-            PanicMode.nextToken(this, t.getTag());
-            throw new UnexpectedTokenException(t.toString(), line);
+            case Tag.DIVIDER:
+                this.consume(Tag.DIVIDER, false);
+                this.invoke(Procedure.ONE_LINE_PROCEDURE, true);
+                break;
+            case Tag.PLUS:
+                this.consume(Tag.PLUS, false);
+                this.invoke(Procedure.MULTIPLE_LINE_PROCEDURE, true);
+                break;
+            default:
+                PanicMode.nextToken(this, t.getTag());
+                throw new UnexpectedTokenException(t.toString(), line);
         }
     }
 }

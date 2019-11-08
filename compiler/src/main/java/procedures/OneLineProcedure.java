@@ -9,10 +9,15 @@ import exceptions.SyntaxException;
 import compiler.Procedure;
 import compiler.SyntaxAnalyser;
 
-public class MultipleCommentAsteriskProcedure extends Procedure {
+public class OneLineProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
+        this.rule(t);
+    }
+
+    @Override
+    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         switch (t.getTag()) {
         case Tag.PLUS:
             this.consume(Tag.PLUS, false);

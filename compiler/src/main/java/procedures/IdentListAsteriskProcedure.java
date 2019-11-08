@@ -12,12 +12,19 @@ public class IdentListAsteriskProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
+        if(t.getTag() != Tag.NEW_LINE){
+            this.rule(t);
+        } else{
+            t = SyntaxAnalyser.nextToken();
+            this.check(t);
+        }
+    }
+
+    @Override
+    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         if (t.getTag() == Tag.COMMA) {
             this.consume(Tag.COMMA, false);
             consume(Tag.IDENTIFIER, true);
-            this.invoke(Procedure.IDENTLIST_ASTERISK_PROCEDURE, true);
-        } else if (t.getTag() == Tag.NEW_LINE) {
-            consume(Tag.NEW_LINE, false);
             this.invoke(Procedure.IDENTLIST_ASTERISK_PROCEDURE, true);
         }
     }

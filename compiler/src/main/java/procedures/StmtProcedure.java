@@ -15,10 +15,21 @@ public class StmtProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
+        if(t.getTag() != Tag.NEW_LINE){
+            this.rule(t);
+        } else{
+            t = SyntaxAnalyser.nextToken();
+            this.check(t);
+        }
+    }
+
+    @Override
+    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
         case Tag.DIVIDER:
-            this.invoke(Procedure.COMMENT_PROCEDURE, false);
+            this.consume(Tag.DIVIDER, false);
+            this.invoke(Procedure.COMMENT_PROCEDURE, true);
             break;
         case Tag.PRINT:
             this.invoke(Procedure.WRITESTMT_PROCEDURE, false);
@@ -36,10 +47,6 @@ public class StmtProcedure extends Procedure {
         case Tag.IDENTIFIER:
             this.invoke(Procedure.ASSIGNSTMT_PROCEDURE, false);
             consume(Tag.SEMICOLON, false); // SimpleExprProcedure already moved one step
-            break;
-        case Tag.NEW_LINE:
-            consume(Tag.NEW_LINE, false);
-            this.invoke(Procedure.STMT_PROCEDURE, true);
             break;
         default:
             PanicMode.nextToken(this, t.getTag());

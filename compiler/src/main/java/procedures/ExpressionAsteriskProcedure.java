@@ -12,6 +12,16 @@ public class ExpressionAsteriskProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
+        if(t.getTag() != Tag.NEW_LINE){
+            this.rule(t);
+        } else{
+            t = SyntaxAnalyser.nextToken();
+            this.check(t);
+        }
+    }
+
+    @Override
+    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         switch (t.getTag()) {
         case Tag.EQUAL:
             this.consume(Tag.EQUAL, false);
@@ -36,10 +46,6 @@ public class ExpressionAsteriskProcedure extends Procedure {
         case Tag.DOUBLE_ARROW:
             this.consume(Tag.DOUBLE_ARROW, false);
             this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, true);
-            break;
-        case Tag.NEW_LINE:
-            consume(Tag.NEW_LINE, false);
-            this.invoke(Procedure.EXPRESSION_ASTERISK_PROCEDURE, true);
             break;
         }
     }

@@ -12,6 +12,16 @@ public class SimpleExprAsteriskProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
+        if(t.getTag() != Tag.NEW_LINE){
+            this.rule(t);
+        } else{
+            t = SyntaxAnalyser.nextToken();
+            this.check(t);
+        }
+    }
+
+    @Override
+    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         switch (t.getTag()) {
         case Tag.PLUS:
             this.consume(Tag.PLUS, false);
@@ -27,10 +37,6 @@ public class SimpleExprAsteriskProcedure extends Procedure {
             this.consume(Tag.OR, false);
             this.invoke(Procedure.TERM_PROCEDURE, true);
             this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE, false); // TermProcedure already moved one step forward
-            break;
-        case Tag.NEW_LINE:
-            consume(Tag.NEW_LINE, false);
-            this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE, true);
             break;
         }
     }
