@@ -23,7 +23,6 @@ procedures/FactorProcedure.class
 tokens/IfToken.class
 tokens/ScanToken.class
 compiler/PanicMode.class
-procedures/DeclAsteriskProcedure.class
 procedures/SimpleExprProcedure.class
 tokens/ElseToken.class
 procedures/TermAsteriskProcedure.class

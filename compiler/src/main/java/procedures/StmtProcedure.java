@@ -11,7 +11,11 @@ import exceptions.UnexpectedTokenException;
 import compiler.Procedure;
 import compiler.SyntaxAnalyser;
 
-public class StmtProcedure extends Procedure {
+public class StmtProcedure  extends Procedure {
+      
+    public StmtProcedure() {
+        this.tag = Procedure.STMT_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {
@@ -34,12 +38,13 @@ public class StmtProcedure extends Procedure {
             break;
         case Tag.IF:
             this.invoke(Procedure.IFSTMT_PROCEDURE, false);
+            break;
         case Tag.IDENTIFIER:
             this.invoke(Procedure.ASSIGNSTMT_PROCEDURE, false);
             consume(Tag.SEMICOLON, false); // SimpleExprProcedure already moved one step
             break;
         default:
-            PanicMode.nextToken(this, t);
+            PanicMode.nextToken(this, t, new int[]{Tag.DIVIDER, Tag.PRINT, Tag.SCAN, Tag.DO, Tag.IF, Tag.IDENTIFIER});
             throw new UnexpectedTokenException(t.toString(), line);
         }
     }

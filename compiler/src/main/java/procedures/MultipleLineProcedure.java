@@ -8,13 +8,17 @@ import exceptions.SyntaxException;
 import compiler.Procedure;
 import compiler.Tag;
 
-public class MultipleLineProcedure extends Procedure {
+public class MultipleLineProcedure  extends Procedure {
+      
+    public MultipleLineProcedure() {
+        this.tag = Procedure.MULTIPLE_LINE_PROCEDURE;
+    }
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
         this.rule(t);
     }
-    
+
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         switch (t.getTag()) {

@@ -7,7 +7,11 @@ import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
 
-public class StmtListProcedure extends Procedure {
+public class StmtListProcedure  extends Procedure {
+      
+    public StmtListProcedure() {
+        this.tag = Procedure.STMTLIST_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {

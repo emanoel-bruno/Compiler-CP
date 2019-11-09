@@ -37,7 +37,6 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exceptions/UnexpectedTokenException.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/PrintToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/BiggerToken.java
-/home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/DeclAsteriskProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/IfStmtAsteriskProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/WhileToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/ExpressionProcedure.java

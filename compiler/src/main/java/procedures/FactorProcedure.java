@@ -11,7 +11,11 @@ import exceptions.UnexpectedTokenException;
 import compiler.Procedure;
 import compiler.SyntaxAnalyser;
 
-public class FactorProcedure extends Procedure {
+public class FactorProcedure  extends Procedure {
+      
+    public FactorProcedure() {
+        this.tag = Procedure.FACTOR_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {
@@ -35,7 +39,7 @@ public class FactorProcedure extends Procedure {
             this.consume(Tag.CLOSE_PARENTHESIS, false); // ExpressionProcedure already moved one step forward
             break;
         default:
-            PanicMode.nextToken(this, t);
+            PanicMode.nextToken(this, t, new int[]{Tag.IDENTIFIER,Tag.INTEGER_CONSTANT,Tag.FLOAT_CONSTANT, Tag.LITERAL, Tag.OPEN_PARENTHESIS});
             throw new UnexpectedTokenException(t.toString(), line);
         }
     }

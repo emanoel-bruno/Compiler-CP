@@ -11,7 +11,11 @@ import exceptions.UnexpectedTokenException;
 import compiler.Procedure;
 import compiler.SyntaxAnalyser;
 
-public class DeclProcedure extends Procedure {
+public class DeclProcedure  extends Procedure {
+      
+    public DeclProcedure() {
+        this.tag = Procedure.DECL_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {
@@ -33,7 +37,7 @@ public class DeclProcedure extends Procedure {
             this.consume(Tag.SEMICOLON, false); // IdentListProcedure move one step forward
             break;
         default:
-            PanicMode.nextToken(this, t);
+            PanicMode.nextToken(this, t, new int [] {Tag.INT, Tag.FLOAT, Tag.STRING} );
             throw new UnexpectedTokenException(t.toString(), line);
         }
     }

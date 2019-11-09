@@ -8,7 +8,11 @@ import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
 
-public class ReadStmtProcedure extends Procedure {
+public class ReadStmtProcedure  extends Procedure {
+      
+    public ReadStmtProcedure() {
+        this.tag = Procedure.READSTMT_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {

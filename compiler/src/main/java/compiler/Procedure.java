@@ -12,9 +12,10 @@ import procedures.*;
 public abstract class Procedure {
     protected LexicalAnalyser lexical;
 
+    protected int tag;
+
     public static final int ASSIGNSTMT_PROCEDURE = 0,
                             CONDITION_PROCEDURE = 1, 
-                            DECL_ASTERISK_PROCEDURE = 2, 
                             DECLLIST_PROCEDURE = 3, 
                             DECL_PROCEDURE = 4, 
                             EXPRESSION_ASTERISK_PROCEDURE = 5, 
@@ -40,16 +41,20 @@ public abstract class Procedure {
                             WRITESTMT_PROCEDURE = 25,
                             COMMENT_PROCEDURE = 26,
                             ONE_LINE_PROCEDURE = 27,
-                            MULTIPLE_LINE_PROCEDURE = 38,
+                            MULTIPLE_LINE_PROCEDURE = 28,
                             MULTIPLE_LINE_ASTERISK_PROCEDURE = 29;
 
     public void consume(int tag, boolean next) throws UnexpectedTokenException, IOException, LexicalException {
         Token t = (next) ? SyntaxAnalyser.nextToken() : SyntaxAnalyser.currentToken();
         int line = SyntaxAnalyser.currentLine();
         if ((t.getTag() != tag && t.getTag() != Tag.NEW_LINE) || (tag == Tag.NEW_LINE && t.getTag() != Tag.NEW_LINE)) {
-            PanicMode.nextToken(this, t);
+            PanicMode.nextToken(this, t, new int[]{tag});
             throw new UnexpectedTokenException(t.toString(), line);
         }
+    }
+
+    public int getTag() {
+        return this.tag;
     }
 
     public void invoke(int procedure, boolean next) throws IOException, LexicalException, SyntaxException {
@@ -60,9 +65,6 @@ public abstract class Procedure {
             break;
         case Procedure.CONDITION_PROCEDURE:
             new ConditionProcedure().check(t);
-            break;
-        case Procedure.DECL_ASTERISK_PROCEDURE:
-            new DeclAsteriskProcedure().check(t);
             break;
         case Procedure.DECLLIST_PROCEDURE:
             new DeclListProcedure().check(t);
@@ -148,13 +150,20 @@ public abstract class Procedure {
         }
     }
 
+    private void debug(Token t){
+        System.out.println(this.getClass());
+        Tag.printTag(t.getTag());
+    }
+
     public void check(Token t) throws IOException, LexicalException, SyntaxException{
         if(t.getTag() != Tag.NEW_LINE){
+            // debug(t);
             this.rule(t);
         } else{
             t = SyntaxAnalyser.nextToken();
             this.check(t);
         }
     }
+
     public abstract void rule(Token t) throws IOException, LexicalException, SyntaxException;
 }

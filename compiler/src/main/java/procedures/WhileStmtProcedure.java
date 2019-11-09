@@ -8,7 +8,11 @@ import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
 
-public class WhileStmtProcedure extends Procedure {
+public class WhileStmtProcedure  extends Procedure {
+      
+    public WhileStmtProcedure() {
+        this.tag = Procedure.WHILESTMT_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {

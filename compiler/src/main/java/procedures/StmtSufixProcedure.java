@@ -8,7 +8,11 @@ import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
 
-public class StmtSufixProcedure extends Procedure {
+public class StmtSufixProcedure  extends Procedure {
+      
+    public StmtSufixProcedure() {
+        this.tag = Procedure.STMTSUFIX_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {

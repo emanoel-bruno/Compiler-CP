@@ -8,7 +8,11 @@ import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
 
-public class TermAsteriskProcedure extends Procedure {
+public class TermAsteriskProcedure  extends Procedure {
+      
+    public TermAsteriskProcedure() {
+        this.tag = Procedure.TERM_ASTERISK_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {

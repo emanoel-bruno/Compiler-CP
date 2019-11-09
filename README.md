@@ -20,6 +20,7 @@
 | Symbol | First  | Follow |
 | program | *[ start ]* | *[ $ ]* |
 | decl-list | *[ int ]* *[ float ]* *[ string ]* | **stmt-list:**  *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* |
+
 | decl | *[ int ]* *[ float ]* *[ string ]* | *[ int ]* *[ float ]* *[ string ]* *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* |
 | ident-list | *[ identifier ]* | *[ ; ]* |
 | assign-stmt | *[ identifier ]* | *[ ; ]* |

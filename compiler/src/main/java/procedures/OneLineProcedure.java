@@ -8,7 +8,11 @@ import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
 
-public class OneLineProcedure extends Procedure {
+public class OneLineProcedure  extends Procedure {
+      
+    public OneLineProcedure() {
+        this.tag = Procedure.ONE_LINE_PROCEDURE;
+    }
     
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {

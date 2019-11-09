@@ -11,7 +11,11 @@ import compiler.Procedure;
 import compiler.SyntaxAnalyser;
 import compiler.Tag;
 
-public class CommentProcedure extends Procedure {
+public class CommentProcedure  extends Procedure {
+      
+    public CommentProcedure() {
+        this.tag = Procedure.COMMENT_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {
@@ -26,7 +30,7 @@ public class CommentProcedure extends Procedure {
                 this.invoke(Procedure.MULTIPLE_LINE_PROCEDURE, true);
                 break;
             default:
-                PanicMode.nextToken(this, t);
+                PanicMode.nextToken(this, t, new int [] {Tag.DIVIDER, Tag.PLUS} );
                 throw new UnexpectedTokenException(t.toString(), line);
         }
     }

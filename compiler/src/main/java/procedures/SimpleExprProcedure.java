@@ -7,7 +7,11 @@ import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
 
-public class SimpleExprProcedure extends Procedure {
+public class SimpleExprProcedure  extends Procedure {
+      
+    public SimpleExprProcedure() {
+        this.tag = Procedure.SIMPLEEXPR_PROCEDURE;
+    }
 
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {
