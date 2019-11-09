@@ -19,20 +19,21 @@
 | :--- | :---: | :---: |
 | Symbol | First  | Follow |
 | program | *[ start ]* | *[ $ ]* |
-| decl-list | *[ int ]* *[ float ]* *[ string ]* | **stmt-list:**  *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* |
+| decl-list | *[ int ]* *[ float ]* *[ string ]* | **stmt-list:**   *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* |
+| decl | *[ int ]* *[ float ]* *[ string ]* | **decl-list:**    *[ int ]* *[ float ]* *[ string ]* |
+| ident-list | *[ identifier ]* | **decl:**:    *[ ; ]* |
+| ident-list* |*[ , ]* | **ident-list:**    *[ ; ]* |
+| stmt-list | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* | **program:**  *[ exit ]*  **if-stmt-asterisk:**    *[ end ]* *[ else ]*    **stmt-sufix:**  *[ while ]*|
 
-| decl | *[ int ]* *[ float ]* *[ string ]* | *[ int ]* *[ float ]* *[ string ]* *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* |
-| ident-list | *[ identifier ]* | *[ ; ]* |
 | assign-stmt | *[ identifier ]* | *[ ; ]* |
 | condition | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* | *[ end ]* *[ then ]* |
-| if-stmt | *[ if ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
-| if-stmt* |*[ end ]* *[ else ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
-| while-stmt | *[ do ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
-| stmt-sufix | *[ while ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
+| if-stmt | *[ if ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
+| if-stmt* |*[ end ]* *[ else ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
+| while-stmt | *[ do ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
+| stmt-sufix | *[ while ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
 | read-stmt | *[ scan ]* | *[ ; ]* |
 | write-stmt | *[ print ]* | *[ ; ]* |
-| stmt-list | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* | *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
-| stmt | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
+| stmt | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
 | writable | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* | *[ ) ]* |
 | expression | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* | *[ end ]* *[ then ]* *[ ) ]* |
 | simple-expr | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* | *[ == ]* *[ > ]* *[ >= ]* *[ < ]* *[ <= ]* *[ <> ]* *[ + ]* *[ - ]* *[ or ]* *[ end ]* *[ then ]* *[ ) ]* *[ ; ]* |
@@ -44,14 +45,14 @@
 | **Terminal Symbols** |||
 | :--- | :---: | :---: |
 | Symbol | First  | Follow |
-| start | *[ start ]* | *[ int ]* *[ float ]* *[ string ]* *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* |
+| start | *[ start ]* | *[ int ]* *[ float ]* *[ string ]* *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* |
 | exit | *[ exit ]* | *[ EOF ]* |
 | type | *[ int ]* *[ float ]* *[ string ]* | *[ identifier ]* |
 | if | *[ if ]* | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* |
-| then | *[ then ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* |
-| else | *[ else ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* |
-| end | *[ end ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
-| do | *[ do ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* |
+| then | *[ then ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* |
+| else | *[ else ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* |
+| end | *[ end ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
+| do | *[ do ]* | *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* |
 | while | *[ while ]* | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* |
 | scan | *[ scan ]* | *[ ( ]* |
 | print | *[ print ]* | *[ ( ]* |
@@ -61,7 +62,7 @@
 | minus | *[ - ]* | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* |
 | plus | *[ + ]* | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* |
 | or | *[ or ]* | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* |
-| semicolon | *[ ; ]* | *[ int ]* *[ float ]* *[ string ]* *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
+| semicolon | *[ ; ]* | *[ int ]* *[ float ]* *[ string ]* *[ print ]* *[ scan ]* *[ do ]* *[ if ]* *[ identifier ]* *[ / ]* *[ exit ]* *[ while ]* *[ end ]* *[ else ]* |
 | coma | *[ , ]* | *[ identifier ]* |
 | open-parenthesis | *[ ( ]* | *[ identifier ]* *[ float_const ]* *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* |
 | close-parenthesis | *[ ) ]* | *[ == ]* *[ > ]* *[ >= ]* *[ < ]* *[ <= ]* *[ <> ]* *[ + ]* *[ - ]* *[ or ]* *[ end ]* *[ then ]* *[ ) ]* *[ ; ]* *[ * ]* *[ / ]* *[ and ]* |
