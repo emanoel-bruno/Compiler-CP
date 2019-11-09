@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-
+message="Please type a valid action: build, run, test"
 if [[ -z $1 ]]; then
-    echo "Please type a valid action: build, run, test";
+    echo $message;
 elif [[ $1 == "build" ]]; then
     cd compiler
     mvn clean package assembly:single
 elif [[ $1 == "run" ]]; then
-    first=false
+    first=false;
     params=""
 
     for arg in $@; do
@@ -21,7 +21,7 @@ elif [[ $1 == "run" ]]; then
 elif [[ $1 == "test" ]]; then
     java -cp compiler/target/compiler-1.0-jar-with-dependencies.jar compiler.App tests/Teste1 tests/Teste2 tests/Teste3 tests/Teste4 tests/Teste5 tests/Teste6
 else
-    echo "Please type a valid action: build, run";
+    echo $message
 fi
 
 

@@ -8,21 +8,23 @@ import exceptions.SyntaxException;
 import compiler.Procedure;
 import compiler.Tag;
 
-public class OneCommentProcedure extends Procedure {
+public class MultipleLineProcedure extends Procedure {
 
     @Override
     public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        if(t.getTag() != Tag.NEW_LINE){
-            this.rule(t);
-        } else{
-            t = SyntaxAnalyser.nextToken();
-            this.check(t);
-        }
+        this.rule(t);
     }
-
+    
     @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {
-        this.consume(Tag.DIVIDER, false);
-        this.invoke(Procedure.ONE_COMMENT_ASTERISK_PROCEDURE, true);
+        switch (t.getTag()) {
+        case Tag.PLUS:
+            this.consume(Tag.PLUS, false);
+            this.invoke(Procedure.MULTIPLE_LINE_ASTERISK_PROCEDURE, true);
+        default:
+            this.invoke(Procedure.MULTIPLE_LINE_PROCEDURE, true); // This token can be anything so it just
+                                                                // move ahead until find "*"
+            break;
+        }
     }
 }

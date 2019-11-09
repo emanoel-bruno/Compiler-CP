@@ -47,7 +47,7 @@ public abstract class Procedure {
         Token t = (next) ? SyntaxAnalyser.nextToken() : SyntaxAnalyser.currentToken();
         int line = SyntaxAnalyser.currentLine();
         if ((t.getTag() != tag && t.getTag() != Tag.NEW_LINE) || (tag == Tag.NEW_LINE && t.getTag() != Tag.NEW_LINE)) {
-            PanicMode.nextToken(this, t.getTag());
+            PanicMode.nextToken(this, t);
             throw new UnexpectedTokenException(t.toString(), line);
         }
     }
@@ -148,6 +148,13 @@ public abstract class Procedure {
         }
     }
 
-    public abstract void check(Token t) throws IOException, LexicalException, SyntaxException;
+    public void check(Token t) throws IOException, LexicalException, SyntaxException{
+        if(t.getTag() != Tag.NEW_LINE){
+            this.rule(t);
+        } else{
+            t = SyntaxAnalyser.nextToken();
+            this.check(t);
+        }
+    }
     public abstract void rule(Token t) throws IOException, LexicalException, SyntaxException;
 }

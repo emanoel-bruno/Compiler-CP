@@ -11,16 +11,6 @@ import compiler.Procedure;
 public class SimpleExprAsteriskProcedure extends Procedure {
 
     @Override
-    public void check(Token t) throws IOException, LexicalException, SyntaxException {
-        if(t.getTag() != Tag.NEW_LINE){
-            this.rule(t);
-        } else{
-            t = SyntaxAnalyser.nextToken();
-            this.check(t);
-        }
-    }
-
-    @Override
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         switch (t.getTag()) {
         case Tag.PLUS:
