@@ -34,7 +34,6 @@ import tokens.IntToken;
 import tokens.IntegerConstantToken;
 import tokens.LiteralToken;
 import tokens.MinusToken;
-import tokens.NewLineToken;
 import tokens.NotToken;
 import tokens.OpenParenthesisToken;
 import tokens.OrToken;
@@ -78,8 +77,9 @@ public class LexicalAnalyser {
      */
     public boolean isEmptySpace() {
         return (this.currentChar == ' ' || this.currentChar == '\t' || this.currentChar == '\r'
-                || this.currentChar == '\b'  || (int) this.currentChar == 0);
+                || this.currentChar == '\b' || this.currentChar == '\n' || (int) this.currentChar == 0);
     };
+
 
     /**
      * Read a character of the opened file and store at currentChar
@@ -103,6 +103,9 @@ public class LexicalAnalyser {
      * @throws IOException
      */
     public boolean nextChar(String condition) throws IOException {
+        if (this.currentChar == '\n')
+            this.currentLine++;
+
         if ((int) (this.currentChar = (char) this.bufferedReader.read()) == -1)
             return false;
 
@@ -139,12 +142,6 @@ public class LexicalAnalyser {
     public Token nextToken() throws IOException, LexicalException {
         if (isEmptySpace())
             while (this.nextChar("empty"));
-
-        if (this.currentChar == '\n'){
-            this.currentLine++;
-            this.nextChar();
-            return (this.currentToken = new NewLineToken());
-        }
         
         if (Character.isDigit(this.currentChar)) {
             StringBuilder number = new StringBuilder();
@@ -264,8 +261,8 @@ public class LexicalAnalyser {
                 this.nextChar();
                 return (this.currentToken = new TimesToken());
             case "/":
-                this.nextChar();
-                return (this.currentToken = new DividerToken());
+                this.comment();
+                return this.currentToken;
             case "-":
                 this.nextChar();
                 return (this.currentToken = new MinusToken());
@@ -296,6 +293,38 @@ public class LexicalAnalyser {
         throw new UnknownCharacterException(this.currentChar, this.currentLine);
     }
 
+
+    private void comment() throws IOException, LexicalException {
+        this.nextChar();
+        switch (String.valueOf(this.currentChar).intern()) {
+            case "/":
+                this.nextChar();
+                while( this.currentChar != '\n')
+                    this.nextChar();
+                this. currentToken = this.nextToken();
+                break;
+            case "*":
+                this.multipleline();
+                this.nextChar();
+                this. currentToken = this.nextToken();
+                break;
+            default:
+                this.currentToken = new DividerToken();
+                break;
+        }
+    }
+
+    private void multipleline() throws IOException, LexicalException {
+        this.nextChar();
+        while( this.currentChar != '*' );
+            this.nextChar();
+        
+        this.nextChar();
+
+        if(this.currentChar != '/')
+            this.multipleline();
+    }
+
     /**
      * Insert a identifier on the SymbolTable
      * 
@@ -308,7 +337,7 @@ public class LexicalAnalyser {
     }
 
     public int getLine() {
-        return (SyntaxAnalyser.currentToken().getTag() == Tag.NEW_LINE) ? this.currentLine - 1 : this.currentLine;
+        return this.currentLine;
     }
 
     public Token getCurrentToken() {

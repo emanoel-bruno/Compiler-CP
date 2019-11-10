@@ -8,8 +8,7 @@ public class PanicMode {
         System.out.println("  Procedure: " + p.getClass());
         System.out.print("  Unexpected Token: ");
         Tag.printTag(t.getTag());
-        System.out.print("  Lexeme: ");        
-        System.out.println((t.getTag() != Tag.NEW_LINE) ? t.toString() : "NEW_LINE");
+        System.out.println("  Lexeme: " + t.toString() );        
     }
 
     public static void nextToken( Procedure p, Token t, int[] expected_tags) {
@@ -66,18 +65,6 @@ public class PanicMode {
             break;
         case Procedure.WRITESTMT_PROCEDURE:
             PanicMode.writeStmtProcedure( t, expected_tags );
-            break;
-        case Procedure.COMMENT_PROCEDURE:
-            PanicMode.commentProcedure( t, expected_tags );
-            break;
-        case Procedure.ONE_LINE_PROCEDURE:
-            PanicMode.oneLineProcedure( t, expected_tags );
-            break;
-        case Procedure.MULTIPLE_LINE_PROCEDURE:
-            PanicMode.multipleLineProcedure( t, expected_tags );
-            break;
-        case Procedure.MULTIPLE_LINE_ASTERISK_PROCEDURE:
-            PanicMode.multipleLineAsteriskProcedure( t, expected_tags );
             break;
         }    
     }
