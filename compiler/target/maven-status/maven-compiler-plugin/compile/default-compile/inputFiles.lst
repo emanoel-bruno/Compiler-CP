@@ -1,4 +1,3 @@
-/home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/CommentProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exceptions/CharacterInvalidException.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exceptions/LexicalException.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/NotToken.java
@@ -20,14 +19,12 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/SmallerEqualToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/DoToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/IfToken.java
-/home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/MultipleLineAsteriskProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/DotToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/AssignToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/IntToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exceptions/SyntaxException.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/EndToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/DividerToken.java
-/home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/MultipleLineProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/StmtListProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/EOFToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/ReadStmtProcedure.java
@@ -44,7 +41,6 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/SemiColonToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/SimpleExprAsteriskProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/ScanToken.java
-/home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/NewLineToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/FactorAProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/StringToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/CloseParenthesisToken.java
@@ -64,7 +60,6 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exceptions/SemanticException.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/ExitToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exceptions/UnknownCharacterException.java
-/home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/OneLineProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/SimpleExprProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/StmtAsteriskProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/LiteralToken.java

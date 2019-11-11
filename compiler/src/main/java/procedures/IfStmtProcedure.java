@@ -7,15 +7,17 @@ import compiler.Tag;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
+import compiler.SyntaxAnalyser;
 
-public class IfStmtProcedure  extends Procedure {
-      
+public class IfStmtProcedure extends Procedure {
+
     public IfStmtProcedure() {
         this.tag = Procedure.IFSTMT_PROCEDURE;
     }
 
     @Override
-    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
+    public void rule() throws IOException, LexicalException, SyntaxException {
+        Token t = SyntaxAnalyser.currentToken();
         this.consume(Tag.IF, false);
         this.invoke(Procedure.CONDITION_PROCEDURE, true);
         this.consume(Tag.THEN, false); // Expression Procedure already moved one step

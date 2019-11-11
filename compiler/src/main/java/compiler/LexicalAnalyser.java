@@ -15,6 +15,7 @@ import tokens.AndToken;
 import tokens.AssignToken;
 import tokens.BiggerEqualToken;
 import tokens.BiggerToken;
+import tokens.CaractereToken;
 import tokens.CloseParenthesisToken;
 import tokens.CommaToken;
 import tokens.DividerToken;
@@ -80,7 +81,6 @@ public class LexicalAnalyser {
                 || this.currentChar == '\b' || this.currentChar == '\n' || (int) this.currentChar == 0);
     };
 
-
     /**
      * Read a character of the opened file and store at currentChar
      * 
@@ -141,8 +141,9 @@ public class LexicalAnalyser {
      */
     public Token nextToken() throws IOException, LexicalException {
         if (isEmptySpace())
-            while (this.nextChar("empty"));
-        
+            while (this.nextChar("empty"))
+                ;
+
         if (Character.isDigit(this.currentChar)) {
             StringBuilder number = new StringBuilder();
             number.append(this.currentChar);
@@ -282,7 +283,9 @@ public class LexicalAnalyser {
                 this.nextChar();
                 return (this.currentToken = new DotToken());
             default:
-                throw new UnknownCharacterException(this.currentChar, this.currentLine);
+                this.currentToken = new CaractereToken(String.valueOf(this.currentChar));
+                this.nextChar();
+                return this.currentToken;
             }
         }
 
@@ -293,35 +296,46 @@ public class LexicalAnalyser {
         throw new UnknownCharacterException(this.currentChar, this.currentLine);
     }
 
-
     private void comment() throws IOException, LexicalException {
         this.nextChar();
         switch (String.valueOf(this.currentChar).intern()) {
-            case "/":
+        case "/":
+            this.nextChar();
+            while (this.currentChar != '\n' && (int) this.currentChar != 65535)
                 this.nextChar();
-                while( this.currentChar != '\n')
-                    this.nextChar();
-                this. currentToken = this.nextToken();
-                break;
-            case "*":
-                this.multipleline();
-                this.nextChar();
-                this. currentToken = this.nextToken();
-                break;
-            default:
-                this.currentToken = new DividerToken();
-                break;
+
+            if ((int) this.currentChar == 65535)
+                throw new LexicalException("Comment Unfinished", this.currentLine);
+
+            this.currentToken = this.nextToken();
+            break;
+        case "*":
+            this.multipleline();
+            this.nextChar();
+            this.currentToken = this.nextToken();
+            break;
+        default:
+            this.currentToken = new DividerToken();
+            break;
         }
     }
 
     private void multipleline() throws IOException, LexicalException {
         this.nextChar();
-        while( this.currentChar != '*' );
-            this.nextChar();
-        
+
+        while (this.currentChar != '*' && (int) this.currentChar != 65535)
+            ;
         this.nextChar();
 
-        if(this.currentChar != '/')
+        if ((int) this.currentChar == 65535)
+            throw new LexicalException("Comment Unfinished", this.currentLine);
+
+        this.nextChar();
+
+        if ((int) this.currentChar == 65535)
+            throw new LexicalException("Comment Unfinished", this.currentLine);
+
+        if (this.currentChar != '/')
             this.multipleline();
     }
 

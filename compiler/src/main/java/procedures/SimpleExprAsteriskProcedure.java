@@ -7,15 +7,17 @@ import compiler.Tag;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
+import compiler.SyntaxAnalyser;
 
-public class SimpleExprAsteriskProcedure  extends Procedure {
-      
+public class SimpleExprAsteriskProcedure extends Procedure {
+
     public SimpleExprAsteriskProcedure() {
         this.tag = Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE;
     }
 
     @Override
-    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
+    public void rule() throws IOException, LexicalException, SyntaxException {
+        Token t = SyntaxAnalyser.currentToken();
         switch (t.getTag()) {
         case Tag.PLUS:
             this.consume(Tag.PLUS, false);

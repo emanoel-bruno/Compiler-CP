@@ -14,38 +14,20 @@ public abstract class Procedure {
 
     protected int tag;
 
-    public static final int ASSIGNSTMT_PROCEDURE = 0,
-                            CONDITION_PROCEDURE = 1, 
-                            DECLLIST_PROCEDURE = 3, 
-                            DECL_PROCEDURE = 4, 
-                            EXPRESSION_ASTERISK_PROCEDURE = 5, 
-                            EXPRESSION_PROCEDURE = 6, 
-                            FACTORA_PROCEDURE = 7, 
-                            FACTOR_PROCEDURE = 8, 
-                            IDENTLIST_ASTERISK_PROCEDURE = 9, 
-                            IDENTLIST_PROCEDURE = 10, 
-                            IFSTMT_ASTERISK_PROCEDURE = 11, 
-                            IFSTMT_PROCEDURE = 12, 
-                            PROGRAM_PROCEDURE = 13, 
-                            READSTMT_PROCEDURE = 14, 
-                            SIMPLEEXPR_ASTERISK_PROCEDURE = 15, 
-                            SIMPLEEXPR_PROCEDURE = 16, 
-                            STMT_ASTERISK_PROCEDURE = 17, 
-                            STMTLIST_PROCEDURE = 18, 
-                            STMT_PROCEDURE = 19, 
-                            STMTSUFIX_PROCEDURE = 20, 
-                            TERM_ASTERISK_PROCEDURE = 21, 
-                            TERM_PROCEDURE = 22, 
-                            WHILESTMT_PROCEDURE = 23, 
-                            WRITEABLE_PROCEDURE = 24, 
-                            WRITESTMT_PROCEDURE = 25;
+    public static final int ASSIGNSTMT_PROCEDURE = 0, CONDITION_PROCEDURE = 1, DECLLIST_PROCEDURE = 3,
+            DECL_PROCEDURE = 4, EXPRESSION_ASTERISK_PROCEDURE = 5, EXPRESSION_PROCEDURE = 6, FACTORA_PROCEDURE = 7,
+            FACTOR_PROCEDURE = 8, IDENTLIST_ASTERISK_PROCEDURE = 9, IDENTLIST_PROCEDURE = 10,
+            IFSTMT_ASTERISK_PROCEDURE = 11, IFSTMT_PROCEDURE = 12, PROGRAM_PROCEDURE = 13, READSTMT_PROCEDURE = 14,
+            SIMPLEEXPR_ASTERISK_PROCEDURE = 15, SIMPLEEXPR_PROCEDURE = 16, STMT_ASTERISK_PROCEDURE = 17,
+            STMTLIST_PROCEDURE = 18, STMT_PROCEDURE = 19, STMTSUFIX_PROCEDURE = 20, TERM_ASTERISK_PROCEDURE = 21,
+            TERM_PROCEDURE = 22, WHILESTMT_PROCEDURE = 23, WRITEABLE_PROCEDURE = 24, WRITESTMT_PROCEDURE = 25;
 
-    public void consume(int tag, boolean next) throws UnexpectedTokenException, IOException, LexicalException {
+    public void consume(int tag, boolean next) throws IOException, LexicalException, SyntaxException {
         Token t = (next) ? SyntaxAnalyser.nextToken() : SyntaxAnalyser.currentToken();
         int line = SyntaxAnalyser.currentLine();
         if (t.getTag() != tag) {
-            PanicMode.nextToken(this, t, new int[]{tag});
-            throw new UnexpectedTokenException(t.toString(), line);
+            PanicMode.nextToken(this, t, new int[] { tag });
+            SyntaxAnalyser.printError("\n  Unexpected Token: " + t.toString(), line);
         }
     }
 
@@ -57,92 +39,93 @@ public abstract class Procedure {
         Token t = (next) ? SyntaxAnalyser.nextToken() : SyntaxAnalyser.currentToken();
         switch (procedure) {
         case Procedure.ASSIGNSTMT_PROCEDURE:
-            new AssignStmtProcedure().check(t);
+            new AssignStmtProcedure().check();
             break;
         case Procedure.CONDITION_PROCEDURE:
-            new ConditionProcedure().check(t);
+            new ConditionProcedure().check();
             break;
         case Procedure.DECLLIST_PROCEDURE:
-            new DeclListProcedure().check(t);
+            new DeclListProcedure().check();
             break;
         case Procedure.DECL_PROCEDURE:
-            new DeclProcedure().check(t);
+            new DeclProcedure().check();
             break;
         case Procedure.EXPRESSION_ASTERISK_PROCEDURE:
-            new ExpressionAsteriskProcedure().check(t);
+            new ExpressionAsteriskProcedure().check();
             break;
         case Procedure.EXPRESSION_PROCEDURE:
-            new ExpressionProcedure().check(t);
+            new ExpressionProcedure().check();
             break;
         case Procedure.FACTORA_PROCEDURE:
-            new FactorAProcedure().check(t);
+            new FactorAProcedure().check();
             break;
         case Procedure.FACTOR_PROCEDURE:
-            new FactorProcedure().check(t);
+            new FactorProcedure().check();
             break;
         case Procedure.IDENTLIST_ASTERISK_PROCEDURE:
-            new IdentListAsteriskProcedure().check(t);
+            new IdentListAsteriskProcedure().check();
             break;
         case Procedure.IDENTLIST_PROCEDURE:
-            new IdentListProcedure().check(t);
+            new IdentListProcedure().check();
             break;
         case Procedure.IFSTMT_ASTERISK_PROCEDURE:
-            new IfStmtAsteriskProcedure().check(t);
+            new IfStmtAsteriskProcedure().check();
             break;
         case Procedure.IFSTMT_PROCEDURE:
-            new IfStmtProcedure().check(t);
+            new IfStmtProcedure().check();
             break;
         case Procedure.PROGRAM_PROCEDURE:
-            new ProgramProcedure().check(t);
+            new ProgramProcedure().check();
             break;
         case Procedure.READSTMT_PROCEDURE:
-            new ReadStmtProcedure().check(t);
+            new ReadStmtProcedure().check();
             break;
         case Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE:
-            new SimpleExprAsteriskProcedure().check(t);
+            new SimpleExprAsteriskProcedure().check();
             break;
         case Procedure.SIMPLEEXPR_PROCEDURE:
-            new SimpleExprProcedure().check(t);
+            new SimpleExprProcedure().check();
             break;
         case Procedure.STMT_ASTERISK_PROCEDURE:
-            new StmtAsteriskProcedure().check(t);
+            new StmtAsteriskProcedure().check();
             break;
         case Procedure.STMTLIST_PROCEDURE:
-            new StmtListProcedure().check(t);
+            new StmtListProcedure().check();
             break;
         case Procedure.STMT_PROCEDURE:
-            new StmtProcedure().check(t);
+            new StmtProcedure().check();
             break;
         case Procedure.STMTSUFIX_PROCEDURE:
-            new StmtProcedure().check(t);
+            new StmtProcedure().check();
             break;
         case Procedure.TERM_ASTERISK_PROCEDURE:
-            new TermAsteriskProcedure().check(t);
+            new TermAsteriskProcedure().check();
             break;
         case Procedure.TERM_PROCEDURE:
-            new TermProcedure().check(t);
+            new TermProcedure().check();
             break;
         case Procedure.WHILESTMT_PROCEDURE:
-            new WhileStmtProcedure().check(t);
+            new WhileStmtProcedure().check();
             break;
         case Procedure.WRITEABLE_PROCEDURE:
-            new WriteableProcedure().check(t);
+            new WriteableProcedure().check();
             break;
         case Procedure.WRITESTMT_PROCEDURE:
-            new WriteStmtProcedure().check(t);
+            new WriteStmtProcedure().check();
             break;
         }
     }
 
-    private void debug(Token t){
-        System.out.println(this.getClass());
+    private void debug(Token t) {
+        System.out.print(this.getClass() + "[" + SyntaxAnalyser.currentLine() + "] - ");
         Tag.printTag(t.getTag());
+
     }
 
-    public void check(Token t) throws IOException, LexicalException, SyntaxException{
-        // debug(t);
-        this.rule(t);
+    public void check() throws IOException, LexicalException, SyntaxException {
+        debug(SyntaxAnalyser.currentToken());
+        this.rule();
     }
 
-    public abstract void rule(Token t) throws IOException, LexicalException, SyntaxException;
+    public abstract void rule() throws IOException, LexicalException, SyntaxException;
 }

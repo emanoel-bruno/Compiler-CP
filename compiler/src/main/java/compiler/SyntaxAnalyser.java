@@ -29,7 +29,11 @@ public class SyntaxAnalyser {
     }
 
     public void scanRules() throws IOException, LexicalException, SyntaxException {
-        Token t = SyntaxAnalyser.lexical.findNextToken();
-        new ProgramProcedure().check(t);
+        SyntaxAnalyser.nextToken();
+        new ProgramProcedure().check();
+    }
+
+    public static void printError(String message, int line) {
+        System.out.println("Syntax Exception: " + message + " | line: " + line);
     }
 }

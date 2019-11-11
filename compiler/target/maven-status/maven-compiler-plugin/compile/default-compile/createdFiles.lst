@@ -1,6 +1,5 @@
 tokens/DoToken.class
 procedures/FactorAProcedure.class
-procedures/MultipleLineAsteriskProcedure.class
 exceptions/SemanticException.class
 tokens/BiggerEqualToken.class
 exceptions/LexicalException.class
@@ -36,7 +35,6 @@ tokens/SemiColonToken.class
 tokens/OpenParenthesisToken.class
 tokens/StringToken.class
 tokens/TimesToken.class
-tokens/NewLineToken.class
 tokens/CommaToken.class
 tokens/DoubleArrowToken.class
 compiler/App.class
@@ -47,7 +45,6 @@ tokens/FloatConstantToken.class
 tokens/EqualToken.class
 tokens/PrintToken.class
 tokens/AndToken.class
-procedures/OneLineProcedure.class
 tokens/CaractereToken.class
 exceptions/UnknownCharacterException.class
 tokens/BiggerToken.class
@@ -67,9 +64,7 @@ tokens/FloatToken.class
 procedures/ReadStmtProcedure.class
 exceptions/CustomException.class
 procedures/WhileStmtProcedure.class
-procedures/MultipleLineProcedure.class
 tokens/LiteralToken.class
-procedures/CommentProcedure.class
 exceptions/CharacterInvalidException.class
 compiler/Procedure.class
 procedures/IfStmtProcedure.class

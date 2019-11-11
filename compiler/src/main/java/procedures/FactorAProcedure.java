@@ -11,14 +11,15 @@ import exceptions.UnexpectedTokenException;
 import compiler.Procedure;
 import compiler.SyntaxAnalyser;
 
-public class FactorAProcedure  extends Procedure {
-      
+public class FactorAProcedure extends Procedure {
+
     public FactorAProcedure() {
         this.tag = Procedure.FACTORA_PROCEDURE;
     }
 
     @Override
-    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
+    public void rule() throws IOException, LexicalException, SyntaxException {
+        Token t = SyntaxAnalyser.currentToken();
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
         case Tag.IDENTIFIER:
@@ -37,8 +38,9 @@ public class FactorAProcedure  extends Procedure {
             this.invoke(Procedure.FACTOR_PROCEDURE, true);
             break;
         default:
-            PanicMode.nextToken(this, t, new int [] {Tag.IDENTIFIER, Tag.INTEGER_CONSTANT, Tag.FLOAT_CONSTANT, Tag.LITERAL, Tag.OPEN_PARENTHESIS, Tag.MINUS, Tag.NOT} );
-            throw new UnexpectedTokenException(t.toString(), line);
+            PanicMode.nextToken(this, t, new int[] { Tag.IDENTIFIER, Tag.INTEGER_CONSTANT, Tag.FLOAT_CONSTANT,
+                    Tag.LITERAL, Tag.OPEN_PARENTHESIS, Tag.MINUS, Tag.NOT });
+            SyntaxAnalyser.printError("\n  Unexpected Token: " + t.toString(), line);
         }
     }
 }

@@ -11,14 +11,15 @@ import exceptions.UnexpectedTokenException;
 import compiler.Procedure;
 import compiler.SyntaxAnalyser;
 
-public class IfStmtAsteriskProcedure  extends Procedure {
-      
+public class IfStmtAsteriskProcedure extends Procedure {
+
     public IfStmtAsteriskProcedure() {
         this.tag = Procedure.IFSTMT_ASTERISK_PROCEDURE;
     }
 
     @Override
-    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
+    public void rule() throws IOException, LexicalException, SyntaxException {
+        Token t = SyntaxAnalyser.currentToken();
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
         case Tag.END:
@@ -28,9 +29,10 @@ public class IfStmtAsteriskProcedure  extends Procedure {
             this.consume(Tag.ELSE, false);
             this.invoke(StmtListProcedure.STMTLIST_PROCEDURE, true);
             this.consume(Tag.END, false); // StmtList already moved one step
+            SyntaxAnalyser.nextToken();
         default:
-            PanicMode.nextToken(this, t, new int[] {Tag.END, Tag.ELSE});
-            throw new UnexpectedTokenException(t.toString(), line);
+            PanicMode.nextToken(this, t, new int[] { Tag.END, Tag.ELSE });
+            SyntaxAnalyser.printError("\n  Unexpected Token: " + t.toString(), line);
         }
     }
 }

@@ -6,16 +6,18 @@ import compiler.Token;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import compiler.Procedure;
+import compiler.SyntaxAnalyser;
 
-public class TermProcedure  extends Procedure {
-      
+public class TermProcedure extends Procedure {
+
     public TermProcedure() {
         this.tag = Procedure.TERM_PROCEDURE;
     }
 
     @Override
-    public void rule(Token t) throws IOException, LexicalException, SyntaxException {
+    public void rule() throws IOException, LexicalException, SyntaxException {
+        Token t = SyntaxAnalyser.currentToken();
         this.invoke(Procedure.FACTORA_PROCEDURE, false);
-        this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, true);
+        this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, false);
     }
 }
