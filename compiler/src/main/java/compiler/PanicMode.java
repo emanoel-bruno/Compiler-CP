@@ -9,8 +9,7 @@ public class PanicMode {
         System.out.println("  Procedure: " + p.getClass());
         System.out.print("  Unexpected Token: ");
         Tag.printTag(t.getTag());
-        System.out.print("  Lexeme: ");        
-        System.out.println((t.getTag() != Tag.NEW_LINE) ? t.toString() : "NEW_LINE");
+        System.out.println("  Lexeme: " + t.toString() );        
     }
 
     public static void nextToken( Procedure p, Token t, int[] expected_tags) {

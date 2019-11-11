@@ -38,16 +38,12 @@ public abstract class Procedure {
                             TERM_PROCEDURE = 22, 
                             WHILESTMT_PROCEDURE = 23, 
                             WRITEABLE_PROCEDURE = 24, 
-                            WRITESTMT_PROCEDURE = 25,
-                            COMMENT_PROCEDURE = 26,
-                            ONE_LINE_PROCEDURE = 27,
-                            MULTIPLE_LINE_PROCEDURE = 28,
-                            MULTIPLE_LINE_ASTERISK_PROCEDURE = 29;
+                            WRITESTMT_PROCEDURE = 25;
 
     public void consume(int tag, boolean next) throws UnexpectedTokenException, IOException, LexicalException {
         Token t = (next) ? SyntaxAnalyser.nextToken() : SyntaxAnalyser.currentToken();
         int line = SyntaxAnalyser.currentLine();
-        if ((t.getTag() != tag && t.getTag() != Tag.NEW_LINE) || (tag == Tag.NEW_LINE && t.getTag() != Tag.NEW_LINE)) {
+        if (t.getTag() != tag) {
             PanicMode.nextToken(this, t, new int[]{tag});
             throw new UnexpectedTokenException(t.toString(), line);
         }
@@ -135,18 +131,6 @@ public abstract class Procedure {
         case Procedure.WRITESTMT_PROCEDURE:
             new WriteStmtProcedure().check(t);
             break;
-        case Procedure.COMMENT_PROCEDURE:
-            new CommentProcedure().check(t);
-            break;
-        case Procedure.ONE_LINE_PROCEDURE:
-            new OneLineProcedure().check(t);
-            break;
-        case Procedure.MULTIPLE_LINE_PROCEDURE:
-            new MultipleLineProcedure().check(t);
-            break;
-        case Procedure.MULTIPLE_LINE_ASTERISK_PROCEDURE:
-            new MultipleLineAsteriskProcedure().check(t);
-            break;
         }
     }
 
@@ -156,13 +140,8 @@ public abstract class Procedure {
     }
 
     public void check(Token t) throws IOException, LexicalException, SyntaxException{
-        if(t.getTag() != Tag.NEW_LINE){
-            // debug(t);
-            this.rule(t);
-        } else{
-            t = SyntaxAnalyser.nextToken();
-            this.check(t);
-        }
+        // debug(t);
+        this.rule(t);
     }
 
     public abstract void rule(Token t) throws IOException, LexicalException, SyntaxException;

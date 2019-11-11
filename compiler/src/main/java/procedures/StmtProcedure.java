@@ -21,10 +21,6 @@ public class StmtProcedure  extends Procedure {
     public void rule(Token t) throws IOException, LexicalException, SyntaxException {
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
-        case Tag.DIVIDER:
-            this.consume(Tag.DIVIDER, false);
-            this.invoke(Procedure.COMMENT_PROCEDURE, true);
-            break;
         case Tag.PRINT:
             this.invoke(Procedure.WRITESTMT_PROCEDURE, false);
             consume(Tag.SEMICOLON, true);
@@ -44,7 +40,7 @@ public class StmtProcedure  extends Procedure {
             consume(Tag.SEMICOLON, false); // SimpleExprProcedure already moved one step
             break;
         default:
-            PanicMode.nextToken(this, t, new int[]{Tag.DIVIDER, Tag.PRINT, Tag.SCAN, Tag.DO, Tag.IF, Tag.IDENTIFIER});
+            PanicMode.nextToken(this, t, new int[]{Tag.PRINT, Tag.SCAN, Tag.DO, Tag.IF, Tag.IDENTIFIER});
             throw new UnexpectedTokenException(t.toString(), line);
         }
     }

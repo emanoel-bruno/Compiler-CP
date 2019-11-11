@@ -7,7 +7,7 @@ public class Tag {
             END = 268, EQUAL = 269, EXIT = 270, FLOAT_CONSTANT = 271, FLOAT = 272, IDENTIFIER = 273, IF = 274,
             INTEGER_CONSTANT = 275, INT = 276, LITERAL = 277, MINUS = 278, NOT = 279, OPEN_PARENTHESIS = 280, OR = 281,
             PLUS = 282, PRINT = 283, QUOTATION_MARK = 284, SCAN = 285, SEMICOLON = 286, SMALLER_EQUAL = 287,
-            SMALLER = 288, START = 289, STRING = 290, THEN = 291, TIMES = 292, WHILE = 293, EOF = 294, NEW_LINE = 295;
+            SMALLER = 288, START = 289, STRING = 290, THEN = 291, TIMES = 292, WHILE = 293, EOF = 294;
 
     public static void printTag(int tag) {
         switch (tag) {
@@ -127,9 +127,6 @@ public class Tag {
             break;
         case 294:
             System.out.println(" EOF");
-            break;
-        case 295:
-            System.out.println(" NEW_LINE");
             break;
         }
     }
