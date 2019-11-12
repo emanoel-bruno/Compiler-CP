@@ -41,6 +41,7 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/SemiColonToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/SimpleExprAsteriskProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/ScanToken.java
+/home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/NewLineToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/FactorAProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/StringToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/CloseParenthesisToken.java

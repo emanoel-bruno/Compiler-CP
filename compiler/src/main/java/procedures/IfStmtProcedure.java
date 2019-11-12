@@ -18,10 +18,10 @@ public class IfStmtProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.consume(Tag.IF, false);
-        this.invoke(Procedure.CONDITION_PROCEDURE, true);
-        this.consume(Tag.THEN, false); // Expression Procedure already moved one step
-        this.invoke(Procedure.STMTLIST_PROCEDURE, true);
-        this.invoke(Procedure.IFSTMT_ASTERISK_PROCEDURE, false); // StmtList already moved one step forward
+        this.consume(Tag.IF);
+        this.invoke(Procedure.CONDITION_PROCEDURE);
+        this.consume(Tag.THEN); // Expression Procedure already moved one step
+        this.invoke(Procedure.STMTLIST_PROCEDURE);
+        this.invoke(Procedure.IFSTMT_ASTERISK_PROCEDURE); // StmtList already moved one step forward
     }
 }

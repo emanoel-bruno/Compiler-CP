@@ -20,8 +20,8 @@ public class StmtAsteriskProcedure extends Procedure {
         Token t = SyntaxAnalyser.currentToken();
         if (t.getTag() == Tag.PRINT || t.getTag() == Tag.SCAN || t.getTag() == Tag.DO || t.getTag() == Tag.IF
                 || t.getTag() == Tag.IDENTIFIER) {
-            this.invoke(Procedure.STMT_PROCEDURE, false);
-            this.invoke(Procedure.STMT_ASTERISK_PROCEDURE, false);
+            this.invoke(Procedure.STMT_PROCEDURE);
+            this.invoke(Procedure.STMT_ASTERISK_PROCEDURE);
         }
     }
 }

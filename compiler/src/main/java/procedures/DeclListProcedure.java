@@ -18,9 +18,10 @@ public class DeclListProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
+        System.out.print("entrou - "); Tag.printTag(t.getTag());
         if (t.getTag() == Tag.INT || t.getTag() == Tag.FLOAT || t.getTag() == Tag.STRING) {
-            this.invoke(Procedure.DECL_PROCEDURE, false);
-            this.invoke(Procedure.DECLLIST_PROCEDURE, false);
+            this.invoke(Procedure.DECL_PROCEDURE);
+            this.invoke(Procedure.DECLLIST_PROCEDURE);
         }
     }
 }

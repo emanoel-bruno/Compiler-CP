@@ -20,19 +20,19 @@ public class TermAsteriskProcedure extends Procedure {
         Token t = SyntaxAnalyser.currentToken();
         switch (t.getTag()) {
         case Tag.TIMES:
-            this.consume(Tag.TIMES, false);
-            this.invoke(Procedure.FACTORA_PROCEDURE, true);
-            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, false);
+            this.consume(Tag.TIMES);
+            this.invoke(Procedure.FACTORA_PROCEDURE);
+            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE);
             break;
         case Tag.DIVIDER:
-            this.consume(Tag.DIVIDER, false);
-            this.invoke(Procedure.FACTORA_PROCEDURE, true);
-            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, false);
+            this.consume(Tag.DIVIDER);
+            this.invoke(Procedure.FACTORA_PROCEDURE);
+            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE);
             break;
         case Tag.AND:
-            this.consume(Tag.AND, false);
-            this.invoke(Procedure.FACTORA_PROCEDURE, true);
-            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, false);
+            this.consume(Tag.AND);
+            this.invoke(Procedure.FACTORA_PROCEDURE);
+            this.invoke(Procedure.TERM_ASTERISK_PROCEDURE);
             break;
         }
     }

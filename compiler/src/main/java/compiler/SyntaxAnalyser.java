@@ -25,7 +25,7 @@ public class SyntaxAnalyser {
     }
 
     public static int currentLine() {
-        return SyntaxAnalyser.lexical.getLine();
+        return (SyntaxAnalyser.currentToken().getTag() == Tag.NEW_LINE) ? SyntaxAnalyser.lexical.getLine() - 1 : SyntaxAnalyser.lexical.getLine();
     }
 
     public void scanRules() throws IOException, LexicalException, SyntaxException {

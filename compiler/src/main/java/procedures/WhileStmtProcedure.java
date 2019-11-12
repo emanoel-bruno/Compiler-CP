@@ -18,8 +18,8 @@ public class WhileStmtProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.consume(Tag.DO, false);
-        this.invoke(Procedure.STMTLIST_PROCEDURE, true);
-        this.invoke(Procedure.STMTSUFIX_PROCEDURE, false); // StmtListProcedure move one step forward
+        this.consume(Tag.DO);
+        this.invoke(Procedure.STMTLIST_PROCEDURE);
+        this.invoke(Procedure.STMTSUFIX_PROCEDURE); // StmtListProcedure move one step forward
     }
 }

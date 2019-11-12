@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import compiler.SyntaxAnalyser;
 import procedures.*;
+import tokens.CommaToken;
 import compiler.Tag;
 import compiler.Token;
 import exceptions.LexicalException;
@@ -33,9 +34,6 @@ public class PanicMode {
         case Procedure.DECL_PROCEDURE:
             PanicMode.declProcedure(t, expected_tags);
             break;
-        case Procedure.EXPRESSION_ASTERISK_PROCEDURE:
-            PanicMode.expressionAsteriskProcedure(t, expected_tags);
-            break;
         case Procedure.FACTORA_PROCEDURE:
             PanicMode.factorAProcedure(t, expected_tags);
             break;
@@ -60,17 +58,11 @@ public class PanicMode {
         case Procedure.READSTMT_PROCEDURE:
             PanicMode.readStmtProcedure(t, expected_tags);
             break;
-        case Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE:
-            PanicMode.simpleExprAsteriskProcedure(t, expected_tags);
-            break;
         case Procedure.STMT_PROCEDURE:
             PanicMode.stmtProcedure(t, expected_tags);
             break;
         case Procedure.STMTSUFIX_PROCEDURE:
             PanicMode.stmtSufixProcedure(t, expected_tags);
-            break;
-        case Procedure.TERM_ASTERISK_PROCEDURE:
-            PanicMode.termAsteriskProcedure(t, expected_tags);
             break;
         case Procedure.WHILESTMT_PROCEDURE:
             PanicMode.whileStmtProcedure(t, expected_tags);
@@ -81,74 +73,74 @@ public class PanicMode {
         }
     }
 
-    private static void programProcedure(Token t, int[] expected_tags) {
+    private static void programProcedure(Token t, int[] expected_tags)
+            throws IOException, LexicalException, SyntaxException {
+        if (expected_tags[0] == Tag.START) {
+            while (    t.getTag() != Tag.INT && t.getTag() != Tag.FLOAT && t.getTag() != Tag.STRING
+                    && t.getTag() != Tag.PRINT && t.getTag() != Tag.SCAN && t.getTag() != Tag.DO && t.getTag() != Tag.IF
+                    && t.getTag() != Tag.IDENTIFIER)
+                t = SyntaxAnalyser.nextToken();
+            System.out.print("saiu - "); Tag.printTag(t.getTag());
+        } else if (expected_tags[0] == Tag.EXIT) {
+            while (t.getTag() != Tag.EOF)
+                t = SyntaxAnalyser.nextToken();
+        }
     }
 
     private static void assignStmtProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
         // | assign-stmt | *[ identifier ]* | *[ ; ]* |
-        t = SyntaxAnalyser.nextToken();
-        while (t.getTag() != Tag.SEMICOLON) {
-            t = SyntaxAnalyser.nextToken();
-        }
-        switch (t.getTag()) {
-        case Tag.SEMICOLON:
-            new AssignStmtProcedure().consume(Tag.SEMICOLON, false);
-            break;
+        // identifier -> **assign-stmt, assign:** *[ = ]*
+        if (expected_tags[0] == Tag.IDENTIFIER) {
+            while (t.getTag() != Tag.ASSIGN)
+                t = SyntaxAnalyser.nextToken();
+        } else if (expected_tags[0] == Tag.ASSIGN) {
+            // assign-stmt, simple-expr: [ identifier ] [ float_const ] [ integer_const ] [
+            // literal ] [ ( ] [ not ] [ - ]
+            while (t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.FLOAT_CONSTANT
+                    && t.getTag() != Tag.INTEGER_CONSTANT && t.getTag() != Tag.LITERAL
+                    && t.getTag() != Tag.OPEN_PARENTHESIS && t.getTag() != Tag.NOT && t.getTag() != Tag.MINUS)
+                t = SyntaxAnalyser.nextToken();
+        } else {
+            while (t.getTag() != Tag.SEMICOLON) {
+                t = SyntaxAnalyser.nextToken();
+            }
         }
     }
 
     private static void declProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        // *decl-list:* [ int ] [ float ] [ string ] *stmt-list:* [ print ] [ scan ] [
-        // do ] [ if ] [ identifier ] [ / ]
-        t = SyntaxAnalyser.nextToken();
-        while (t.getTag() != Tag.INT && t.getTag() != Tag.FLOAT && t.getTag() != Tag.STRING && t.getTag() != Tag.PRINT
-                && t.getTag() != Tag.SCAN && t.getTag() != Tag.DO && t.getTag() != Tag.IF
-                && t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.DIVIDER) {
-            t = SyntaxAnalyser.nextToken();
+        // decl [ int ] [ float ] [ string ] decl-list: [ int ] [ float ] [ string ]
+        // stmt-list: [ print ] [ scan ] [ do ] [ if ] [ identifier ]
+        if (expected_tags.length > 1) {
+            while (t.getTag() != Tag.INT && t.getTag() != Tag.FLOAT && t.getTag() != Tag.STRING
+                    && t.getTag() != Tag.PRINT && t.getTag() != Tag.SCAN && t.getTag() != Tag.DO && t.getTag() != Tag.IF
+                    && t.getTag() != Tag.IDENTIFIER)
+                t = SyntaxAnalyser.nextToken();
+        } else if (expected_tags[0] == Tag.ASSIGN) {
+            // | assign | **assign-stmt, simple-expr:** *[ identifier ]* *[ float_const ]*
+            // *[ integer_const ]* *[ literal ]* *[ ( ]* *[ not ]* *[ - ]* |
+            while (t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.FLOAT_CONSTANT
+                    && t.getTag() != Tag.INTEGER_CONSTANT && t.getTag() != Tag.LITERAL
+                    && t.getTag() != Tag.OPEN_PARENTHESIS && t.getTag() != Tag.NOT && t.getTag() != Tag.MINUS) {
+                t = SyntaxAnalyser.nextToken();
+            }
         }
-        // switch (t.getTag()) {
-        // case Tag.INT:
-        // case Tag.FLOAT:
-        // case Tag.STRING:
-        //     new DeclListProcedure().check(t);
-        //     break;
-        // case Tag.PRINT:
-        // case Tag.SCAN:
-        // case Tag.DO:
-        // case Tag.IF:
-        // case Tag.IDENTIFIER:
-        // case Tag.DIVIDER:
-        //     new StmtListProcedure().check(t);
-        //     break;
-        // }
-    }
-
-    private static void expressionAsteriskProcedure(Token t, int[] expected_tags)
-            throws IOException, LexicalException, SyntaxException {
-        // follow do expression: )
-        // do condition: then ou end
-        t = SyntaxAnalyser.nextToken();
-        while (t.getTag() != Tag.CLOSE_PARENTHESIS && t.getTag() != Tag.THEN && t.getTag() != Tag.END) {
-            t = SyntaxAnalyser.nextToken();
-        }
-        // switch (t.getTag()) {
-        // case Tag.CLOSE_PARENTHESIS:
-        //     new ExpressionAsteriskProcedure().consume(Tag.CLOSE_PARENTHESIS, false);
-        //     break;
-        // case Tag.END:
-        //     new ExpressionAsteriskProcedure().consume(Tag.END, false);
-        //     break;
-        // case Tag.THEN:
-        //     new ExpressionAsteriskProcedure().consume(Tag.THEN, false);
-        //     break;
-        // }
     }
 
     private static void factorAProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        termAsteriskProcedure(t, expected_tags);
+        // **term-asterisk:** *[ * ]* *[ / ]* *[ and ]* **simple-expr-asterisk:** *[ +
+        // ]* *[ - ]* *[ or ]* **stmt-sufix:** *[ end ]* **if-stmt:** *[ then ]*
+        // **factor:** *[ ) ]* **write-stmt:** *[ ) ]* **expression-asterisk:** *[ == ]*
+        // *[ > ]* *[ >= ]* *[ < ]* *[ <= ]* *[ <> ]* **assign-stmt:** *[ ; ]*
+        while (  t.getTag() != Tag.TIMES && t.getTag() != Tag.DIVIDER && t.getTag() != Tag.AND 
+              && t.getTag() != Tag.EQUAL && t.getTag() != Tag.BIGGER && t.getTag() != Tag.BIGGER_EQUAL 
+              && t.getTag() != Tag.SMALLER && t.getTag() != Tag.SMALLER_EQUAL && t.getTag() != Tag.DOUBLE_ARROW 
+              && t.getTag() != Tag.PLUS && t.getTag() != Tag.MINUS && t.getTag() != Tag.OR && t.getTag() != Tag.END 
+              && t.getTag() != Tag.THEN && t.getTag() != Tag.SEMICOLON && t.getTag() != Tag.CLOSE_PARENTHESIS)
+            t = SyntaxAnalyser.nextToken();
+        
     }
 
     private static void factorProcedure(Token t, int[] expected_tags)
@@ -158,158 +150,128 @@ public class PanicMode {
 
     private static void identListAsteriskProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        t = SyntaxAnalyser.nextToken();
-        while (t.getTag() != Tag.SEMICOLON) {
-            t = SyntaxAnalyser.nextToken();
+        // first: [ , ]	ident-list: [ ; ]
+        if(expected_tags[0] == Tag.IDENTIFIER){
+            while (t.getTag() != Tag.SEMICOLON && t.getTag() != Tag.COMMA )
+                t = SyntaxAnalyser.nextToken();
         }
-        // switch (t.getTag()) {
-        // case Tag.SEMICOLON:
-        //     new IdentListAsteriskProcedure().consume(Tag.SEMICOLON, false);
-        //     break;
-        // }
     }
 
     private static void identListProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        t = SyntaxAnalyser.nextToken();
-        while (t.getTag() != Tag.SEMICOLON) {
-            t = SyntaxAnalyser.nextToken();
+        // first: [ , ]	ident-list: [ ; ]
+        if(expected_tags[0] == Tag.IDENTIFIER){
+            while (t.getTag() != Tag.SEMICOLON && t.getTag() != Tag.COMMA )
+                t = SyntaxAnalyser.nextToken();
         }
-        // switch (t.getTag()) {
-        // case Tag.SEMICOLON:
-        //     new IdentListProcedure().consume(Tag.SEMICOLON, false);
-        //     break;
-        // }
     }
 
     private static void ifStmtAsteriskProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        ifStmtProcedure(t, expected_tags);
+        // program: [ exit ] if-stmt-asterisk: [ end ] [ else ] stmt-sufix: [ while ]
+        // stmt-asterisk: [ print ] [ scan ] [ do ] [ if ] [ identifier ] 
+        while (    t.getTag() != Tag.EXIT  && t.getTag() != Tag.END && t.getTag() != Tag.ELSE 
+                && t.getTag() != Tag.WHILE && t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.IF 
+                && t.getTag() != Tag.DO && t.getTag() != Tag.SCAN  && t.getTag() != Tag.PRINT)
+            t = SyntaxAnalyser.nextToken();        
     }
 
     private static void ifStmtProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        stmtProcedure(t, expected_tags);
+        if(expected_tags[0] == Tag.IF){
+            // [ identifier ] [ float_const ] [ integer_const ] [ literal ] [ ( ] [ not ] [ - ]
+            while (t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.FLOAT_CONSTANT && t.getTag() != Tag.INTEGER_CONSTANT
+                && t.getTag() != Tag.LITERAL && t.getTag() != Tag.OPEN_PARENTHESIS && t.getTag() != Tag.NOT  && t.getTag() != Tag.MINUS )
+                t = SyntaxAnalyser.nextToken();
+        } else if( expected_tags[0] == Tag.THEN){
+            // [ print ] [ scan ] [ do ] [ if ] [ identifier ]	
+            while (t.getTag() != Tag.PRINT && t.getTag() != Tag.SCAN && t.getTag() != Tag.DO
+                && t.getTag() != Tag.IF && t.getTag() != Tag.IDENTIFIER)
+                t = SyntaxAnalyser.nextToken();
+        }
     }
 
     private static void readStmtProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        t = SyntaxAnalyser.nextToken();
-        while (t.getTag() != Tag.SEMICOLON) {
-            t = SyntaxAnalyser.nextToken();
+        switch (expected_tags[0]) {
+            case Tag.SCAN:
+                while(t.getTag() != Tag.OPEN_PARENTHESIS)
+                    t = SyntaxAnalyser.nextToken();
+                break;
+            case Tag.OPEN_PARENTHESIS:
+                while(t.getTag() != Tag.IDENTIFIER)
+                    t = SyntaxAnalyser.nextToken();
+                break;
+            case Tag.IDENTIFIER:
+                while(t.getTag() != Tag.CLOSE_PARENTHESIS)
+                    t = SyntaxAnalyser.nextToken();
+                break;
+            case Tag.CLOSE_PARENTHESIS:
+                while (t.getTag() != Tag.SEMICOLON)
+                    t = SyntaxAnalyser.nextToken();
+                break;
         }
-        // switch (t.getTag()) {
-        // case Tag.SEMICOLON:
-        //     new ReadStmtProcedure().consume(Tag.SEMICOLON, false);
-        //     break;
-        // }
-    }
-
-    private static void simpleExprAsteriskProcedure(Token t, int[] expected_tags)
-            throws IOException, LexicalException, SyntaxException {
-        factorAProcedure(t, expected_tags);
+        
     }
 
     private static void stmtProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        t = SyntaxAnalyser.nextToken();
-        while (t.getTag() != Tag.EXIT && t.getTag() != Tag.END && t.getTag() != Tag.WHILE
-                && t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.IF && t.getTag() != Tag.DO
-                && t.getTag() != Tag.SCAN && t.getTag() != Tag.PRINT) {
-            t = SyntaxAnalyser.nextToken();
-        }
-        // switch (t.getTag()) {
-        // case Tag.EXIT:
-        //     new IfStmtProcedure().consume(Tag.EXIT, false);
-        //     break;
-        // case Tag.END:
-        //     new IfStmtProcedure().consume(Tag.END, false);
-        //     break;
-        // case Tag.WHILE:
-        //     new IfStmtProcedure().consume(Tag.WHILE, false);
-        //     break;
-        // case Tag.IDENTIFIER:
-        //     new IfStmtProcedure().consume(Tag.IDENTIFIER, false);
-        //     break;
-        // case Tag.IF:
-        //     new IfStmtProcedure().consume(Tag.IF, false);
-        //     break;
-        // case Tag.DO:
-        //     new IfStmtProcedure().consume(Tag.DO, false);
-        //     break;
-        // case Tag.SCAN:
-        //     new IfStmtProcedure().consume(Tag.SCAN, false);
-        //     break;
-        // case Tag.PRINT:
-        //     new IfStmtProcedure().consume(Tag.PRINT, false);
-        //     break;
-        // }
+        // stmt-asterisk: [ print ] [ scan ] [ do ] [ if ] [ identifier ] program: [
+        // exit ] if-stmt-asterisk: [ end ] [ else ] stmt-sufix: [ while ]
+        while (    t.getTag() != Tag.EXIT  && t.getTag() != Tag.END && t.getTag() != Tag.ELSE 
+                && t.getTag() != Tag.WHILE && t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.IF 
+                && t.getTag() != Tag.DO && t.getTag() != Tag.SCAN  && t.getTag() != Tag.PRINT)
+            t = SyntaxAnalyser.nextToken();       
     }
 
     private static void stmtSufixProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        whileStmtProcedure(t, expected_tags);
-    }
-
-    private static void termAsteriskProcedure(Token t, int[] expected_tags)
-            throws IOException, LexicalException, SyntaxException {
-        t = SyntaxAnalyser.nextToken();
-        while (t.getTag() != Tag.TIMES && t.getTag() != Tag.DIVIDER && t.getTag() != Tag.AND && t.getTag() != Tag.EQUAL
-                && t.getTag() != Tag.BIGGER && t.getTag() != Tag.BIGGER_EQUAL && t.getTag() != Tag.SMALLER
-                && t.getTag() != Tag.SMALLER_EQUAL && t.getTag() != Tag.DOUBLE_ARROW && t.getTag() != Tag.PLUS
-                && t.getTag() != Tag.MINUS && t.getTag() != Tag.OR && t.getTag() != Tag.END && t.getTag() != Tag.THEN
-                && t.getTag() != Tag.SEMICOLON && t.getTag() != Tag.CLOSE_PARENTHESIS) {
-            t = SyntaxAnalyser.nextToken();
+        switch (expected_tags[0]) {
+            case Tag.WHILE:
+                // [ identifier ] [ float_const ] [ integer_const ] [ literal ] [ ( ] [ not ] [ - ]
+                while (t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.FLOAT_CONSTANT && t.getTag() != Tag.INTEGER_CONSTANT
+                    && t.getTag() != Tag.LITERAL && t.getTag() != Tag.OPEN_PARENTHESIS && t.getTag() != Tag.NOT  && t.getTag() != Tag.MINUS )
+                    t = SyntaxAnalyser.nextToken();
+                break;
+            case Tag.END:
+                // stmt-asterisk: [ print ] [ scan ] [ do ] [ if ] [ identifier ] program: [
+                // exit ] if-stmt-asterisk: [ end ] [ else ] stmt-sufix: [ while ]
+                while (t.getTag() != Tag.EXIT  && t.getTag() != Tag.END && t.getTag() != Tag.ELSE 
+                    && t.getTag() != Tag.WHILE && t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.IF 
+                    && t.getTag() != Tag.DO && t.getTag() != Tag.SCAN  && t.getTag() != Tag.PRINT)
+                    t = SyntaxAnalyser.nextToken();
+                break;
         }
-        // switch (t.getTag()) {
-        // case Tag.TIMES:
-        // case Tag.DIVIDER:
-        // case Tag.AND:
-        //     new TermAsteriskProcedure().check(t);
-        //     break;
-        // case Tag.EQUAL:
-        // case Tag.BIGGER:
-        // case Tag.BIGGER_EQUAL:
-        // case Tag.SMALLER:
-        // case Tag.SMALLER_EQUAL:
-        // case Tag.DOUBLE_ARROW:
-        //     new ExpressionAsteriskProcedure().check(t);
-        //     break;
-        // case Tag.PLUS:
-        // case Tag.MINUS:
-        // case Tag.OR:
-        //     new SimpleExprAsteriskProcedure().check(t);
-        //     break;
-        // case Tag.SEMICOLON:
-        //     new FactorAProcedure().consume(Tag.SEMICOLON, false);
-        //     break;
-        // case Tag.END:
-        //     new FactorAProcedure().consume(Tag.END, false);
-        //     break;
-        // case Tag.THEN:
-        //     new FactorAProcedure().consume(Tag.THEN, false);
-        //     break;
-        // case Tag.CLOSE_PARENTHESIS:
-        //     new FactorAProcedure().consume(Tag.CLOSE_PARENTHESIS, false);
-        //     break;
-        // }
     }
 
     private static void whileStmtProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        stmtProcedure(t, expected_tags);
+        if(expected_tags[0] == Tag.DO){
+            while (t.getTag() != Tag.PRINT && t.getTag() != Tag.SCAN && t.getTag() != Tag.DO
+                && t.getTag() != Tag.IF && t.getTag() != Tag.IDENTIFIER)
+                    t = SyntaxAnalyser.nextToken();
+        }
     }
 
     private static void writeStmtProcedure(Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        t = SyntaxAnalyser.nextToken();
-        while (t.getTag() != Tag.SEMICOLON) {
-            t = SyntaxAnalyser.nextToken();
+        switch (expected_tags[0]) {
+            case Tag.PRINT:
+                while(t.getTag() != Tag.OPEN_PARENTHESIS)
+                    t = SyntaxAnalyser.nextToken();
+                break;
+            case Tag.OPEN_PARENTHESIS:
+                // [ identifier ] [ float_const ] [ integer_const ] [ literal ] [ ( ] [ not ] [ - ]
+                while (t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.FLOAT_CONSTANT && t.getTag() != Tag.INTEGER_CONSTANT
+                    && t.getTag() != Tag.LITERAL && t.getTag() != Tag.OPEN_PARENTHESIS && t.getTag() != Tag.NOT  && t.getTag() != Tag.MINUS )
+                    t = SyntaxAnalyser.nextToken();
+                break;
+            case Tag.CLOSE_PARENTHESIS:
+                while (t.getTag() != Tag.SEMICOLON)
+                    t = SyntaxAnalyser.nextToken();
+                break;
         }
-        // switch (t.getTag()) {
-        // case Tag.SEMICOLON:
-        //     new ReadStmtProcedure().consume(Tag.SEMICOLON, false);
-        //     break;
-        // }
+        
     }
+    
 }

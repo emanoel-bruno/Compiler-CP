@@ -18,7 +18,7 @@ public class IdentListProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.consume(Tag.IDENTIFIER, false);
-        this.invoke(Procedure.IDENTLIST_ASTERISK_PROCEDURE, true);
+        this.consume(Tag.IDENTIFIER);
+        this.invoke(Procedure.IDENTLIST_ASTERISK_PROCEDURE);
     }
 }

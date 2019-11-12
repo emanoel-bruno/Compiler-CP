@@ -27,15 +27,15 @@ public class FactorAProcedure extends Procedure {
         case Tag.FLOAT_CONSTANT:
         case Tag.LITERAL:
         case Tag.OPEN_PARENTHESIS:
-            this.invoke(Procedure.FACTOR_PROCEDURE, false);
+            this.invoke(Procedure.FACTOR_PROCEDURE);
             break;
         case Tag.MINUS:
-            this.consume(Tag.MINUS, false);
-            this.invoke(Procedure.FACTOR_PROCEDURE, true);
+            this.consume(Tag.MINUS);
+            this.invoke(Procedure.FACTOR_PROCEDURE);
             break;
         case Tag.NOT:
-            this.consume(Tag.NOT, false);
-            this.invoke(Procedure.FACTOR_PROCEDURE, true);
+            this.consume(Tag.NOT);
+            this.invoke(Procedure.FACTOR_PROCEDURE);
             break;
         default:
             PanicMode.nextToken(this, t, new int[] { Tag.IDENTIFIER, Tag.INTEGER_CONSTANT, Tag.FLOAT_CONSTANT,

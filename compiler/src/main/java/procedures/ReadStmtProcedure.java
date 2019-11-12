@@ -18,10 +18,10 @@ public class ReadStmtProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.consume(Tag.SCAN, false);
-        this.consume(Tag.OPEN_PARENTHESIS, true);
-        this.consume(Tag.IDENTIFIER, true);
-        this.consume(Tag.CLOSE_PARENTHESIS, true);
-        SyntaxAnalyser.nextToken();
+        this.consume(Tag.SCAN);
+        this.consume(Tag.OPEN_PARENTHESIS);
+        this.consume(Tag.IDENTIFIER);
+        this.consume(Tag.CLOSE_PARENTHESIS);
+        
     }
 }

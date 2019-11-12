@@ -35,6 +35,7 @@ tokens/SemiColonToken.class
 tokens/OpenParenthesisToken.class
 tokens/StringToken.class
 tokens/TimesToken.class
+tokens/NewLineToken.class
 tokens/CommaToken.class
 tokens/DoubleArrowToken.class
 compiler/App.class

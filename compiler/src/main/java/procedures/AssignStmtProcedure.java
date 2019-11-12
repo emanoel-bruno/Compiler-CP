@@ -18,8 +18,8 @@ public class AssignStmtProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.consume(Tag.IDENTIFIER, false);
-        this.consume(Tag.ASSIGN, true);
-        this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, true);
+        this.consume(Tag.IDENTIFIER);
+        this.consume(Tag.ASSIGN);
+        this.invoke(Procedure.SIMPLEEXPR_PROCEDURE);
     }
 }

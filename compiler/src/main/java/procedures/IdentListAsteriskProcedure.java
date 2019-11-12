@@ -19,9 +19,9 @@ public class IdentListAsteriskProcedure extends Procedure {
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
         if (t.getTag() == Tag.COMMA) {
-            this.consume(Tag.COMMA, false);
-            this.consume(Tag.IDENTIFIER, true);
-            this.invoke(Procedure.IDENTLIST_ASTERISK_PROCEDURE, true);
+            this.consume(Tag.COMMA);
+            this.consume(Tag.IDENTIFIER);
+            this.invoke(Procedure.IDENTLIST_ASTERISK_PROCEDURE);
         }
     }
 }

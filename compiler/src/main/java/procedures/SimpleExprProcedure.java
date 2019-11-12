@@ -17,7 +17,7 @@ public class SimpleExprProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.invoke(Procedure.TERM_PROCEDURE, false);
-        this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE, false); // TermProcedure already moved one step forward
+        this.invoke(Procedure.TERM_PROCEDURE);
+        this.invoke(Procedure.SIMPLEEXPR_ASTERISK_PROCEDURE); // TermProcedure already moved one step forward
     }
 }

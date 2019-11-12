@@ -18,10 +18,10 @@ public class ProgramProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.consume(Tag.START, false);
-        this.invoke(Procedure.DECLLIST_PROCEDURE, true);
-        this.invoke(Procedure.STMTLIST_PROCEDURE, false); // DeclListAsteriskProcedure already moved one step forward
-        this.consume(Tag.EXIT, false); // StmtListProcedure already moved one step forward
-        this.consume(Tag.EOF, true);
+        this.consume(Tag.START);
+        this.invoke(Procedure.DECLLIST_PROCEDURE);
+        this.invoke(Procedure.STMTLIST_PROCEDURE); // DeclListAsteriskProcedure already moved one step forward
+        this.consume(Tag.EXIT); // StmtListProcedure already moved one step forward
+        this.consume(Tag.EOF);
     }
 }

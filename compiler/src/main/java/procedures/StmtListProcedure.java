@@ -17,7 +17,7 @@ public class StmtListProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.invoke(Procedure.STMT_PROCEDURE, false);
-        this.invoke(Procedure.STMT_ASTERISK_PROCEDURE, false);
+        this.invoke(Procedure.STMT_PROCEDURE);
+        this.invoke(Procedure.STMT_ASTERISK_PROCEDURE);
     }
 }

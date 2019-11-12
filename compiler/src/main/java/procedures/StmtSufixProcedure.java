@@ -18,9 +18,9 @@ public class StmtSufixProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.consume(Tag.WHILE, false);
-        this.invoke(Procedure.CONDITION_PROCEDURE, true);
-        this.consume(Tag.END, false); // ConditionProcedure already moved one step forward
-        SyntaxAnalyser.nextToken();
+        this.consume(Tag.WHILE);
+        this.invoke(Procedure.CONDITION_PROCEDURE);
+        this.consume(Tag.END); // ConditionProcedure already moved one step forward
+        
     }
 }

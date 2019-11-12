@@ -20,28 +20,28 @@ public class ExpressionAsteriskProcedure extends Procedure {
         Token t = SyntaxAnalyser.currentToken();
         switch (t.getTag()) {
         case Tag.EQUAL:
-            this.consume(Tag.EQUAL, false);
-            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, true);
+            this.consume(Tag.EQUAL);
+            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE);
             break;
         case Tag.BIGGER:
-            this.consume(Tag.BIGGER, false);
-            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, true);
+            this.consume(Tag.BIGGER);
+            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE);
             break;
         case Tag.BIGGER_EQUAL:
-            this.consume(Tag.BIGGER_EQUAL, false);
-            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, true);
+            this.consume(Tag.BIGGER_EQUAL);
+            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE);
             break;
         case Tag.SMALLER:
-            this.consume(Tag.SMALLER, false);
-            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, true);
+            this.consume(Tag.SMALLER);
+            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE);
             break;
         case Tag.SMALLER_EQUAL:
-            this.consume(Tag.SMALLER_EQUAL, false);
-            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, true);
+            this.consume(Tag.SMALLER_EQUAL);
+            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE);
             break;
         case Tag.DOUBLE_ARROW:
-            this.consume(Tag.DOUBLE_ARROW, false);
-            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE, true);
+            this.consume(Tag.DOUBLE_ARROW);
+            this.invoke(Procedure.SIMPLEEXPR_PROCEDURE);
             break;
         }
     }

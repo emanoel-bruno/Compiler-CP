@@ -18,10 +18,10 @@ public class WriteStmtProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.consume(Tag.PRINT, false);
-        this.consume(Tag.OPEN_PARENTHESIS, true);
-        this.invoke(Procedure.WRITEABLE_PROCEDURE, true);
-        this.consume(Tag.CLOSE_PARENTHESIS, false); // WriteableProcedure already moved one step forward
-        SyntaxAnalyser.nextToken();
+        this.consume(Tag.PRINT);
+        this.consume(Tag.OPEN_PARENTHESIS);
+        this.invoke(Procedure.WRITEABLE_PROCEDURE);
+        this.consume(Tag.CLOSE_PARENTHESIS); // WriteableProcedure already moved one step forward
+        
     }
 }

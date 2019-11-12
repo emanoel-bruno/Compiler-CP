@@ -17,7 +17,7 @@ public class TermProcedure extends Procedure {
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();
-        this.invoke(Procedure.FACTORA_PROCEDURE, false);
-        this.invoke(Procedure.TERM_ASTERISK_PROCEDURE, false);
+        this.invoke(Procedure.FACTORA_PROCEDURE);
+        this.invoke(Procedure.TERM_ASTERISK_PROCEDURE);
     }
 }

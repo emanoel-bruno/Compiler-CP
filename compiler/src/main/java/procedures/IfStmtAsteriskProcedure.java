@@ -23,13 +23,14 @@ public class IfStmtAsteriskProcedure extends Procedure {
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
         case Tag.END:
-            this.consume(Tag.END, false);
+            this.consume(Tag.END);
+            
             break;
         case Tag.ELSE:
-            this.consume(Tag.ELSE, false);
-            this.invoke(StmtListProcedure.STMTLIST_PROCEDURE, true);
-            this.consume(Tag.END, false); // StmtList already moved one step
-            SyntaxAnalyser.nextToken();
+            this.consume(Tag.ELSE);
+            this.invoke(StmtListProcedure.STMTLIST_PROCEDURE);
+            this.consume(Tag.END); // StmtList already moved one step
+            
         default:
             PanicMode.nextToken(this, t, new int[] { Tag.END, Tag.ELSE });
             SyntaxAnalyser.printError("\n  Unexpected Token: " + t.toString(), line);

@@ -22,12 +22,15 @@ public abstract class Procedure {
             STMTLIST_PROCEDURE = 18, STMT_PROCEDURE = 19, STMTSUFIX_PROCEDURE = 20, TERM_ASTERISK_PROCEDURE = 21,
             TERM_PROCEDURE = 22, WHILESTMT_PROCEDURE = 23, WRITEABLE_PROCEDURE = 24, WRITESTMT_PROCEDURE = 25;
 
-    public void consume(int tag, boolean next) throws IOException, LexicalException, SyntaxException {
-        Token t = (next) ? SyntaxAnalyser.nextToken() : SyntaxAnalyser.currentToken();
+    public void consume(int tag) throws IOException, LexicalException, SyntaxException {
+        Token t = SyntaxAnalyser.currentToken();
         int line = SyntaxAnalyser.currentLine();
         if (t.getTag() != tag) {
             PanicMode.nextToken(this, t, new int[] { tag });
             SyntaxAnalyser.printError("\n  Unexpected Token: " + t.toString(), line);
+        }
+        else{
+            SyntaxAnalyser.nextToken();
         }
     }
 
@@ -35,8 +38,8 @@ public abstract class Procedure {
         return this.tag;
     }
 
-    public void invoke(int procedure, boolean next) throws IOException, LexicalException, SyntaxException {
-        Token t = (next) ? SyntaxAnalyser.nextToken() : SyntaxAnalyser.currentToken();
+    public void invoke( int procedure ) throws IOException, LexicalException, SyntaxException {
+        Token t = SyntaxAnalyser.currentToken();
         switch (procedure) {
         case Procedure.ASSIGNSTMT_PROCEDURE:
             new AssignStmtProcedure().check();
@@ -124,6 +127,8 @@ public abstract class Procedure {
 
     public void check() throws IOException, LexicalException, SyntaxException {
         debug(SyntaxAnalyser.currentToken());
+        while (SyntaxAnalyser.currentToken().getTag() == Tag.NEW_LINE)
+            SyntaxAnalyser.nextToken();
         this.rule();
     }
 

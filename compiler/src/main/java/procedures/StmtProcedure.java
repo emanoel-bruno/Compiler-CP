@@ -23,25 +23,25 @@ public class StmtProcedure extends Procedure {
         int line = SyntaxAnalyser.currentLine();
         switch (t.getTag()) {
         case Tag.PRINT:
-            this.invoke(Procedure.WRITESTMT_PROCEDURE, false);
-            consume(Tag.SEMICOLON, false);
-            SyntaxAnalyser.nextToken();
+            this.invoke(Procedure.WRITESTMT_PROCEDURE);
+            consume(Tag.SEMICOLON);
+            
             break;
         case Tag.SCAN:
-            this.invoke(Procedure.READSTMT_PROCEDURE, false);
-            consume(Tag.SEMICOLON, false);
-            SyntaxAnalyser.nextToken();
+            this.invoke(Procedure.READSTMT_PROCEDURE);
+            consume(Tag.SEMICOLON);
+            
             break;
         case Tag.DO:
-            this.invoke(Procedure.WHILESTMT_PROCEDURE, false);
+            this.invoke(Procedure.WHILESTMT_PROCEDURE);
             break;
         case Tag.IF:
-            this.invoke(Procedure.IFSTMT_PROCEDURE, false);
+            this.invoke(Procedure.IFSTMT_PROCEDURE);
             break;
         case Tag.IDENTIFIER:
-            this.invoke(Procedure.ASSIGNSTMT_PROCEDURE, false);
-            consume(Tag.SEMICOLON, false); // SimpleExprProcedure already moved one step
-            SyntaxAnalyser.nextToken();
+            this.invoke(Procedure.ASSIGNSTMT_PROCEDURE);
+            consume(Tag.SEMICOLON); // SimpleExprProcedure already moved one step
+            
             break;
         default:
             PanicMode.nextToken(this, t, new int[] { Tag.PRINT, Tag.SCAN, Tag.DO, Tag.IF, Tag.IDENTIFIER });
