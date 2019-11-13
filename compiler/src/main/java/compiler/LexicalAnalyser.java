@@ -217,7 +217,7 @@ public class LexicalAnalyser {
 
         if ((int) this.currentChar == 8221) {
             this.nextChar();
-            throw new CharacterInvalidException(this.currentChar,
+            throw new CharacterInvalidException('"',
                     "[Close Quotation Mark(Unicode)] without open quotation before", this.currentLine);
         }
         if ((int) this.currentChar == 8220 || String.valueOf(this.currentChar).intern() == "\"") {
@@ -229,13 +229,17 @@ public class LexicalAnalyser {
                 return (this.currentToken = new LiteralToken(literal.toString()));
             } else if ((int) this.currentChar == 8220) {
                 this.nextChar();
-                throw new CharacterInvalidException(this.currentChar,
+                throw new CharacterInvalidException('"',
                         "[Open Quotation Mark(Unicode)] already opened quotation", this.currentLine);
             } else if (String.valueOf(this.currentChar) == "\n") {
-                throw new CharacterInvalidException(this.currentChar, "[New Line] can't be used within a literal",
+                char c = this.currentChar;
+                this.nextChar();
+                throw new CharacterInvalidException(c, "[New Line] can't be used within a literal",
                         this.currentLine);
             } else {
-                throw new CharacterInvalidException(this.currentChar, " can't be used within a literal",
+                char c = this.currentChar;
+                this.nextChar();
+                throw new CharacterInvalidException(c, " can't be used within a literal",
                         this.currentLine);
             }
         }
@@ -243,20 +247,28 @@ public class LexicalAnalyser {
         if (CharMatcher.ascii().matches(this.currentChar)) {
             switch (String.valueOf(this.currentChar).intern()) {
             case "=":
-                if (this.nextChar("="))
+                if (this.nextChar("=")){
+                    this.nextChar();
                     return (this.currentToken = new EqualToken());
+                }
                 else
                     return (this.currentToken = new AssignToken());
             case ">":
-                if (this.nextChar("="))
+                if (this.nextChar("=")){
+                    this.nextChar();
                     return (this.currentToken = new BiggerEqualToken());
+                }
                 else
                     return (this.currentToken = new BiggerToken());
             case "<":
-                if (this.nextChar("="))
+                if (this.nextChar("=")){
+                    this.nextChar();
                     return (this.currentToken = new SmallerEqualToken());
-                else if (String.valueOf(this.currentChar).intern() == ">")
+                }
+                else if (String.valueOf(this.currentChar).intern() == ">"){
+                    this.nextChar();
                     return (this.currentToken = new DoubleArrowToken());
+                }
                 else
                     return (this.currentToken = new SmallerToken());
             case "+":
@@ -327,9 +339,11 @@ public class LexicalAnalyser {
     private void multipleline() throws IOException, LexicalException {
         this.nextChar();
 
-        while (this.currentChar != '*' && (int) this.currentChar != 65535)
-            ;
-        this.nextChar();
+        while (this.currentChar != '*' && (int) this.currentChar != 65535){
+            if (this.currentChar == '\n')
+                this.currentLine++;
+            this.nextChar();
+        }
 
         if ((int) this.currentChar == 65535)
             throw new LexicalException("Comment Unfinished", this.currentLine);

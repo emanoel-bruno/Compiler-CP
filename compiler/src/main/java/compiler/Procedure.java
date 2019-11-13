@@ -23,6 +23,9 @@ public abstract class Procedure {
             TERM_PROCEDURE = 22, WHILESTMT_PROCEDURE = 23, WRITEABLE_PROCEDURE = 24, WRITESTMT_PROCEDURE = 25;
 
     public void consume(int tag) throws IOException, LexicalException, SyntaxException {
+        while (SyntaxAnalyser.currentToken().getTag() == Tag.NEW_LINE)
+            SyntaxAnalyser.nextToken();
+        
         Token t = SyntaxAnalyser.currentToken();
         int line = SyntaxAnalyser.currentLine();
         if (t.getTag() != tag) {
@@ -99,7 +102,7 @@ public abstract class Procedure {
             new StmtProcedure().check();
             break;
         case Procedure.STMTSUFIX_PROCEDURE:
-            new StmtProcedure().check();
+            new StmtSufixProcedure().check();
             break;
         case Procedure.TERM_ASTERISK_PROCEDURE:
             new TermAsteriskProcedure().check();
@@ -120,15 +123,14 @@ public abstract class Procedure {
     }
 
     private void debug(Token t) {
-        System.out.print(this.getClass() + "[" + SyntaxAnalyser.currentLine() + "] - ");
+        System.out.print(this.getClass() + "[" + SyntaxAnalyser.currentLine() + "] - "+ t.toString() +" - ");
         Tag.printTag(t.getTag());
-
     }
 
     public void check() throws IOException, LexicalException, SyntaxException {
-        debug(SyntaxAnalyser.currentToken());
         while (SyntaxAnalyser.currentToken().getTag() == Tag.NEW_LINE)
             SyntaxAnalyser.nextToken();
+        //debug(SyntaxAnalyser.currentToken());
         this.rule();
     }
 

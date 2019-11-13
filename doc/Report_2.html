@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Relatório Analisador Sintático</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body class="vscode-light">
+        <h1 id="relat%c3%b3rio-analisador-sint%c3%a1tico">Relatório Analisador Sintático</h1>
+<p><strong>Nome:</strong> <em>Emanoel</em>, <em>Miguel</em></p>
+<h2 id="introdu%c3%a7%c3%a3o">Introdução</h2>
+<p>Essa etapa trata de dar continuidade à etapa 1 (Implementação do analisador Léxico), ao implementar o analisador Sintático do compilador.</p>
+<h2 id="gram%c3%a1tica">Gramática</h2>
+<p>A gramática foi modificada para possibilitar o uso do parser LL(1) especificado no enunciado do trabalho. Abaixo estão as imagens da gramática antes e depois.</p>
+<h3 id="antes">Antes</h3>
+<p><img src="file:////home/emanoel/Git/Compiler-CP/doc/Grammar.png" alt="  "></p>
+<h3 id="depois">Depois</h3>
+<p><img src="file:////home/emanoel/Git/Compiler-CP/doc/Grammar_2.png" alt="  "></p>
+<h3 id="modifica%c3%a7%c3%b5es">Modificações</h3>
+<ul>
+<li><strong>Recurção a esquerda removida</strong>
+<ul>
+<li>term</li>
+<li>simple-expr</li>
+</ul>
+</li>
+<li><strong>Prefixo comum removido</strong>
+<ul>
+<li>term</li>
+<li>if-stmt</li>
+<li>expression</li>
+</ul>
+</li>
+<li><strong>Ambiguidade removida</strong>
+<ul>
+<li>program</li>
+<li>writable</li>
+</ul>
+</li>
+<li><strong>Loop removido</strong>
+<ul>
+<li>decl-list</li>
+<li>ident-list</li>
+<li>stmt-list</li>
+</ul>
+</li>
+</ul>
+<h2 id="coment%c3%a1rios">Comentários</h2>
+<p>Os comentários são tratados no analisador léxico para evitar tornar o código do sintático mais complexo. Quando o léxico encontra um comentário ele ignora os próximos caracteres até encontrar o fim do comentário seja ele de uma linha ou múltiplas.</p>
+<h2 id="panic-mode">Panic Mode</h2>
+<p>Para implementar o panic mode foi criada uma classe chamada &quot;Panic Mode&quot; que é chamada toda vez que ocorre algum erro sintático. A implementação exigiu o calculo da tabela de first e follow que esta logo abaixo.</p>
+<h3 id="first-e-follow">First e Follow</h3>
+<ul>
+<li>Grupos: <em>mulop</em>, <em>relop</em>, <em>type</em></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>Símbolos_não_terminais</strong></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Symbol</td>
+<td style="text-align:center">First</td>
+<td style="text-align:center">Follow</td>
+</tr>
+<tr>
+<td style="text-align:left">program</td>
+<td style="text-align:center"><em>[ start ]</em></td>
+<td style="text-align:center"><em>[ $ ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">decl-list</td>
+<td style="text-align:center"><em>[ int ]</em> <em>[ float ]</em> <em>[ string ]</em></td>
+<td style="text-align:center"><strong>stmt-list:</strong>   <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">decl</td>
+<td style="text-align:center"><em>[ int ]</em> <em>[ float ]</em> <em>[ string ]</em></td>
+<td style="text-align:center"><strong>decl-list:</strong>    <em>[ int ]</em> <em>[ float ]</em> <em>[ string ]</em> <strong>stmt-list:</strong>   <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">ident-list</td>
+<td style="text-align:center"><em>[ identifier ]</em></td>
+<td style="text-align:center"><strong>decl:</strong>:    <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">ident-list-asterisk</td>
+<td style="text-align:center"><em>[ , ]</em></td>
+<td style="text-align:center"><strong>ident-list:</strong>    <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">stmt-list</td>
+<td style="text-align:center"><em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em></td>
+<td style="text-align:center"><strong>program:</strong>  <em>[ exit ]</em>  <strong>if-stmt-asterisk:</strong>    <em>[ end ]</em> <em>[ else ]</em>    <strong>stmt-sufix:</strong>  <em>[ while ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">stmt</td>
+<td style="text-align:center"><em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em></td>
+<td style="text-align:center"><strong>stmt-asterisk:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em> <strong>program:</strong>  <em>[ exit ]</em>  <strong>if-stmt-asterisk:</strong>    <em>[ end ]</em> <em>[ else ]</em>    <strong>stmt-sufix:</strong>  <em>[ while ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">stmt-asterisk</td>
+<td style="text-align:center"><em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em></td>
+<td style="text-align:center"><strong>program:</strong>  <em>[ exit ]</em>  <strong>if-stmt-asterisk:</strong>    <em>[ end ]</em> <em>[ else ]</em>    <strong>stmt-sufix:</strong>  <em>[ while ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">assign-stmt</td>
+<td style="text-align:center"><em>[ identifier ]</em></td>
+<td style="text-align:center"><strong>stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">if-stmt</td>
+<td style="text-align:center"><em>[ if ]</em></td>
+<td style="text-align:center"><strong>stmt-asterisk:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em> <strong>program:</strong>  <em>[ exit ]</em>  <strong>if-stmt-asterisk:</strong>    <em>[ end ]</em> <em>[ else ]</em>    <strong>stmt-sufix:</strong>  <em>[ while ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">while-stmt</td>
+<td style="text-align:center"><em>[ do ]</em></td>
+<td style="text-align:center"><strong>stmt-asterisk:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em> <strong>program:</strong>  <em>[ exit ]</em>  <strong>if-stmt-asterisk:</strong>    <em>[ end ]</em> <em>[ else ]</em>    <strong>stmt-sufix:</strong>  <em>[ while ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">read-stmt</td>
+<td style="text-align:center"><em>[ scan ]</em></td>
+<td style="text-align:center"><strong>stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">write-stmt</td>
+<td style="text-align:center"><em>[ print ]</em></td>
+<td style="text-align:center"><strong>stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">if-stmt*</td>
+<td style="text-align:center"><em>[ end ]</em> <em>[ else ]</em></td>
+<td style="text-align:center"><strong>stmt-asterisk:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em> <strong>program:</strong>  <em>[ exit ]</em>  <strong>if-stmt-asterisk:</strong>    <em>[ end ]</em> <em>[ else ]</em>    <strong>stmt-sufix:</strong>  <em>[ while ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">condition</td>
+<td style="text-align:center"><em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+<td style="text-align:center"><strong>stmt-sufix:</strong> <em>[ end ]</em> <strong>if-stmt:</strong> <em>[ then ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">stmt-sufix</td>
+<td style="text-align:center"><em>[ while ]</em></td>
+<td style="text-align:center"><strong>stmt-asterisk:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em> <strong>program:</strong>  <em>[ exit ]</em>  <strong>if-stmt-asterisk:</strong>    <em>[ end ]</em> <em>[ else ]</em>    <strong>stmt-sufix:</strong>  <em>[ while ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">writable</td>
+<td style="text-align:center"><em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+<td style="text-align:center"><strong>write-stmt:</strong> <em>[ ) ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">expression</td>
+<td style="text-align:center"><em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+<td style="text-align:center"><strong>stmt-sufix:</strong> <em>[ end ]</em> <strong>if-stmt:</strong> <em>[ then ]</em> <strong>factor:</strong> <em>[ ) ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">expression-asterisk</td>
+<td style="text-align:center"><em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em></td>
+<td style="text-align:center"><strong>stmt-sufix:</strong> <em>[ end ]</em> <strong>if-stmt:</strong> <em>[ then ]</em> <strong>factor:</strong> <em>[ ) ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">simple-expr</td>
+<td style="text-align:center"><em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+<td style="text-align:center"><strong>stmt-sufix:</strong> <em>[ end ]</em> <strong>if-stmt:</strong> <em>[ then ]</em> <strong>factor:</strong> <em>[ ) ]</em> <strong>write-stmt:</strong> <em>[ ) ]</em>  <strong>expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">simple-expr-asterisk</td>
+<td style="text-align:center"><em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em></td>
+<td style="text-align:center"><strong>stmt-sufix:</strong> <em>[ end ]</em> <strong>if-stmt:</strong> <em>[ then ]</em> <strong>factor:</strong> <em>[ ) ]</em> <strong>write-stmt:</strong> <em>[ ) ]</em>  <strong>expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">term</td>
+<td style="text-align:center"><em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+<td style="text-align:center"><strong>simple-expr-asterisk:</strong> <em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em> <strong>stmt-sufix:</strong> <em>[ end ]</em> <strong>if-stmt:</strong> <em>[ then ]</em> <strong>factor:</strong> <em>[ ) ]</em> <strong>write-stmt:</strong> <em>[ ) ]</em>  <strong>expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">term-asterisk</td>
+<td style="text-align:center"><em>[ * ]</em> <em>[ / ]</em> <em>[ and ]</em></td>
+<td style="text-align:center"><strong>simple-expr-asterisk:</strong> <em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em> <strong>stmt-sufix:</strong> <em>[ end ]</em> <strong>if-stmt:</strong> <em>[ then ]</em> <strong>factor:</strong> <em>[ ) ]</em> <strong>write-stmt:</strong> <em>[ ) ]</em>  <strong>expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">factor-a</td>
+<td style="text-align:center"><em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+<td style="text-align:center"><strong>term-asterisk:</strong> <em>[ * ]</em> <em>[ / ]</em> <em>[ and ]</em> <strong>simple-expr-asterisk:</strong> <em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em> <strong>stmt-sufix:</strong> <em>[ end ]</em> <strong>if-stmt:</strong> <em>[ then ]</em> <strong>factor:</strong> <em>[ ) ]</em> <strong>write-stmt:</strong> <em>[ ) ]</em>  <strong>expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">factor</td>
+<td style="text-align:center"><em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em></td>
+<td style="text-align:center"><strong>term-asterisk:</strong> <em>[ * ]</em> <em>[ / ]</em> <em>[ and ]</em> <strong>simple-expr-asterisk:</strong> <em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em> <strong>stmt-sufix:</strong> <em>[ end ]</em> <strong>if-stmt:</strong> <em>[ then ]</em> <strong>factor:</strong> <em>[ ) ]</em> <strong>write-stmt:</strong> <em>[ ) ]</em>  <strong>expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>Símbolos_terminais</strong></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Symbol</td>
+<td style="text-align:center">First</td>
+<td style="text-align:center">Follow</td>
+</tr>
+<tr>
+<td style="text-align:left">start</td>
+<td style="text-align:center"><em>[ start ]</em></td>
+<td style="text-align:center"><strong>program, decl-list:</strong> <em>[ int ]</em> <em>[ float ]</em> <em>[ string ]</em> <strong>program, stmt-list:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">exit</td>
+<td style="text-align:center"><em>[ exit ]</em></td>
+<td style="text-align:center"><strong>program, program:</strong> <em>[ EOF ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">type</td>
+<td style="text-align:center"><em>[ int ]</em> <em>[ float ]</em> <em>[ string ]</em></td>
+<td style="text-align:center"><strong>decl, ident-list:</strong> <em>[ identifier ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">if</td>
+<td style="text-align:center"><em>[ if ]</em></td>
+<td style="text-align:center"><strong>if-stmt, condition:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">then</td>
+<td style="text-align:center"><em>[ then ]</em></td>
+<td style="text-align:center"><strong>if-stmt, stmt-list:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">else</td>
+<td style="text-align:center"><em>[ else ]</em></td>
+<td style="text-align:center"><strong>if-stmt-asterisk, stmt-list:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">end</td>
+<td style="text-align:center"><em>[ end ]</em></td>
+<td style="text-align:center"><strong>stmt-sufix, end, stmt-asterisk:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em> <strong>stmt-sufix, end, program:</strong>  <em>[ exit ]</em>  <strong>stmt-sufix, end, if-stmt-asterisk:</strong>    <em>[ end ]</em> <em>[ else ]</em>  <strong>stmt-sufix, end, stmt-sufix:</strong>  <em>[ while ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">do</td>
+<td style="text-align:center"><em>[ do ]</em></td>
+<td style="text-align:center"><strong>while-stmt, stmt-list:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">while</td>
+<td style="text-align:center"><em>[ while ]</em></td>
+<td style="text-align:center"><strong>stmt-sufix, condition:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">scan</td>
+<td style="text-align:center"><em>[ scan ]</em></td>
+<td style="text-align:center"><strong>read-stmt, read-stmt:</strong>  <em>[ ( ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">print</td>
+<td style="text-align:center"><em>[ print ]</em></td>
+<td style="text-align:center"><strong>write-stmt, write-stmt:</strong> <em>[ ( ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">not</td>
+<td style="text-align:center"><em>[ not ]</em></td>
+<td style="text-align:center"><strong>factor-a, factor:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">mulop</td>
+<td style="text-align:center"><em>[ * ]</em> <em>[ / ]</em> <em>[ and ]</em></td>
+<td style="text-align:center"><strong>term-asterisk, factor-a:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">relop</td>
+<td style="text-align:center"><em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em></td>
+<td style="text-align:center"><strong>expression-asterisk, simple-expr:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">minus</td>
+<td style="text-align:center"><em>[ - ]</em></td>
+<td style="text-align:center"><strong>factor-a, factor and simple-expr-asterisk, term:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <strong>simple-expr-asterisk, term:</strong> <em>[ not ]</em> <em>[ - ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">plus</td>
+<td style="text-align:center"><em>[ + ]</em></td>
+<td style="text-align:center"><strong>simple-expr-asterisk, term:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">or</td>
+<td style="text-align:center"><em>[ or ]</em></td>
+<td style="text-align:center"><strong>simple-expr-asterisk, term:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">semicolon</td>
+<td style="text-align:center"><em>[ ; ]</em></td>
+<td style="text-align:center"><strong>decl, decl:</strong> <strong>-decl-list:</strong>    <em>[ int ]</em> <em>[ float ]</em> <em>[ string ]</em> <strong>-stmt-list:</strong>   <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em> <strong>stmt, stmt:</strong>  <strong>-stmt-asterisk:</strong> <em>[ print ]</em> <em>[ scan ]</em> <em>[ do ]</em> <em>[ if ]</em> <em>[ identifier ]</em> <strong>-program:</strong>  <em>[ exit ]</em>  <strong>-if-stmt-asterisk:</strong>    <em>[ end ]</em> <em>[ else ]</em>    <strong>-stmt-sufix:</strong>  <em>[ while ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">coma</td>
+<td style="text-align:center"><em>[ , ]</em></td>
+<td style="text-align:center"><strong>ident-list-asterisk, identifier:</strong> <em>[ identifier ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">open-parenthesis</td>
+<td style="text-align:center"><em>[ ( ]</em></td>
+<td style="text-align:center"><strong>read-stmt, identifier:</strong> <em>[ identifier ]</em> <strong>write-stmt, writeable  and factor, expression:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">close-parenthesis</td>
+<td style="text-align:center"><em>[ ) ]</em></td>
+<td style="text-align:center"><strong>read-stmt, read-stmt:</strong> <strong>-stmt:</strong> <em>[ ; ]</em> <strong>write-stmt, write-stmt:</strong> <strong>-stmt:</strong> <em>[ ; ]</em> <strong>factor, factor:</strong> <strong>-term-asterisk:</strong> <em>[ * ]</em> <em>[ / ]</em> <em>[ and ]</em> <strong>-simple-expr-asterisk:</strong> <em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em> <strong>-stmt-sufix:</strong> <em>[ end ]</em> <strong>-if-stmt:</strong> <em>[ then ]</em> <strong>-factor:</strong> <em>[ ) ]</em> <em>[ ; ]</em> <strong>-write-stmt:</strong> <em>[ ) ]</em>  <strong>-expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">assign</td>
+<td style="text-align:center"><em>[ = ]</em></td>
+<td style="text-align:center"><strong>assign-stmt, simple-expr:</strong> <em>[ identifier ]</em> <em>[ float_const ]</em> <em>[ integer_const ]</em> <em>[ literal ]</em> <em>[ ( ]</em> <em>[ not ]</em> <em>[ - ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">identifier</td>
+<td style="text-align:center"><em>[ identifier ]</em></td>
+<td style="text-align:center"><strong>assign-stmt, assign:</strong> <em>[ = ]</em> <strong>ident-list,ident-list: and ident-list-asterisk, ident-list-asterisk:</strong>  <strong>-decl:</strong>:   <em>[ ; ]</em>   <strong>ident-list,ident-list-asterisk:</strong> <em>[ , ]</em> <strong>factor-factor:</strong>  <strong>-term-asterisk:</strong> <em>[ * ]</em> <em>[ / ]</em> <em>[ and ]</em> <strong>-simple-expr-asterisk:</strong> <em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em> <strong>-stmt-sufix:</strong> <em>[ end ]</em> <strong>-if-stmt:</strong> <em>[ then ]</em> <strong>-factor:</strong> <em>[ ) ]</em> <strong>-write-stmt:</strong> <em>[ ) ]</em>  <strong>-expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>-assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">literal</td>
+<td style="text-align:center"><em>[ literal ]</em></td>
+<td style="text-align:center"><strong>factor-factor:</strong>  <strong>-term-asterisk:</strong> <em>[ * ]</em> <em>[ / ]</em> <em>[ and ]</em> <strong>-simple-expr-asterisk:</strong> <em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em> <strong>-stmt-sufix:</strong> <em>[ end ]</em> <strong>-if-stmt:</strong> <em>[ then ]</em> <strong>-factor:</strong> <em>[ ) ]</em> <strong>-write-stmt:</strong> <em>[ ) ]</em>  <strong>-expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>-assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">float_const</td>
+<td style="text-align:center"><em>[ float_const ]</em></td>
+<td style="text-align:center"><strong>factor-factor:</strong>  <strong>-term-asterisk:</strong> <em>[ * ]</em> <em>[ / ]</em> <em>[ and ]</em> <strong>-simple-expr-asterisk:</strong> <em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em> <strong>-stmt-sufix:</strong> <em>[ end ]</em> <strong>-if-stmt:</strong> <em>[ then ]</em> <strong>-factor:</strong> <em>[ ) ]</em> <strong>-write-stmt:</strong> <em>[ ) ]</em>  <strong>-expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>-assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+<tr>
+<td style="text-align:left">integer_const</td>
+<td style="text-align:center"><em>[ integer_const ]</em></td>
+<td style="text-align:center"><strong>factor-factor:</strong>  <strong>-term-asterisk:</strong> <em>[ * ]</em> <em>[ / ]</em> <em>[ and ]</em> <strong>-simple-expr-asterisk:</strong> <em>[ + ]</em> <em>[ - ]</em> <em>[ or ]</em> <strong>-stmt-sufix:</strong> <em>[ end ]</em> <strong>-if-stmt:</strong> <em>[ then ]</em> <strong>-factor:</strong> <em>[ ) ]</em> <strong>-write-stmt:</strong> <em>[ ) ]</em>  <strong>-expression-asterisk:</strong>  <em>[ == ]</em> <em>[ &gt; ]</em> <em>[ &gt;= ]</em> <em>[ &lt; ]</em> <em>[ &lt;= ]</em> <em>[ &lt;&gt; ]</em> <strong>-assign-stmt:</strong> <em>[ ; ]</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="como-usar">Como Usar</h2>
+<h2 id="linux">Linux</h2>
+<p>Para montar ou rodar é necessário estar dentro da pasta do projeto (Compiler-CP)</p>
+<h3 id="montar">Montar</h3>
+<pre><code>./cp build
+</code></pre>
+<h3 id="rodar">Rodar</h3>
+<pre><code>./cp run &lt;arquivo&gt; 
+</code></pre>
+<h3 id="testar">Testar</h3>
+<pre><code> ./cp run &lt;diretorio_de_teste/arquivo_de_teste&gt;
+</code></pre>
+<h3 id="testar-todos-testes">Testar todos testes</h3>
+<pre><code>./cp test
+</code></pre>
+<h2 id="descri%c3%a7%c3%a3o">Descrição</h2>
+<p>Para implementar essa etapa foi criada uma classe SyntaxAnalyser que gerencia toda etapa 2, fazendo a análise de consistência token a token de acordo com a gramática especificada no enunciado do trabalho adaptada para o parser LL(1). Os erros são impressos na tela pela mesma classe através da função “printError”.</p>
+<h2 id="resultados-dos-testes">Resultados dos Testes</h2>
+<h3 id="testes-com-debug">Testes com Debug</h3>
+<h4 id="teste-1"><strong>Teste 1</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code>start
+    int a, b;
+    int result;
+    float a,x,total; start
+    a = 2;
+    x = .1;
+    scan (b);
+    scan (y)
+    result = (a*b ++ 1) / 2;
+    print “Resultado: ”;
+    print (result);
+    print (“Total: ”);
+    total = y / x;
+    print (“Total: ”;
+    print (total);
+exit
+</code></pre>
+<p><strong>Saída</strong></p>
+<pre><code>-- Compiling Teste1...
+class procedures.ProgramProcedure[1] - start -  START
+class procedures.DeclListProcedure[1] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[2] - int -  INT
+class procedures.IdentListProcedure[2] - a -  IDENTIFIER
+class procedures.IdentListAsteriskProcedure[2] - , -  COMMA
+class procedures.IdentListAsteriskProcedure[2] - ; -  SEMICOLON
+class procedures.DeclListProcedure[2] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[3] - int -  INT
+class procedures.IdentListProcedure[3] - result -  IDENTIFIER
+class procedures.IdentListAsteriskProcedure[3] - ; -  SEMICOLON
+class procedures.DeclListProcedure[3] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[4] - float -  FLOAT
+class procedures.IdentListProcedure[4] - a -  IDENTIFIER
+class procedures.IdentListAsteriskProcedure[4] - , -  COMMA
+class procedures.IdentListAsteriskProcedure[4] - , -  COMMA
+class procedures.IdentListAsteriskProcedure[4] - ; -  SEMICOLON
+class procedures.DeclListProcedure[4] - start -  START
+class procedures.StmtListProcedure[4] - start -  START
+class procedures.StmtProcedure[4] - start -  START
+
+* Procedure: class procedures.StmtProcedure
+Unexpected token: start
+Expected Token: 
+PRINT
+SCAN
+DO
+IF
+IDENTIFIER
+Lexeme: start
+Syntax Exception: 
+Unexpected Token: start | line: 4
+class procedures.StmtAsteriskProcedure[5] - a -  IDENTIFIER
+class procedures.StmtProcedure[5] - a -  IDENTIFIER
+class procedures.AssignStmtProcedure[5] - a -  IDENTIFIER
+class procedures.SimpleExprProcedure[5] - 2 -  INTEGER_CONSTANT
+class procedures.TermProcedure[5] - 2 -  INTEGER_CONSTANT
+class procedures.FactorAProcedure[5] - 2 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[5] - 2 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[5] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[6] - x -  IDENTIFIER
+class procedures.AssignStmtProcedure[6] - x -  IDENTIFIER
+class procedures.SimpleExprProcedure[6] - . -  DOT
+class procedures.TermProcedure[6] - . -  DOT
+class procedures.FactorAProcedure[6] - . -  DOT
+
+* Procedure: class procedures.FactorAProcedure
+Unexpected token: .
+Expected Token: 
+IDENTIFIER
+INTEGER_CONSTANT
+FLOAT_CONSTANT
+LITERAL
+OPEN_PARENTHESIS
+MINUS
+NOT
+Lexeme: .
+Syntax Exception: 
+Unexpected Token: . | line: 6
+class procedures.TermAsteriskProcedure[6] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[6] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[6] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[7] - scan -  SCAN
+class procedures.ReadStmtProcedure[7] - scan -  SCAN
+class procedures.StmtAsteriskProcedure[7] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[8] - scan -  SCAN
+class procedures.ReadStmtProcedure[8] - scan -  SCAN
+
+* Procedure: class procedures.StmtProcedure
+Unexpected token: result
+Expected Token: 
+SEMICOLON
+Lexeme: result
+Syntax Exception: 
+Unexpected Token: result | line: 9
+class procedures.StmtAsteriskProcedure[9] - result -  IDENTIFIER
+class procedures.StmtProcedure[9] - result -  IDENTIFIER
+class procedures.AssignStmtProcedure[9] - result -  IDENTIFIER
+class procedures.SimpleExprProcedure[9] - ( -  OPEN_PARENTHESIS
+class procedures.TermProcedure[9] - ( -  OPEN_PARENTHESIS
+class procedures.FactorAProcedure[9] - ( -  OPEN_PARENTHESIS
+class procedures.FactorProcedure[9] - ( -  OPEN_PARENTHESIS
+class procedures.ExpressionProcedure[9] - a -  IDENTIFIER
+class procedures.SimpleExprProcedure[9] - a -  IDENTIFIER
+class procedures.TermProcedure[9] - a -  IDENTIFIER
+class procedures.FactorAProcedure[9] - a -  IDENTIFIER
+class procedures.FactorProcedure[9] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[9] - * -  TIMES
+class procedures.FactorAProcedure[9] - b -  IDENTIFIER
+class procedures.FactorProcedure[9] - b -  IDENTIFIER
+class procedures.TermAsteriskProcedure[9] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[9] - + -  PLUS
+class procedures.TermProcedure[9] - + -  PLUS
+class procedures.FactorAProcedure[9] - + -  PLUS
+
+* Procedure: class procedures.FactorAProcedure
+Unexpected token: +
+Expected Token: 
+IDENTIFIER
+INTEGER_CONSTANT
+FLOAT_CONSTANT
+LITERAL
+OPEN_PARENTHESIS
+MINUS
+NOT
+Lexeme: +
+Syntax Exception: 
+Unexpected Token: + | line: 9
+class procedures.TermAsteriskProcedure[9] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[9] - + -  PLUS
+class procedures.TermProcedure[9] - 1 -  INTEGER_CONSTANT
+class procedures.FactorAProcedure[9] - 1 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[9] - 1 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[9] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[9] - ) -  CLOSE_PARENTHESIS
+class procedures.ExpressionAsteriskProcedure[9] - ) -  CLOSE_PARENTHESIS
+class procedures.TermAsteriskProcedure[9] - / -  DIVIDER
+class procedures.FactorAProcedure[9] - 2 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[9] - 2 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[9] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[9] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[9] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[10] - print -  PRINT
+class procedures.WriteStmtProcedure[10] - print -  PRINT
+
+* Procedure: class procedures.WriteStmtProcedure
+Unexpected token: &quot;Resultado: &quot;
+Expected Token: 
+OPEN_PARENTHESIS
+Lexeme: &quot;Resultado: &quot;
+Syntax Exception: 
+Unexpected Token: &quot;Resultado: &quot; | line: 10
+class procedures.WriteableProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.TermProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.FactorAProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.FactorProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[10] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[10] - ; -  SEMICOLON
+
+* Procedure: class procedures.WriteStmtProcedure
+Unexpected token: ;
+Expected Token: 
+CLOSE_PARENTHESIS
+Lexeme: ;
+Syntax Exception: 
+Unexpected Token: ; | line: 10
+class procedures.StmtAsteriskProcedure[10] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[11] - print -  PRINT
+class procedures.WriteStmtProcedure[11] - print -  PRINT
+class procedures.WriteableProcedure[11] - result -  IDENTIFIER
+class procedures.SimpleExprProcedure[11] - result -  IDENTIFIER
+class procedures.TermProcedure[11] - result -  IDENTIFIER
+class procedures.FactorAProcedure[11] - result -  IDENTIFIER
+class procedures.FactorProcedure[11] - result -  IDENTIFIER
+class procedures.TermAsteriskProcedure[11] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[11] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[11] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[12] - print -  PRINT
+class procedures.WriteStmtProcedure[12] - print -  PRINT
+class procedures.WriteableProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.TermProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.FactorAProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.FactorProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[12] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[12] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[12] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[13] - total -  IDENTIFIER
+class procedures.AssignStmtProcedure[13] - total -  IDENTIFIER
+class procedures.SimpleExprProcedure[13] - y -  IDENTIFIER
+class procedures.TermProcedure[13] - y -  IDENTIFIER
+class procedures.FactorAProcedure[13] - y -  IDENTIFIER
+class procedures.FactorProcedure[13] - y -  IDENTIFIER
+class procedures.TermAsteriskProcedure[13] - / -  DIVIDER
+class procedures.FactorAProcedure[13] - x -  IDENTIFIER
+class procedures.FactorProcedure[13] - x -  IDENTIFIER
+class procedures.TermAsteriskProcedure[13] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[13] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[13] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[14] - print -  PRINT
+class procedures.WriteStmtProcedure[14] - print -  PRINT
+class procedures.WriteableProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.TermProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.FactorAProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.FactorProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[14] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[14] - ; -  SEMICOLON
+
+* Procedure: class procedures.WriteStmtProcedure
+Unexpected token: ;
+Expected Token: 
+CLOSE_PARENTHESIS
+Lexeme: ;
+Syntax Exception: 
+Unexpected Token: ; | line: 14
+class procedures.StmtAsteriskProcedure[14] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[15] - print -  PRINT
+class procedures.WriteStmtProcedure[15] - print -  PRINT
+class procedures.WriteableProcedure[15] - total -  IDENTIFIER
+class procedures.SimpleExprProcedure[15] - total -  IDENTIFIER
+class procedures.TermProcedure[15] - total -  IDENTIFIER
+class procedures.FactorAProcedure[15] - total -  IDENTIFIER
+class procedures.FactorProcedure[15] - total -  IDENTIFIER
+class procedures.TermAsteriskProcedure[15] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[15] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[15] - NEW_LINE -  NEW_LINE
+-- Teste1 compilation finished  :) 
+</code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code>start
+    int a, b;
+    int result;
+    float a,x,total;
+    a = 2;
+    x = 1;
+    scan (b);
+    scan (y);
+    result = (a*b + 1) / 2;
+    print (“Resultado: ”);
+    print (result);
+    print (“Total: ”);
+    total = y / x;
+    print (“Total: ”);
+    print (total);
+exit
+</code></pre>
+<p><strong>Saída</strong></p>
+<pre><code>-- Compiling Teste1...
+class procedures.ProgramProcedure[1] - start -  START
+class procedures.DeclListProcedure[1] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[2] - int -  INT
+class procedures.IdentListProcedure[2] - a -  IDENTIFIER
+class procedures.IdentListAsteriskProcedure[2] - , -  COMMA
+class procedures.IdentListAsteriskProcedure[2] - ; -  SEMICOLON
+class procedures.DeclListProcedure[2] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[3] - int -  INT
+class procedures.IdentListProcedure[3] - result -  IDENTIFIER
+class procedures.IdentListAsteriskProcedure[3] - ; -  SEMICOLON
+class procedures.DeclListProcedure[3] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[4] - float -  FLOAT
+class procedures.IdentListProcedure[4] - a -  IDENTIFIER
+class procedures.IdentListAsteriskProcedure[4] - , -  COMMA
+class procedures.IdentListAsteriskProcedure[4] - , -  COMMA
+class procedures.IdentListAsteriskProcedure[4] - ; -  SEMICOLON
+class procedures.DeclListProcedure[4] - NEW_LINE -  NEW_LINE
+class procedures.StmtListProcedure[5] - a -  IDENTIFIER
+class procedures.StmtProcedure[5] - a -  IDENTIFIER
+class procedures.AssignStmtProcedure[5] - a -  IDENTIFIER
+class procedures.SimpleExprProcedure[5] - 2 -  INTEGER_CONSTANT
+class procedures.TermProcedure[5] - 2 -  INTEGER_CONSTANT
+class procedures.FactorAProcedure[5] - 2 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[5] - 2 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[5] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[6] - x -  IDENTIFIER
+class procedures.AssignStmtProcedure[6] - x -  IDENTIFIER
+class procedures.SimpleExprProcedure[6] - 1 -  INTEGER_CONSTANT
+class procedures.TermProcedure[6] - 1 -  INTEGER_CONSTANT
+class procedures.FactorAProcedure[6] - 1 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[6] - 1 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[6] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[6] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[6] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[7] - scan -  SCAN
+class procedures.ReadStmtProcedure[7] - scan -  SCAN
+class procedures.StmtAsteriskProcedure[7] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[8] - scan -  SCAN
+class procedures.ReadStmtProcedure[8] - scan -  SCAN
+class procedures.StmtAsteriskProcedure[8] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[9] - result -  IDENTIFIER
+class procedures.AssignStmtProcedure[9] - result -  IDENTIFIER
+class procedures.SimpleExprProcedure[9] - ( -  OPEN_PARENTHESIS
+class procedures.TermProcedure[9] - ( -  OPEN_PARENTHESIS
+class procedures.FactorAProcedure[9] - ( -  OPEN_PARENTHESIS
+class procedures.FactorProcedure[9] - ( -  OPEN_PARENTHESIS
+class procedures.ExpressionProcedure[9] - a -  IDENTIFIER
+class procedures.SimpleExprProcedure[9] - a -  IDENTIFIER
+class procedures.TermProcedure[9] - a -  IDENTIFIER
+class procedures.FactorAProcedure[9] - a -  IDENTIFIER
+class procedures.FactorProcedure[9] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[9] - * -  TIMES
+class procedures.FactorAProcedure[9] - b -  IDENTIFIER
+class procedures.FactorProcedure[9] - b -  IDENTIFIER
+class procedures.TermAsteriskProcedure[9] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[9] - + -  PLUS
+class procedures.TermProcedure[9] - 1 -  INTEGER_CONSTANT
+class procedures.FactorAProcedure[9] - 1 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[9] - 1 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[9] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[9] - ) -  CLOSE_PARENTHESIS
+class procedures.ExpressionAsteriskProcedure[9] - ) -  CLOSE_PARENTHESIS
+class procedures.TermAsteriskProcedure[9] - / -  DIVIDER
+class procedures.FactorAProcedure[9] - 2 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[9] - 2 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[9] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[9] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[9] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[10] - print -  PRINT
+class procedures.WriteStmtProcedure[10] - print -  PRINT
+class procedures.WriteableProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.TermProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.FactorAProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.FactorProcedure[10] - &quot;Resultado: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[10] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[10] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[10] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[11] - print -  PRINT
+class procedures.WriteStmtProcedure[11] - print -  PRINT
+class procedures.WriteableProcedure[11] - result -  IDENTIFIER
+class procedures.SimpleExprProcedure[11] - result -  IDENTIFIER
+class procedures.TermProcedure[11] - result -  IDENTIFIER
+class procedures.FactorAProcedure[11] - result -  IDENTIFIER
+class procedures.FactorProcedure[11] - result -  IDENTIFIER
+class procedures.TermAsteriskProcedure[11] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[11] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[11] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[12] - print -  PRINT
+class procedures.WriteStmtProcedure[12] - print -  PRINT
+class procedures.WriteableProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.TermProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.FactorAProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.FactorProcedure[12] - &quot;Total: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[12] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[12] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[12] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[13] - total -  IDENTIFIER
+class procedures.AssignStmtProcedure[13] - total -  IDENTIFIER
+class procedures.SimpleExprProcedure[13] - y -  IDENTIFIER
+class procedures.TermProcedure[13] - y -  IDENTIFIER
+class procedures.FactorAProcedure[13] - y -  IDENTIFIER
+class procedures.FactorProcedure[13] - y -  IDENTIFIER
+class procedures.TermAsteriskProcedure[13] - / -  DIVIDER
+class procedures.FactorAProcedure[13] - x -  IDENTIFIER
+class procedures.FactorProcedure[13] - x -  IDENTIFIER
+class procedures.TermAsteriskProcedure[13] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[13] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[13] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[14] - print -  PRINT
+class procedures.WriteStmtProcedure[14] - print -  PRINT
+class procedures.WriteableProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.TermProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.FactorAProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.FactorProcedure[14] - &quot;Total: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[14] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[14] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[14] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[15] - print -  PRINT
+class procedures.WriteStmtProcedure[15] - print -  PRINT
+class procedures.WriteableProcedure[15] - total -  IDENTIFIER
+class procedures.SimpleExprProcedure[15] - total -  IDENTIFIER
+class procedures.TermProcedure[15] - total -  IDENTIFIER
+class procedures.FactorAProcedure[15] - total -  IDENTIFIER
+class procedures.FactorProcedure[15] - total -  IDENTIFIER
+class procedures.TermAsteriskProcedure[15] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[15] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[15] - NEW_LINE -  NEW_LINE
+-- Teste1 compilation finished  :) 
+</code></pre>
+<h4 id="teste-2"><strong>Teste 2</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code>start
+
+    int: a, c;
+    float d, _e;
+    a = 0; d = 3.5
+    c = d / 1.2;
+    Scan (a);
+    Scan (c);
+    b = a * a;
+    c = b + a * (1 + a*c);
+    print (“Resultado: ”);
+    print c;
+    d = 34.2
+    e = val + 2.2;
+    print (“E: ”);
+    print (e);
+    a = b + c + d)/2;
+</code></pre>
+<p><strong>Saída</strong></p>
+<pre><code>-- Compiling Teste2...
+class procedures.ProgramProcedure[1] - start -  START
+class procedures.DeclListProcedure[1] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[3] - int -  INT
+class procedures.IdentListProcedure[3] - : -  CARACTERE
+
+* Procedure: class procedures.IdentListProcedure
+Unexpected token: :
+Expected Token: 
+IDENTIFIER
+Lexeme: :
+Syntax Exception: 
+Unexpected Token: : | line: 3
+class procedures.IdentListAsteriskProcedure[3] - , -  COMMA
+class procedures.IdentListAsteriskProcedure[3] - ; -  SEMICOLON
+class procedures.DeclListProcedure[3] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[4] - float -  FLOAT
+class procedures.IdentListProcedure[4] - d -  IDENTIFIER
+class procedures.IdentListAsteriskProcedure[4] - , -  COMMA
+
+* Procedure: class procedures.IdentListAsteriskProcedure
+Unexpected token: _
+Expected Token: 
+IDENTIFIER
+Lexeme: _
+Syntax Exception: 
+Unexpected Token: _ | line: 4
+class procedures.IdentListAsteriskProcedure[4] - ; -  SEMICOLON
+class procedures.DeclListProcedure[4] - NEW_LINE -  NEW_LINE
+class procedures.StmtListProcedure[5] - a -  IDENTIFIER
+class procedures.StmtProcedure[5] - a -  IDENTIFIER
+class procedures.AssignStmtProcedure[5] - a -  IDENTIFIER
+class procedures.SimpleExprProcedure[5] - 0 -  INTEGER_CONSTANT
+class procedures.TermProcedure[5] - 0 -  INTEGER_CONSTANT
+class procedures.FactorAProcedure[5] - 0 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[5] - 0 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[5] - d -  IDENTIFIER
+class procedures.StmtProcedure[5] - d -  IDENTIFIER
+class procedures.AssignStmtProcedure[5] - d -  IDENTIFIER
+class procedures.SimpleExprProcedure[5] - 3.5 -  FLOAT_CONSTANT
+class procedures.TermProcedure[5] - 3.5 -  FLOAT_CONSTANT
+class procedures.FactorAProcedure[5] - 3.5 -  FLOAT_CONSTANT
+class procedures.FactorProcedure[5] - 3.5 -  FLOAT_CONSTANT
+class procedures.TermAsteriskProcedure[5] - NEW_LINE -  NEW_LINE
+class procedures.SimpleExprAsteriskProcedure[6] - c -  IDENTIFIER
+
+* Procedure: class procedures.StmtProcedure
+Unexpected token: c
+Expected Token: 
+SEMICOLON
+Lexeme: c
+Syntax Exception: 
+Unexpected Token: c | line: 6
+class procedures.StmtAsteriskProcedure[6] - c -  IDENTIFIER
+class procedures.StmtProcedure[6] - c -  IDENTIFIER
+class procedures.AssignStmtProcedure[6] - c -  IDENTIFIER
+class procedures.SimpleExprProcedure[6] - d -  IDENTIFIER
+class procedures.TermProcedure[6] - d -  IDENTIFIER
+class procedures.FactorAProcedure[6] - d -  IDENTIFIER
+class procedures.FactorProcedure[6] - d -  IDENTIFIER
+class procedures.TermAsteriskProcedure[6] - / -  DIVIDER
+class procedures.FactorAProcedure[6] - 1.2 -  FLOAT_CONSTANT
+class procedures.FactorProcedure[6] - 1.2 -  FLOAT_CONSTANT
+class procedures.TermAsteriskProcedure[6] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[6] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[6] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[7] - Scan -  IDENTIFIER
+class procedures.AssignStmtProcedure[7] - Scan -  IDENTIFIER
+
+* Procedure: class procedures.AssignStmtProcedure
+Unexpected token: (
+Expected Token: 
+ASSIGN
+Lexeme: (
+Syntax Exception: 
+Unexpected Token: ( | line: 7
+class procedures.SimpleExprProcedure[7] - ( -  OPEN_PARENTHESIS
+class procedures.TermProcedure[7] - ( -  OPEN_PARENTHESIS
+class procedures.FactorAProcedure[7] - ( -  OPEN_PARENTHESIS
+class procedures.FactorProcedure[7] - ( -  OPEN_PARENTHESIS
+class procedures.ExpressionProcedure[7] - a -  IDENTIFIER
+class procedures.SimpleExprProcedure[7] - a -  IDENTIFIER
+class procedures.TermProcedure[7] - a -  IDENTIFIER
+class procedures.FactorAProcedure[7] - a -  IDENTIFIER
+class procedures.FactorProcedure[7] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[7] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[7] - ) -  CLOSE_PARENTHESIS
+class procedures.ExpressionAsteriskProcedure[7] - ) -  CLOSE_PARENTHESIS
+class procedures.TermAsteriskProcedure[7] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[7] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[7] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[8] - Scan -  IDENTIFIER
+class procedures.AssignStmtProcedure[8] - Scan -  IDENTIFIER
+
+* Procedure: class procedures.AssignStmtProcedure
+Unexpected token: (
+Expected Token: 
+ASSIGN
+Lexeme: (
+Syntax Exception: 
+Unexpected Token: ( | line: 8
+class procedures.SimpleExprProcedure[8] - ( -  OPEN_PARENTHESIS
+class procedures.TermProcedure[8] - ( -  OPEN_PARENTHESIS
+class procedures.FactorAProcedure[8] - ( -  OPEN_PARENTHESIS
+class procedures.FactorProcedure[8] - ( -  OPEN_PARENTHESIS
+class procedures.ExpressionProcedure[8] - c -  IDENTIFIER
+class procedures.SimpleExprProcedure[8] - c -  IDENTIFIER
+class procedures.TermProcedure[8] - c -  IDENTIFIER
+class procedures.FactorAProcedure[8] - c -  IDENTIFIER
+class procedures.FactorProcedure[8] - c -  IDENTIFIER
+class procedures.TermAsteriskProcedure[8] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[8] - ) -  CLOSE_PARENTHESIS
+class procedures.ExpressionAsteriskProcedure[8] - ) -  CLOSE_PARENTHESIS
+class procedures.TermAsteriskProcedure[8] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[8] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[8] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[9] - b -  IDENTIFIER
+class procedures.AssignStmtProcedure[9] - b -  IDENTIFIER
+class procedures.SimpleExprProcedure[9] - a -  IDENTIFIER
+class procedures.TermProcedure[9] - a -  IDENTIFIER
+class procedures.FactorAProcedure[9] - a -  IDENTIFIER
+class procedures.FactorProcedure[9] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[9] - * -  TIMES
+class procedures.FactorAProcedure[9] - a -  IDENTIFIER
+class procedures.FactorProcedure[9] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[9] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[9] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[9] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[10] - c -  IDENTIFIER
+class procedures.AssignStmtProcedure[10] - c -  IDENTIFIER
+class procedures.SimpleExprProcedure[10] - b -  IDENTIFIER
+class procedures.TermProcedure[10] - b -  IDENTIFIER
+class procedures.FactorAProcedure[10] - b -  IDENTIFIER
+class procedures.FactorProcedure[10] - b -  IDENTIFIER
+class procedures.TermAsteriskProcedure[10] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[10] - + -  PLUS
+class procedures.TermProcedure[10] - a -  IDENTIFIER
+class procedures.FactorAProcedure[10] - a -  IDENTIFIER
+class procedures.FactorProcedure[10] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[10] - * -  TIMES
+class procedures.FactorAProcedure[10] - ( -  OPEN_PARENTHESIS
+class procedures.FactorProcedure[10] - ( -  OPEN_PARENTHESIS
+class procedures.ExpressionProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.SimpleExprProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.TermProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.FactorAProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[10] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[10] - + -  PLUS
+class procedures.TermProcedure[10] - a -  IDENTIFIER
+class procedures.FactorAProcedure[10] - a -  IDENTIFIER
+class procedures.FactorProcedure[10] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[10] - * -  TIMES
+class procedures.FactorAProcedure[10] - c -  IDENTIFIER
+class procedures.FactorProcedure[10] - c -  IDENTIFIER
+class procedures.TermAsteriskProcedure[10] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[10] - ) -  CLOSE_PARENTHESIS
+class procedures.ExpressionAsteriskProcedure[10] - ) -  CLOSE_PARENTHESIS
+class procedures.TermAsteriskProcedure[10] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[10] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[10] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[11] - print -  PRINT
+class procedures.WriteStmtProcedure[11] - print -  PRINT
+class procedures.WriteableProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.TermProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.FactorAProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.FactorProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[11] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[11] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[11] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[12] - print -  PRINT
+class procedures.WriteStmtProcedure[12] - print -  PRINT
+
+* Procedure: class procedures.WriteStmtProcedure
+Unexpected token: c
+Expected Token: 
+OPEN_PARENTHESIS
+Lexeme: c
+Syntax Exception: 
+Unexpected Token: c | line: 12
+class procedures.WriteableProcedure[12] - c -  IDENTIFIER
+class procedures.SimpleExprProcedure[12] - c -  IDENTIFIER
+class procedures.TermProcedure[12] - c -  IDENTIFIER
+class procedures.FactorAProcedure[12] - c -  IDENTIFIER
+class procedures.FactorProcedure[12] - c -  IDENTIFIER
+class procedures.TermAsteriskProcedure[12] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[12] - ; -  SEMICOLON
+
+* Procedure: class procedures.WriteStmtProcedure
+Unexpected token: ;
+Expected Token: 
+CLOSE_PARENTHESIS
+Lexeme: ;
+Syntax Exception: 
+Unexpected Token: ; | line: 12
+class procedures.StmtAsteriskProcedure[12] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[13] - d -  IDENTIFIER
+class procedures.AssignStmtProcedure[13] - d -  IDENTIFIER
+class procedures.SimpleExprProcedure[13] - 34.2 -  FLOAT_CONSTANT
+class procedures.TermProcedure[13] - 34.2 -  FLOAT_CONSTANT
+class procedures.FactorAProcedure[13] - 34.2 -  FLOAT_CONSTANT
+class procedures.FactorProcedure[13] - 34.2 -  FLOAT_CONSTANT
+class procedures.TermAsteriskProcedure[13] - NEW_LINE -  NEW_LINE
+class procedures.SimpleExprAsteriskProcedure[14] - e -  IDENTIFIER
+
+* Procedure: class procedures.StmtProcedure
+Unexpected token: e
+Expected Token: 
+SEMICOLON
+Lexeme: e
+Syntax Exception: 
+Unexpected Token: e | line: 14
+class procedures.StmtAsteriskProcedure[14] - e -  IDENTIFIER
+class procedures.StmtProcedure[14] - e -  IDENTIFIER
+class procedures.AssignStmtProcedure[14] - e -  IDENTIFIER
+class procedures.SimpleExprProcedure[14] - val -  IDENTIFIER
+class procedures.TermProcedure[14] - val -  IDENTIFIER
+class procedures.FactorAProcedure[14] - val -  IDENTIFIER
+class procedures.FactorProcedure[14] - val -  IDENTIFIER
+class procedures.TermAsteriskProcedure[14] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[14] - + -  PLUS
+class procedures.TermProcedure[14] - 2.2 -  FLOAT_CONSTANT
+class procedures.FactorAProcedure[14] - 2.2 -  FLOAT_CONSTANT
+class procedures.FactorProcedure[14] - 2.2 -  FLOAT_CONSTANT
+class procedures.TermAsteriskProcedure[14] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[14] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[14] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[15] - print -  PRINT
+class procedures.WriteStmtProcedure[15] - print -  PRINT
+class procedures.WriteableProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.TermProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.FactorAProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.FactorProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[15] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[15] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[15] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[16] - print -  PRINT
+class procedures.WriteStmtProcedure[16] - print -  PRINT
+class procedures.WriteableProcedure[16] - e -  IDENTIFIER
+class procedures.SimpleExprProcedure[16] - e -  IDENTIFIER
+class procedures.TermProcedure[16] - e -  IDENTIFIER
+class procedures.FactorAProcedure[16] - e -  IDENTIFIER
+class procedures.FactorProcedure[16] - e -  IDENTIFIER
+class procedures.TermAsteriskProcedure[16] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[16] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[16] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[17] - a -  IDENTIFIER
+class procedures.AssignStmtProcedure[17] - a -  IDENTIFIER
+class procedures.SimpleExprProcedure[17] - b -  IDENTIFIER
+class procedures.TermProcedure[17] - b -  IDENTIFIER
+class procedures.FactorAProcedure[17] - b -  IDENTIFIER
+class procedures.FactorProcedure[17] - b -  IDENTIFIER
+class procedures.TermAsteriskProcedure[17] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[17] - + -  PLUS
+class procedures.TermProcedure[17] - c -  IDENTIFIER
+class procedures.FactorAProcedure[17] - c -  IDENTIFIER
+class procedures.FactorProcedure[17] - c -  IDENTIFIER
+class procedures.TermAsteriskProcedure[17] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[17] - + -  PLUS
+class procedures.TermProcedure[17] - d -  IDENTIFIER
+class procedures.FactorAProcedure[17] - d -  IDENTIFIER
+class procedures.FactorProcedure[17] - d -  IDENTIFIER
+class procedures.TermAsteriskProcedure[17] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[17] - ) -  CLOSE_PARENTHESIS
+
+* Procedure: class procedures.StmtProcedure
+Unexpected token: )
+Expected Token: 
+SEMICOLON
+Lexeme: )
+Syntax Exception: 
+Unexpected Token: ) | line: 17
+class procedures.StmtAsteriskProcedure[17] - EOF -  EOF
+
+* Procedure: class procedures.ProgramProcedure
+Unexpected token: EOF
+Expected Token: 
+EXIT
+Lexeme: EOF
+Syntax Exception: 
+Unexpected Token: EOF | line: 17
+-- Teste2 compilation finished  :) 
+</code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code>start
+
+    int a, c;
+    float d, e;
+    a = 0; d = 3.5;
+    c = d / 1.2;
+    scan (a);
+    scan (c);
+    b = a * a;
+    c = b + a * (1 + a*c);
+    print (“Resultado: ”);
+    print (c);
+    d = 34.2;
+    e = val + 2.2;
+    print (“E: ”);
+    print (e);
+    a = (b + c + d)/2;
+exit
+</code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div>-- Compiling Teste2...
+class procedures.ProgramProcedure[1] - start -  START
+class procedures.DeclListProcedure[1] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[3] - int -  INT
+class procedures.IdentListProcedure[3] - a -  IDENTIFIER
+class procedures.IdentListAsteriskProcedure[3] - , -  COMMA
+class procedures.IdentListAsteriskProcedure[3] - ; -  SEMICOLON
+class procedures.DeclListProcedure[3] - NEW_LINE -  NEW_LINE
+class procedures.DeclProcedure[4] - float -  FLOAT
+class procedures.IdentListProcedure[4] - d -  IDENTIFIER
+class procedures.IdentListAsteriskProcedure[4] - , -  COMMA
+class procedures.IdentListAsteriskProcedure[4] - ; -  SEMICOLON
+class procedures.DeclListProcedure[4] - NEW_LINE -  NEW_LINE
+class procedures.StmtListProcedure[5] - a -  IDENTIFIER
+class procedures.StmtProcedure[5] - a -  IDENTIFIER
+class procedures.AssignStmtProcedure[5] - a -  IDENTIFIER
+class procedures.SimpleExprProcedure[5] - 0 -  INTEGER_CONSTANT
+class procedures.TermProcedure[5] - 0 -  INTEGER_CONSTANT
+class procedures.FactorAProcedure[5] - 0 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[5] - 0 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[5] - d -  IDENTIFIER
+class procedures.StmtProcedure[5] - d -  IDENTIFIER
+class procedures.AssignStmtProcedure[5] - d -  IDENTIFIER
+class procedures.SimpleExprProcedure[5] - 3.5 -  FLOAT_CONSTANT
+class procedures.TermProcedure[5] - 3.5 -  FLOAT_CONSTANT
+class procedures.FactorAProcedure[5] - 3.5 -  FLOAT_CONSTANT
+class procedures.FactorProcedure[5] - 3.5 -  FLOAT_CONSTANT
+class procedures.TermAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[5] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[5] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[6] - c -  IDENTIFIER
+class procedures.AssignStmtProcedure[6] - c -  IDENTIFIER
+class procedures.SimpleExprProcedure[6] - d -  IDENTIFIER
+class procedures.TermProcedure[6] - d -  IDENTIFIER
+class procedures.FactorAProcedure[6] - d -  IDENTIFIER
+class procedures.FactorProcedure[6] - d -  IDENTIFIER
+class procedures.TermAsteriskProcedure[6] - / -  DIVIDER
+class procedures.FactorAProcedure[6] - 1.2 -  FLOAT_CONSTANT
+class procedures.FactorProcedure[6] - 1.2 -  FLOAT_CONSTANT
+class procedures.TermAsteriskProcedure[6] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[6] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[6] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[7] - scan -  SCAN
+class procedures.ReadStmtProcedure[7] - scan -  SCAN
+class procedures.StmtAsteriskProcedure[7] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[8] - scan -  SCAN
+class procedures.ReadStmtProcedure[8] - scan -  SCAN
+class procedures.StmtAsteriskProcedure[8] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[9] - b -  IDENTIFIER
+class procedures.AssignStmtProcedure[9] - b -  IDENTIFIER
+class procedures.SimpleExprProcedure[9] - a -  IDENTIFIER
+class procedures.TermProcedure[9] - a -  IDENTIFIER
+class procedures.FactorAProcedure[9] - a -  IDENTIFIER
+class procedures.FactorProcedure[9] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[9] - * -  TIMES
+class procedures.FactorAProcedure[9] - a -  IDENTIFIER
+class procedures.FactorProcedure[9] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[9] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[9] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[9] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[10] - c -  IDENTIFIER
+class procedures.AssignStmtProcedure[10] - c -  IDENTIFIER
+class procedures.SimpleExprProcedure[10] - b -  IDENTIFIER
+class procedures.TermProcedure[10] - b -  IDENTIFIER
+class procedures.FactorAProcedure[10] - b -  IDENTIFIER
+class procedures.FactorProcedure[10] - b -  IDENTIFIER
+class procedures.TermAsteriskProcedure[10] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[10] - + -  PLUS
+class procedures.TermProcedure[10] - a -  IDENTIFIER
+class procedures.FactorAProcedure[10] - a -  IDENTIFIER
+class procedures.FactorProcedure[10] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[10] - * -  TIMES
+class procedures.FactorAProcedure[10] - ( -  OPEN_PARENTHESIS
+class procedures.FactorProcedure[10] - ( -  OPEN_PARENTHESIS
+class procedures.ExpressionProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.SimpleExprProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.TermProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.FactorAProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[10] - 1 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[10] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[10] - + -  PLUS
+class procedures.TermProcedure[10] - a -  IDENTIFIER
+class procedures.FactorAProcedure[10] - a -  IDENTIFIER
+class procedures.FactorProcedure[10] - a -  IDENTIFIER
+class procedures.TermAsteriskProcedure[10] - * -  TIMES
+class procedures.FactorAProcedure[10] - c -  IDENTIFIER
+class procedures.FactorProcedure[10] - c -  IDENTIFIER
+class procedures.TermAsteriskProcedure[10] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[10] - ) -  CLOSE_PARENTHESIS
+class procedures.ExpressionAsteriskProcedure[10] - ) -  CLOSE_PARENTHESIS
+class procedures.TermAsteriskProcedure[10] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[10] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[10] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[11] - print -  PRINT
+class procedures.WriteStmtProcedure[11] - print -  PRINT
+class procedures.WriteableProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.TermProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.FactorAProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.FactorProcedure[11] - &quot;Resultado: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[11] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[11] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[11] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[12] - print -  PRINT
+class procedures.WriteStmtProcedure[12] - print -  PRINT
+class procedures.WriteableProcedure[12] - c -  IDENTIFIER
+class procedures.SimpleExprProcedure[12] - c -  IDENTIFIER
+class procedures.TermProcedure[12] - c -  IDENTIFIER
+class procedures.FactorAProcedure[12] - c -  IDENTIFIER
+class procedures.FactorProcedure[12] - c -  IDENTIFIER
+class procedures.TermAsteriskProcedure[12] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[12] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[12] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[13] - d -  IDENTIFIER
+class procedures.AssignStmtProcedure[13] - d -  IDENTIFIER
+class procedures.SimpleExprProcedure[13] - 34.2 -  FLOAT_CONSTANT
+class procedures.TermProcedure[13] - 34.2 -  FLOAT_CONSTANT
+class procedures.FactorAProcedure[13] - 34.2 -  FLOAT_CONSTANT
+class procedures.FactorProcedure[13] - 34.2 -  FLOAT_CONSTANT
+class procedures.TermAsteriskProcedure[13] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[13] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[13] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[14] - e -  IDENTIFIER
+class procedures.AssignStmtProcedure[14] - e -  IDENTIFIER
+class procedures.SimpleExprProcedure[14] - val -  IDENTIFIER
+class procedures.TermProcedure[14] - val -  IDENTIFIER
+class procedures.FactorAProcedure[14] - val -  IDENTIFIER
+class procedures.FactorProcedure[14] - val -  IDENTIFIER
+class procedures.TermAsteriskProcedure[14] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[14] - + -  PLUS
+class procedures.TermProcedure[14] - 2.2 -  FLOAT_CONSTANT
+class procedures.FactorAProcedure[14] - 2.2 -  FLOAT_CONSTANT
+class procedures.FactorProcedure[14] - 2.2 -  FLOAT_CONSTANT
+class procedures.TermAsteriskProcedure[14] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[14] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[14] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[15] - print -  PRINT
+class procedures.WriteStmtProcedure[15] - print -  PRINT
+class procedures.WriteableProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.SimpleExprProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.TermProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.FactorAProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.FactorProcedure[15] - &quot;E: &quot; -  LITERAL
+class procedures.TermAsteriskProcedure[15] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[15] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[15] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[16] - print -  PRINT
+class procedures.WriteStmtProcedure[16] - print -  PRINT
+class procedures.WriteableProcedure[16] - e -  IDENTIFIER
+class procedures.SimpleExprProcedure[16] - e -  IDENTIFIER
+class procedures.TermProcedure[16] - e -  IDENTIFIER
+class procedures.FactorAProcedure[16] - e -  IDENTIFIER
+class procedures.FactorProcedure[16] - e -  IDENTIFIER
+class procedures.TermAsteriskProcedure[16] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[16] - ) -  CLOSE_PARENTHESIS
+class procedures.StmtAsteriskProcedure[16] - NEW_LINE -  NEW_LINE
+class procedures.StmtProcedure[17] - a -  IDENTIFIER
+class procedures.AssignStmtProcedure[17] - a -  IDENTIFIER
+class procedures.SimpleExprProcedure[17] - ( -  OPEN_PARENTHESIS
+class procedures.TermProcedure[17] - ( -  OPEN_PARENTHESIS
+class procedures.FactorAProcedure[17] - ( -  OPEN_PARENTHESIS
+class procedures.FactorProcedure[17] - ( -  OPEN_PARENTHESIS
+class procedures.ExpressionProcedure[17] - b -  IDENTIFIER
+class procedures.SimpleExprProcedure[17] - b -  IDENTIFIER
+class procedures.TermProcedure[17] - b -  IDENTIFIER
+class procedures.FactorAProcedure[17] - b -  IDENTIFIER
+class procedures.FactorProcedure[17] - b -  IDENTIFIER
+class procedures.TermAsteriskProcedure[17] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[17] - + -  PLUS
+class procedures.TermProcedure[17] - c -  IDENTIFIER
+class procedures.FactorAProcedure[17] - c -  IDENTIFIER
+class procedures.FactorProcedure[17] - c -  IDENTIFIER
+class procedures.TermAsteriskProcedure[17] - + -  PLUS
+class procedures.SimpleExprAsteriskProcedure[17] - + -  PLUS
+class procedures.TermProcedure[17] - d -  IDENTIFIER
+class procedures.FactorAProcedure[17] - d -  IDENTIFIER
+class procedures.FactorProcedure[17] - d -  IDENTIFIER
+class procedures.TermAsteriskProcedure[17] - ) -  CLOSE_PARENTHESIS
+class procedures.SimpleExprAsteriskProcedure[17] - ) -  CLOSE_PARENTHESIS
+class procedures.ExpressionAsteriskProcedure[17] - ) -  CLOSE_PARENTHESIS
+class procedures.TermAsteriskProcedure[17] - / -  DIVIDER
+class procedures.FactorAProcedure[17] - 2 -  INTEGER_CONSTANT
+class procedures.FactorProcedure[17] - 2 -  INTEGER_CONSTANT
+class procedures.TermAsteriskProcedure[17] - ; -  SEMICOLON
+class procedures.SimpleExprAsteriskProcedure[17] - ; -  SEMICOLON
+class procedures.StmtAsteriskProcedure[17] - NEW_LINE -  NEW_LINE
+-- Teste2 compilation finished  :) 
+</div></code></pre>
+<h4 id="teste-3"><strong>Teste 3</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<h4 id="teste-4"><strong>Teste 4</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<h4 id="teste-5"><strong>Teste 5</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<h4 id="teste-6"><strong>Teste 6</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<h3 id="testes-sem-debug">Testes sem debug</h3>
+<h4 id="teste-1-1"><strong>Teste 1</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<h4 id="teste-2-1"><strong>Teste 2</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<h4 id="teste-3-1"><strong>Teste 3</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<h4 id="teste-4-1"><strong>Teste 4</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<h4 id="teste-5-1"><strong>Teste 5</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<h4 id="teste-6-1"><strong>Teste 6</strong></h4>
+<p><strong>Código</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Código Corrigido</strong></p>
+<pre><code><div></div></code></pre>
+<p><strong>Saída</strong></p>
+<pre><code><div></div></code></pre>
+
+    </body>
+    </html>

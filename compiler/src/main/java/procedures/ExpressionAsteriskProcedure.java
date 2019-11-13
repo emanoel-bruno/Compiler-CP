@@ -14,7 +14,7 @@ public class ExpressionAsteriskProcedure extends Procedure {
     public ExpressionAsteriskProcedure() {
         this.tag = Procedure.EXPRESSION_ASTERISK_PROCEDURE;
     }
-
+    
     @Override
     public void rule() throws IOException, LexicalException, SyntaxException {
         Token t = SyntaxAnalyser.currentToken();

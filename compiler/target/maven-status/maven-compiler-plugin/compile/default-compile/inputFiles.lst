@@ -58,6 +58,7 @@
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/procedures/ExpressionAsteriskProcedure.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/MinusToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/TimesToken.java
+/home/emanoel/Git/Compiler-CP/compiler/src/main/java/exceptions/EOFUnexpected.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exceptions/SemanticException.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/tokens/ExitToken.java
 /home/emanoel/Git/Compiler-CP/compiler/src/main/java/exceptions/UnknownCharacterException.java

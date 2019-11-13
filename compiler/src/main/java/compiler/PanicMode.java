@@ -8,6 +8,7 @@ import procedures.*;
 import tokens.CommaToken;
 import compiler.Tag;
 import compiler.Token;
+import exceptions.EOFUnexpected;
 import exceptions.LexicalException;
 import exceptions.SyntaxException;
 import exceptions.UnexpectedTokenException;
@@ -25,7 +26,7 @@ public class PanicMode {
 
     public static void nextToken(Procedure p, Token t, int[] expected_tags)
             throws IOException, LexicalException, SyntaxException {
-        PanicMode.print(p, t, expected_tags);
+        //PanicMode.print(p, t, expected_tags);
 
         switch (p.getTag()) {
         case Procedure.ASSIGNSTMT_PROCEDURE:
@@ -78,9 +79,12 @@ public class PanicMode {
         if (expected_tags[0] == Tag.START) {
             while (    t.getTag() != Tag.INT && t.getTag() != Tag.FLOAT && t.getTag() != Tag.STRING
                     && t.getTag() != Tag.PRINT && t.getTag() != Tag.SCAN && t.getTag() != Tag.DO && t.getTag() != Tag.IF
-                    && t.getTag() != Tag.IDENTIFIER)
+                    && t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.EOF)
                 t = SyntaxAnalyser.nextToken();
-            System.out.print("saiu - "); Tag.printTag(t.getTag());
+            
+            if(t.getTag() == Tag.EOF)
+                throw new EOFUnexpected(t.toString(), SyntaxAnalyser.currentLine());
+            
         } else if (expected_tags[0] == Tag.EXIT) {
             while (t.getTag() != Tag.EOF)
                 t = SyntaxAnalyser.nextToken();
@@ -220,7 +224,8 @@ public class PanicMode {
         // exit ] if-stmt-asterisk: [ end ] [ else ] stmt-sufix: [ while ]
         while (    t.getTag() != Tag.EXIT  && t.getTag() != Tag.END && t.getTag() != Tag.ELSE 
                 && t.getTag() != Tag.WHILE && t.getTag() != Tag.IDENTIFIER && t.getTag() != Tag.IF 
-                && t.getTag() != Tag.DO && t.getTag() != Tag.SCAN  && t.getTag() != Tag.PRINT)
+                && t.getTag() != Tag.DO && t.getTag() != Tag.SCAN  && t.getTag() != Tag.PRINT
+                && t.getTag() != Tag.EOF)
             t = SyntaxAnalyser.nextToken();       
     }
 

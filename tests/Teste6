@@ -1,0 +1,10 @@
+start
+    float a, b;
+    float result;
+
+    a = 2.3;
+    b = a;
+    result = (a*b);
+    print (“Resultado: ”);
+    print (result);
+exit

@@ -18,6 +18,7 @@ tokens/SmallerEqualToken.class
 compiler/LexicalAnalyser.class
 tokens/DividerToken.class
 procedures/IdentListAsteriskProcedure.class
+exceptions/EOFUnexpected.class
 procedures/FactorProcedure.class
 tokens/IfToken.class
 tokens/ScanToken.class

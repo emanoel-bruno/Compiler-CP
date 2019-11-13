@@ -24,13 +24,12 @@ public class IfStmtAsteriskProcedure extends Procedure {
         switch (t.getTag()) {
         case Tag.END:
             this.consume(Tag.END);
-            
             break;
         case Tag.ELSE:
             this.consume(Tag.ELSE);
             this.invoke(StmtListProcedure.STMTLIST_PROCEDURE);
-            this.consume(Tag.END); // StmtList already moved one step
-            
+            this.consume(Tag.END);
+            break;
         default:
             PanicMode.nextToken(this, t, new int[] { Tag.END, Tag.ELSE });
             SyntaxAnalyser.printError("\n  Unexpected Token: " + t.toString(), line);

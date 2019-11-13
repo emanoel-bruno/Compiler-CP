@@ -113,9 +113,7 @@ To build or run is necessary be inside the folder of the project (Compiler-CP)
 If you want run from the .jar just go to the releases folder
 
 
-### Fazer
+### To do
 
-1. Implementar panic mode
-2. Implementar Syntax Analyser
-3. Implementar Semantic Analyser
-4. Implementar Code Generator
+1. Implement Semantic Analyser
+2. Implement Code Generator
