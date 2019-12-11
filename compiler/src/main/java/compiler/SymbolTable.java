@@ -17,4 +17,16 @@ public class SymbolTable {
         this.table.put(String.valueOf(id.toString()), id);
         return true;
     }
+
+    public boolean hasToken(IdentifierToken id) {
+        return !this.table.containsKey(String.valueOf(id.toString()));
+    }
+
+    public void updateToken(IdentifierToken id){
+        this.table.replace(String.valueOf(id.toString()), this.table.get(String.valueOf(id.toString())), id);
+    }
+
+    public IdentifierToken getToken(IdentifierToken id){
+        return this.table.get(String.valueOf(id.toString()));
+    }
 }

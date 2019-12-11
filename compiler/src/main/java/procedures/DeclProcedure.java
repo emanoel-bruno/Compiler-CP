@@ -13,6 +13,8 @@ import compiler.SyntaxAnalyser;
 
 public class DeclProcedure extends Procedure {
 
+    public static int currentType;
+
     public DeclProcedure() {
         this.tag = Procedure.DECL_PROCEDURE;
     }
@@ -24,21 +26,21 @@ public class DeclProcedure extends Procedure {
         switch (t.getTag()) {
         case Tag.INT:
             this.consume(Tag.INT);
+            DeclProcedure.currentType = Tag.INT;
             this.invoke(Procedure.IDENTLIST_PROCEDURE);
             this.consume(Tag.SEMICOLON); // IdentListProcedure move one step forward
-            
             break;
         case Tag.FLOAT:
             this.consume(Tag.FLOAT);
+            DeclProcedure.currentType = Tag.FLOAT;
             this.invoke(Procedure.IDENTLIST_PROCEDURE);
             this.consume(Tag.SEMICOLON); // IdentListProcedure move one step forward
-            
             break;
         case Tag.STRING:
             this.consume(Tag.STRING);
+            DeclProcedure.currentType = Tag.STRING;
             this.invoke(Procedure.IDENTLIST_PROCEDURE);
             this.consume(Tag.SEMICOLON); // IdentListProcedure move one step forward
-            
             break;
         default:
             PanicMode.nextToken(this, t, new int[] { Tag.INT, Tag.FLOAT, Tag.STRING });
