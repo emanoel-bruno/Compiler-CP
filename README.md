@@ -111,9 +111,3 @@ To build or run is necessary be inside the folder of the project (Compiler-CP)
 ## Java
 
 If you want run from the .jar just go to the releases folder
-
-
-### To do
-
-1. Implement Semantic Analyser
-2. Implement Code Generator
